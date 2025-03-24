@@ -1,15 +1,23 @@
 import {updateSession} from "@/utils/supabase/middleware";
 
 export async function middleware(request) {
-    // Actualizăm sesiunea și obținem răspunsul middleware-ului
-    let response = await updateSession(request);
-    console.log("Middleware executat pentru:", request.nextUrl.pathname); // Debugging
+    const pathname = request.nextUrl.pathname;
+
+    let response = await updateSession(request, pathname);
+    console.log("Middleware executed for:", pathname); // Debugging
+
     return response;
 }
 
 export const config = {
     matcher: [
-        // Middleware-ul va rula doar pe rutele specificate
-        "/fitness/:path*",
+        /*
+         * Match all request paths except for the ones starting with:
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * Feel free to modify this pattern to include more paths.
+         */
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     ],
-};
+}

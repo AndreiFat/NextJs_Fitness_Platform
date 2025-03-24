@@ -1,6 +1,7 @@
 import Link from "next/link";
 import UserInfo from "@/components/UserInfo";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
+import ProductList from "@/components/ProductList";
 
 export const metadata = {
     title: "Shop",
@@ -20,15 +21,7 @@ export default async function Shop() {
 
             {/* Fetch user info on the client side */}
             <UserInfo/>
-
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {products.map((product) => (
-                    <li key={product.id} className="border p-4 rounded-md shadow-sm">
-                        <h3 className="text-lg font-semibold">{product.name}</h3>
-                        <p className="text-gray-600">{product.description}</p>
-                    </li>
-                ))}
-            </ul>
+            <ProductList initialProducts={products}/>
         </div>
     );
 }

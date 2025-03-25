@@ -1,5 +1,5 @@
 import {login, signInWithGoogle, signup} from "@/app/(auth)/actions";
-import LoginWithGoogleButton from "@/app/(auth)/components/LoginWithGoogleButton";
+import LoginWithGoogleButton from "@/components/auth/LoginWithGoogleButton";
 
 export const metadata = {
     title: "Login",

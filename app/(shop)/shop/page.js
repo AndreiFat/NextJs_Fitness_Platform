@@ -1,7 +1,7 @@
 import Link from "next/link";
-import UserInfo from "@/components/UserInfo";
+import UserInfo from "@/components/auth/UserInfo";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
-import ProductList from "@/components/ProductList";
+import ProductList from "@/components/shop/products/ProductList";
 
 export const metadata = {
     title: "Shop",
@@ -15,7 +15,7 @@ export default async function Shop() {
     if (error) return <p>Eroare la încărcarea produselor.</p>;
     return (
         <div>
-            <Link href={"/"}>Homepage</Link>
+            <Link href={"/public"}>Homepage</Link>
             <h1>Shop</h1>
             <p>This is the Shop page.</p>
 

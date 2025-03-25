@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-strong {
-    all: unset !important;
-    color: inherit !important;
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, cupcake, emerald;
 }

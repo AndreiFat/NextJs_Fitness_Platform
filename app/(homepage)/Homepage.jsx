@@ -1,13 +1,11 @@
 import React from 'react';
-import NavbarComponent from "@/components/NavbarComponent";
+import UserInfo from "@/components/auth/UserInfo";
 
 function Homepage() {
     return (
         <div>
-            <NavbarComponent/>
-            {/*<UserInfo/>*/}
+            <UserInfo/>
             <p className="font-bold">cevaaaa</p>
-
         </div>
     );
 }

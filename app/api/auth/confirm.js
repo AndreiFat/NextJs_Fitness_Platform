@@ -6,7 +6,6 @@ export async function GET(request) {
     const token_hash = searchParams.get('token_hash');
     const type = searchParams.get('type');
     const next = searchParams.get('next') ?? '/';
-
     if (token_hash && type) {
         const supabase = await createSupabaseServerClient();
 
@@ -20,7 +19,7 @@ export async function GET(request) {
             redirect(next);
         }
     }
-    
+
     // Redirect the user to an error page with some instructions
     redirect('/error');
 }

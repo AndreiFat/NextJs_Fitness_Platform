@@ -1,5 +1,6 @@
-import {login, signInWithGoogle, signup} from "@/app/(auth)/actions";
+import {login, signInWithGoogle} from "@/app/(auth)/actions";
 import LoginWithGoogleButton from "@/components/auth/LoginWithGoogleButton";
+import Link from "next/link";
 
 export const metadata = {
     title: "Login",
@@ -43,13 +44,12 @@ export default function LoginPage() {
                     >
                         Log in
                     </button>
-                    <button
-                        formAction={signup}
-                        className="w-full ml-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-200"
+
+                    <Link href={"/signup"}
+                          className="w-full ml-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-200 text-center"
                     >
                         Sign up
-                    </button>
-
+                    </Link>
                 </div>
             </form>
             <form action={signInWithGoogle}>

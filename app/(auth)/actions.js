@@ -12,11 +12,24 @@ export async function login(formData) {
         password: formData.get("password"),
     };
 
-    const {error} = await supabase.auth.signInWithPassword(data)
+    const {data: session, error} = await supabase.auth.signInWithPassword(data)
 
     if (error) {
         console.error(error);
         redirect('/error')
+    }
+
+    const {data: profile, error: profileError} = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq("id", session.user.id)
+        .maybeSingle();
+
+    //console.log("profile" + profile.weight);
+
+    if (profileError || !profile) {
+        redirect('/userProfile');
+        return;
     }
 
     revalidatePath('/', 'layout')
@@ -26,8 +39,10 @@ export async function login(formData) {
 export async function signup(formData) {
     const supabase = await createSupabaseServerClient();
     const data = {
+        username: formData.get("name"),
+        phone: formData.get("phone"),
         email: formData.get("email"),
-        password: formData.get("password"),
+        password: formData.get("password")
     };
     console.log(data)
     const {error} = await supabase.auth.signUp(data)
@@ -38,25 +53,26 @@ export async function signup(formData) {
     }
 
     revalidatePath('/', 'layout')
-    redirect('/')
+    redirect('/login')
 }
 
 export async function signInWithGoogle() {
     const supabase = await createSupabaseServerClient();
     console.log(getURL())
+
     const {data, error} = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
             redirectTo: `${getURL()}auth/callback`,
         },
     });
-    console.log(data)
+
     if (error) {
         console.error(error);
         redirect('/error');
     }
+    //revalidatePath('/')
     redirect(data.url)
-    // revalidatePath('/')
 }
 
 const getURL = () => {

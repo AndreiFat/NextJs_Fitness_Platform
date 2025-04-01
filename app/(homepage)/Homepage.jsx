@@ -1,8 +1,11 @@
 import React from 'react';
+import UserInfo from "@/components/auth/UserInfo";
+import Link from "next/link";
 
 function Homepage() {
     return (
         <div>
+            <button className="btn btn-primary"><Link href={"/accountSettings"}>Edit your account</Link></button>
             <div className="hero bg-base-200 min-h-screen">
                 <div className="hero-content text-center">
                     <div className="max-w-md">

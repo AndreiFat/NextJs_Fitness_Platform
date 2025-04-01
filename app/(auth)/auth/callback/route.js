@@ -17,8 +17,9 @@ export async function GET(request) {
         console.log("User ID after session exchange:", userData.user.id);
 
         const userId = userData.user.identities[0].user_id;
-        const hasUserProfile = await getUserProfile(userId);
 
+        const hasUserProfile = await getUserProfile(userId);
+      
         if (!hasUserProfile)
             redirect('/userProfile')
 

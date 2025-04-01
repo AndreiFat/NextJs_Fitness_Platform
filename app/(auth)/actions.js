@@ -130,3 +130,59 @@ const getURL = () => {
     url = url.endsWith('/') ? url : `${url}/`
     return url
 }
+
+export async function saveUserProfile(formData) {
+    const supabase = await createSupabaseServerClient();
+
+    const data = {
+        weight: formData.get("weight"),
+        height: formData.get("height"),
+        abdominal_circumference: formData.get("abdominal_circumference"),
+        hip_circumference: formData.get("hip_circumference"),
+        notes: formData.get("notes"),
+        goal_type: formData.get("goal_type"),
+    };
+
+    const user = await supabase.auth.getUser();
+
+    const userId = user.data.user.id;
+
+    const {error} = await supabase
+        .from('user_profiles')
+        .insert([
+            {
+                id: userId,
+                weight: data.weight,
+                height: data.height,
+                abdominal_circumference: data.abdominal_circumference,
+                hip_circumference: data.hip_circumference,
+                notes: data.notes
+            },
+        ])
+        .select()
+
+    const IMC = (data.weight / (data.height * data.height)) * 10000;
+
+    const {error: goalError} = await supabase
+        .from('fitness_goals')
+        .insert([
+            {
+                user_id: userId,
+                goal_type: data.goal_type,
+                IMC: IMC
+            }
+        ]);
+
+    if (goalError) {
+        console.error(goalError);
+        redirect('/error');
+    }
+
+    if (error) {
+        console.error(error);
+        redirect('/error');
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/')
+}

@@ -19,7 +19,7 @@ export async function GET(request) {
 
         const hasUserProfile = await checkUserProfile(userId);
 
-        //console.log("User Profile:", hasUserProfile);
+        console.log("User Profile:", hasUserProfile);
 
         if (!hasUserProfile)
             redirect('/userProfile')

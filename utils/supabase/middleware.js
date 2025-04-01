@@ -1,5 +1,6 @@
 import {createServerClient} from '@supabase/ssr'
 import {NextResponse} from 'next/server'
+import {getUserRole} from "@/utils/user/getUserRole";
 
 export async function updateSession(request) {
     let supabaseResponse = NextResponse.next({
@@ -26,18 +27,28 @@ export async function updateSession(request) {
             },
         }
     )
-
     const {
         data: {user},
     } = await supabase.auth.getUser()
 
-    const PROTECTED_ROUTES = ["/fitness", "/profile", "/settings"];
+
+    const PROTECTED_ROUTES = ["/fitness", "/api", "/userProfile", "/auth/reset-password"];
+    const ADMIN_ROUTES = ["/admin"];
 
     if (!user && PROTECTED_ROUTES.some(route => request.nextUrl.pathname.startsWith(route))) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone()
         url.pathname = '/login'
         return NextResponse.redirect(url)
+    }
+
+    // Check if user is admin for /admin routes
+    if (ADMIN_ROUTES.some(route => request.nextUrl.pathname.startsWith(route))) {
+        const {is_admin} = await getUserRole();
+
+        if (!is_admin) {
+            return NextResponse.json({error: 'Unauthorized'}, {status: 401});
+        }
     }
 
     return supabaseResponse

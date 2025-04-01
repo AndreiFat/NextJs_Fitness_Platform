@@ -2,10 +2,8 @@ import {updateSession} from "@/utils/supabase/middleware";
 
 export async function middleware(request) {
     const pathname = request.nextUrl.pathname;
-
     let response = await updateSession(request, pathname);
     console.log("Middleware executed for:", pathname); // Debugging
-
     return response;
 }
 

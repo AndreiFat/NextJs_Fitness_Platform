@@ -1,4 +1,8 @@
+
 import {saveUserProfile} from "@/app/(auth)/actions";
+import {sendPasswordReset} from "@/app/(auth)/actions";
+import EmailInput from "@/components/auth/forms/EmailInput";
+
 
 export const metadata = {
     title: "User Profile Page",
@@ -7,9 +11,10 @@ export const metadata = {
 
 export default function UserProfilePage() {
     return (
-        <div>
+        <>
             <h1>User Profile Page</h1>
             <p>This is the User Profile Page page.</p>
+
             <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
 
                 {/*Weight*/}
@@ -139,5 +144,15 @@ export default function UserProfilePage() {
             </form>
 
         </div>
+            <div className={"flex justify-center p-4"}>
+                <div className="w-full grid grid-cols-4 gap-4">
+                    <form action={sendPasswordReset}>
+                        <EmailInput/>
+                        <button type={"submit"} className={"btn btn-soft btn-accent mt-3"}>Reset Password</button>
+                    </form>
+                </div>
+            </div>
+        </>
+
     );
 }

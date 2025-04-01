@@ -2,6 +2,9 @@
 
 import {useEffect, useState} from "react";
 import {createSupabaseClient} from "@/utils/supabase/client";
+import Link from "next/link";
+import SaveToFavoritesButton from "@/components/fitness/buttons/SaveToFavoritesButton";
+import AddToCartButton from "@/components/fitness/buttons/AddToCartButton";
 
 function ProductList({initialProducts}) {
     const [products, setProducts] = useState(initialProducts);
@@ -36,6 +39,11 @@ function ProductList({initialProducts}) {
                 {products.map((product) => (<li key={product.id} className="border p-4 rounded-md shadow-sm">
                     <h3 className="text-lg font-semibold">{product.name}</h3>
                     <p className="text-gray-500">{product.description}</p>
+                    <div className="flex gap-2">
+                        <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
+                        <SaveToFavoritesButton/>
+                        <AddToCartButton/>
+                    </div>
                 </li>))}
             </ul>
         </div>

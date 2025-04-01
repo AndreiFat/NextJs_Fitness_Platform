@@ -19,9 +19,9 @@ export async function GET(request) {
         const userId = userData.user.identities[0].user_id;
 
         const hasUserProfile = await getUserProfile(userId);
-      
+
         if (!hasUserProfile)
-            redirect('/userProfile')
+            redirect('/user-profile')
 
         console.log(error)
         if (!error) {

@@ -1,6 +1,6 @@
 export const metadata = {
     title: "accountSettings",
-    description: "Page for accountSettings",
+    description: "Page for account-settings",
 };
 
 export default function accountSettings() {

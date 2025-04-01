@@ -28,8 +28,8 @@ export async function login(formData) {
     console.log(profile, profileError);
 
     if (profileError || !profile) {
-        revalidatePath('/userProfile', 'page')
-        redirect('/userProfile');
+        revalidatePath('/user-profile', 'page')
+        redirect('/user-profile');
     }
 
     revalidatePath('/', 'layout')

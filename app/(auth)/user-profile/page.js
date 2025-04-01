@@ -1,6 +1,4 @@
-
-import {saveUserProfile} from "@/app/(auth)/actions";
-import {sendPasswordReset} from "@/app/(auth)/actions";
+import {saveUserProfile, sendPasswordReset} from "@/app/(auth)/actions";
 import EmailInput from "@/components/auth/forms/EmailInput";
 
 
@@ -142,8 +140,6 @@ export default function UserProfilePage() {
                     Save Profile
                 </button>
             </form>
-
-        </div>
             <div className={"flex justify-center p-4"}>
                 <div className="w-full grid grid-cols-4 gap-4">
                     <form action={sendPasswordReset}>
@@ -154,5 +150,6 @@ export default function UserProfilePage() {
             </div>
         </>
 
-    );
+    )
+        ;
 }

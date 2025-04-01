@@ -25,11 +25,11 @@ export async function login(formData) {
         .eq("id", session.user.id)
         .maybeSingle();
 
-    //console.log("profile" + profile.weight);
+    console.log(profile, profileError);
 
     if (profileError || !profile) {
+        revalidatePath('/userProfile', 'page')
         redirect('/userProfile');
-        return;
     }
 
     revalidatePath('/', 'layout')
@@ -39,7 +39,7 @@ export async function login(formData) {
 export async function signup(formData) {
     const supabase = await createSupabaseServerClient();
     const data = {
-        username: formData.get("name"),
+        friendly_name: formData.get("name"),
         phone: formData.get("phone"),
         email: formData.get("email"),
         password: formData.get("password")
@@ -71,8 +71,52 @@ export async function signInWithGoogle() {
         console.error(error);
         redirect('/error');
     }
-    //revalidatePath('/')
+    revalidatePath('/')
     redirect(data.url)
+}
+
+export async function sendPasswordReset(formData) {
+    console.log("Sending reset password");
+    const supabase = await createSupabaseServerClient();
+    const email = formData.get("email");
+
+    const {data, error} = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${getURL()}auth/reset-password`,
+    })
+
+    console.log(data, error)
+
+}
+
+export async function resetPassword(prevState, formData) {
+    const supabase = await createSupabaseServerClient();
+    console.log("Reset password");
+    const password = formData.get("new-password");
+    const confirmPassword = formData.get("confirm-password");
+    if (password !== confirmPassword) {
+        return {error: "Passwords do not match."};
+    }
+
+    console.log(password)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return {
+            error: (
+                <>Must be more than 8 characters, including
+                    <br/>At least one number
+                    <br/>At least one lowercase letter
+                    <br/>At least one uppercase letter</>
+            )
+        };
+    }
+
+    const {data, error} = await supabase.auth.updateUser({
+        password: password,
+    });
+
+    if (error) {
+        return {error: error.message};
+    } else return {success: "Password updated successfully."};
 }
 
 const getURL = () => {

@@ -3,11 +3,12 @@
 import {useEffect, useState} from "react";
 import {createSupabaseClient} from "@/utils/supabase/client";
 import Link from "next/link";
-import SaveToFavoritesButton from "@/components/fitness/buttons/SaveToFavoritesButton";
-import AddToCartButton from "@/components/fitness/buttons/AddToCartButton";
+import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
+import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
 
-function ProductList({initialProducts}) {
+function ProductList({initialProducts, userId, initialFavoriteIds}) {
     const [products, setProducts] = useState(initialProducts);
+    const [favoriteIds, setFavoritesIds] = useState(initialFavoriteIds);
 
     useEffect(() => {
         const supabase = createSupabaseClient();
@@ -41,7 +42,8 @@ function ProductList({initialProducts}) {
                     <p className="text-gray-500">{product.description}</p>
                     <div className="flex gap-2">
                         <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
-                        <SaveToFavoritesButton/>
+                        <SaveToFavoritesButton userId={userId} productId={product.id}
+                                               initialFavorite={favoriteIds.includes(product.id)}/>
                         <AddToCartButton/>
                     </div>
                 </li>))}

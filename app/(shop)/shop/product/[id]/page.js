@@ -5,6 +5,7 @@ export const metadata = {
 
 export default async function Product({params}) {
     const {id} = await params
+
     return (
         <div>
             <h1>Product {id}</h1>

@@ -1,5 +1,8 @@
-import {saveUserProfile, sendPasswordReset} from "@/app/(auth)/actions";
-import EmailInput from "@/components/auth/forms/EmailInput";
+import {saveUserProfile} from "@/app/(auth)/actions";
+import {createSupabaseServerClient} from "@/utils/supabase/server";
+import {getUserProfile} from "@/utils/user/profile/getUserProfile";
+import {redirect} from "next/navigation";
+import UserProfileInput from "@/components/auth/forms/UserProfileInput";
 
 
 export const metadata = {
@@ -7,60 +10,33 @@ export const metadata = {
     description: "Page for User Profile Page",
 };
 
-export default function UserProfilePage() {
+export default async function UserProfilePage() {
+    const supabase = await createSupabaseServerClient();
+    const {data: {user}, error} = await supabase.auth.getUser();
+
+    if (error) {
+        console.error("Error fetching user:", error);
+    }
+
+    const userProfile = await getUserProfile(user.id);
+
+    if (userProfile) {
+        redirect("/account-settings");
+    }
+
     return (
         <>
             <h1>User Profile Page</h1>
             <p>This is the User Profile Page page.</p>
 
             <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-
-                {/*Weight*/}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Enter your weight here:
-                    </label>
-                    <input name="weight" id="weight" type="number" className="input validator" required
-                           placeholder="75 kg"
-                           min="1" title="Must be between be 1 to 10"/>
-                    <p className="validator-hint">Must be between be 1 to 10</p>
-                </div>
-
-                {/*Height*/}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Enter your height here:
-                    </label>
-                    <input name="height" id="height" type="number" className="input validator" required
-                           placeholder="175 cm"
-                           min="1" title="Must be between be 1 to 10"/>
-                    <p className="validator-hint">Must be between be 1 to 10</p>
-                </div>
-
-                {/*Abdominal Circumference*/}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        What is your abdominal circumference?
-                    </label>
-                    <input name="abdominal_circumference" id="abdominal_circumference" type="number"
-                           className="input validator"
-                           required
-                           placeholder="78 cm"
-                           min="1" max="10" title="Must be between be 1 to 10"/>
-                    <p className="validator-hint">Must be between be 1 to 10</p>
-                </div>
-
-                {/*Hip Circumference*/}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        What is your hip circumference?
-                    </label>
-                    <input name="hip_circumference" id="hip_circumference" type="number" className="input validator"
-                           required
-                           placeholder="93 cm"
-                           min="1" max="10" title="Must be between be 1 to 10"/>
-                    <p className="validator-hint">Must be between be 1 to 10</p>
-                </div>
+                <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"/>
+                <UserProfileInput label="Enter your weight here:" name="weight" type="number" placeholder="75 kg"/>
+                <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"/>
+                <UserProfileInput label="What is your abdominal circumference?" name="abdominal_circumference"
+                                  type="number" placeholder="78 cm"/>
+                <UserProfileInput label="What is your hip circumference?" name="hip_circumference" type="number"
+                                  placeholder="93 cm"/>
 
                 {/*Fitness Goal Type*/}
                 <div className="flex flex-col space-y-2">
@@ -140,16 +116,6 @@ export default function UserProfilePage() {
                     Save Profile
                 </button>
             </form>
-            <div className={"flex justify-center p-4"}>
-                <div className="w-full grid grid-cols-4 gap-4">
-                    <form action={sendPasswordReset}>
-                        <EmailInput/>
-                        <button type={"submit"} className={"btn btn-soft btn-accent mt-3"}>Reset Password</button>
-                    </form>
-                </div>
-            </div>
         </>
-
-    )
-        ;
+    );
 }

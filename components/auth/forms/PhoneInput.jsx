@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PhoneInput(props) {
+function PhoneInput({value}) {
     return (
         <div><label className="input validator w-full">
             <svg className="h-[1.2em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
@@ -15,7 +15,7 @@ function PhoneInput(props) {
             </svg>
             <input name="phone" id="phone" type="tel" className="tabular-nums" required placeholder="Phone"
                    pattern="[0-9]*"
-                   minLength="10" maxLength="10" title="Must be 10 digits"/>
+                   minLength="10" maxLength="10" defaultValue={value || ""} title="Must be 10 digits"/>
         </label>
             <div className="validator-hint hidden">Must be 10 digits</div>
         </div>

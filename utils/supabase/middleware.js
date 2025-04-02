@@ -32,7 +32,7 @@ export async function updateSession(request) {
     } = await supabase.auth.getUser()
 
 
-    const PROTECTED_ROUTES = ["/fitness", "/api", "/user-profile", "/auth/reset-password"];
+    const PROTECTED_ROUTES = ["/fitness", "/user-profile", "/auth/reset-password"];
     const ADMIN_ROUTES = ["/admin"];
 
     if (!user && PROTECTED_ROUTES.some(route => request.nextUrl.pathname.startsWith(route))) {

@@ -39,10 +39,14 @@ export async function login(formData) {
 export async function signup(formData) {
     const supabase = await createSupabaseServerClient();
     const data = {
-        friendly_name: formData.get("name"),
-        phone: formData.get("phone"),
         email: formData.get("email"),
-        password: formData.get("password")
+        password: formData.get("password"),
+        options: {
+            data: {
+                full_name: formData.get("name"),
+                phone: formData.get("phone"),
+            }
+        }
     };
     console.log(data)
     const {error} = await supabase.auth.signUp(data)
@@ -135,6 +139,7 @@ export async function saveUserProfile(formData) {
     const supabase = await createSupabaseServerClient();
 
     const data = {
+        age: formData.get("age"),
         weight: formData.get("weight"),
         height: formData.get("height"),
         abdominal_circumference: formData.get("abdominal_circumference"),
@@ -147,11 +152,14 @@ export async function saveUserProfile(formData) {
 
     const userId = user.data.user.id;
 
+    console.log(data.age);
+
     const {error} = await supabase
         .from('user_profiles')
         .insert([
             {
                 id: userId,
+                age: data.age,
                 weight: data.weight,
                 height: data.height,
                 abdominal_circumference: data.abdominal_circumference,
@@ -185,4 +193,76 @@ export async function saveUserProfile(formData) {
 
     revalidatePath('/', 'layout')
     redirect('/')
+}
+
+export async function updateUserProfile(formData) {
+    const supabase = await createSupabaseServerClient();
+
+    const {data: {user}} = await supabase.auth.getUser();
+
+    const userId = user.id;
+
+    const data = {
+        username: formData.get("name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        age: formData.get("age"),
+        weight: formData.get("weight"),
+        height: formData.get("height"),
+        abdominal_circumference: formData.get("abdominal_circumference"),
+        hip_circumference: formData.get("hip_circumference"),
+        notes: formData.get("notes"),
+        goal_type: formData.get("goal_type"),
+    };
+
+    console.log(data)
+
+    const IMC = (data.weight / (data.height * data.height)) * 10000;
+
+    const {userProfileError} = await supabase
+        .from('user_profiles')
+        .update({
+            age: data.age,
+            weight: data.weight,
+            height: data.height,
+            abdominal_circumference: data.abdominal_circumference,
+            hip_circumference: data.hip_circumference,
+            notes: data.notes
+        })
+        .eq('id', userId)
+        .select()
+
+
+    const {fitnessError} = await supabase
+        .from('fitness_goals')
+        .update({goal_type: data.goal_type, IMC: IMC})
+        .eq('user_id', userId)
+        .select()
+
+    const {userMetaData, error} = await supabase.auth.updateUser({
+        email: data.email,
+        data: {
+            username: data.username,
+            phone: data.phone,
+        }
+    });
+
+    if (userProfileError) {
+        console.error(userProfileError);
+        redirect('/error');
+    }
+
+    if (fitnessError) {
+        console.error(fitnessError);
+        redirect('/error');
+    }
+
+    if (error) {
+        console.error(error);
+        redirect('/error');
+    }
+
+    revalidatePath('/', 'layout');
+
+    return {success: "Data was updated successfully."};
 }

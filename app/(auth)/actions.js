@@ -266,3 +266,4 @@ export async function updateUserProfile(formData) {
 
     return {success: "Data was updated successfully."};
 }
+

@@ -42,7 +42,7 @@ export default function UserInfo({userInfo}) {
                     className="menu dropdown-content bg-base-100 rounded-box z-1 w-full p-2 shadow-sm spacer-y-2">
                     <li><Link href={"/account-settings"}>Account</Link></li>
                     <li><Link href={"/"}>Orders</Link></li>
-                    <li><Link href={"/"}>Daca mai e ceva</Link></li>
+                    <li><Link href={"/addresses"}>Addresses</Link></li>
                     <li className={""}><LogoutButton/></li>
                 </ul>
             </div>

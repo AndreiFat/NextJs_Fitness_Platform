@@ -1,7 +1,6 @@
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import ProductList from "@/components/shop/products/ProductList";
 
-
 export const metadata = {
     title: "Shop",
     description: "Page for Shop",

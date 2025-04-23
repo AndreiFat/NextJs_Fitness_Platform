@@ -2,7 +2,7 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {deleteAddress, updateAddress} from "@/app/(user)/addresses/actions";
-import AddressInput from "@/components/auth/forms/AddressInput";
+import FormInput from "@/components/auth/forms/FormInput";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 
 export default function AddressList({addresses}) {
@@ -30,15 +30,15 @@ export default function AddressList({addresses}) {
                                 <form action={updateAddress}>
                                     <input type="hidden" id={`address_id_${address.id}`} name="address_id"
                                            value={address.id}/>
-                                    <AddressInput label={"Country: "} placeholder={"country"} name={"country"}
-                                                  value={address?.country}
-                                                  type={"text"}/>
-                                    <AddressInput label={"City: "} placeholder={"city"} name={"city"}
-                                                  value={address?.city}
-                                                  type={"text"}/>
-                                    <AddressInput label={"Address: "} placeholder={"address"} name={"address"}
-                                                  value={address?.address}
-                                                  type={"text"}/>
+                                    <FormInput label={"Country: "} placeholder={"country"} name={"country"}
+                                               value={address?.country}
+                                               type={"text"}/>
+                                    <FormInput label={"City: "} placeholder={"city"} name={"city"}
+                                               value={address?.city}
+                                               type={"text"}/>
+                                    <FormInput label={"Address: "} placeholder={"address"} name={"address"}
+                                               value={address?.address}
+                                               type={"text"}/>
                                     <button
                                         type="submit"
                                         className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"

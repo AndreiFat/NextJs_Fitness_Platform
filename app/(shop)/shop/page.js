@@ -1,5 +1,7 @@
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import ProductList from "@/components/shop/products/ProductList";
+import {getCart} from "@/app/(shop)/shop/actions";
+
 
 export const metadata = {
     title: "Shop",
@@ -20,16 +22,24 @@ export default async function Shop() {
         .eq("user_id", user.id);
 
     const favoriteIds = favorites ? favorites.map((fav) => fav.product_id) : [];
-    console.log(favoriteIds);
     // Fetch all products
     const {data: products, error} = await supabase.from("products").select("*");
 
     if (error) return <p>Eroare la încărcarea produselor.</p>;
 
+    // Fetch cart data
+    const {cart} = await getCart(user.id);
+    const cartItems = cart.reduce((acc, item) => {
+        acc[item.product_id] = item.quantity;
+        return acc;
+    }, {});
+
+    console.log(cartItems);
     return (
         <div>
             <h1>Shop</h1>
-            <ProductList initialProducts={products} userId={user.id} initialFavoriteIds={favoriteIds}></ProductList>
+            <ProductList initialProducts={products} userId={user.id} initialFavoriteIds={favoriteIds}
+                         initialCartItems={cartItems}></ProductList>
         </div>
     );
 }

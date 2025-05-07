@@ -3,7 +3,8 @@ import NavbarComponent from "@/components/layout/NavbarComponent";
 import React from "react";
 
 import {config} from '@fortawesome/fontawesome-svg-core' // 👈
-import '@fortawesome/fontawesome-svg-core/styles.css' // 👈
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import MinimalFooterComponent from "@/components/layout/MinimalFooterComponent"; // 👈
 config.autoAddCss = false //
 
 export const metadata = {
@@ -16,7 +17,10 @@ export default function RootLayout({children}) {
         <html lang="en" data-theme="emerald">
         <body className="pt-[76px]">
         <NavbarComponent/>
-        {children}</body>
+        <div className="py-3 md:py-5">
+            {children}
+        </div>
+        <MinimalFooterComponent></MinimalFooterComponent></body>
         </html>
     );
 }

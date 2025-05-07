@@ -2,7 +2,7 @@ import UserInfo from "@/components/auth/UserInfo";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import Link from "next/link";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping, faHeart} from "@fortawesome/free-solid-svg-icons";
 
 async function NavbarComponent() {
     const supabase = await createSupabaseServerClient();
@@ -39,6 +39,12 @@ async function NavbarComponent() {
                 {/*              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>*/}
                 {/*    </svg>*/}
                 {/*</button>*/}
+                <Link href={"/shop/shopping-cart"} className="btn btn-ghost btn-circle">
+                    <div className="indicator">
+                        <FontAwesomeIcon icon={faCartShopping} size={"xl"}></FontAwesomeIcon>
+                        {/*<span className="badge badge-xs badge-primary indicator-item"></span>*/}
+                    </div>
+                </Link>
                 <Link href={"/favorites"} className="btn btn-ghost btn-circle">
                     <div className="indicator">
                         <FontAwesomeIcon icon={faHeart} size={"xl"}></FontAwesomeIcon>

@@ -1,4 +1,5 @@
 import React from 'react';
+import FooterComponent from "@/components/layout/FooterComponent";
 
 function Homepage() {
     return (
@@ -15,17 +16,18 @@ function Homepage() {
                     </div>
                 </div>
             </div>
-            <div className="container mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                    <div className="bg-accent text-center rounded p-2">01</div>
-                    <div className="bg-accent text-center rounded p-2">02</div>
-                    <div className="bg-accent text-center rounded p-2">03</div>
-                    <div className="col-span-2 bg-accent text-center rounded p-2">04</div>
-                    <div className="bg-accent text-center rounded p-2">05</div>
-                    <div className="bg-accent text-center rounded p-2">06</div>
-                    <div className="col-span-2 bg-accent text-center rounded p-2">07</div>
-                </div>
-            </div>
+            {/*<div className="container mx-auto">*/}
+            {/*    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">*/}
+            {/*        <div className="bg-accent text-center rounded p-2">01</div>*/}
+            {/*        <div className="bg-accent text-center rounded p-2">02</div>*/}
+            {/*        <div className="bg-accent text-center rounded p-2">03</div>*/}
+            {/*        <div className="col-span-2 bg-accent text-center rounded p-2">04</div>*/}
+            {/*        <div className="bg-accent text-center rounded p-2">05</div>*/}
+            {/*        <div className="bg-accent text-center rounded p-2">06</div>*/}
+            {/*        <div className="col-span-2 bg-accent text-center rounded p-2">07</div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            <FooterComponent></FooterComponent>
         </div>
     );
 }

@@ -4,6 +4,7 @@ import EmailInput from "@/components/auth/forms/EmailInput";
 import {getUserProfile} from "@/utils/user/profile/getUserProfile";
 import UserProfileInput from "@/components/auth/forms/UserProfileInput";
 import PhoneInput from "@/components/auth/forms/PhoneInput";
+import {redirect} from "next/navigation";
 
 export const metadata = {
     title: "accountSettings",
@@ -25,6 +26,10 @@ export default async function accountSettings() {
         .select('*')
         .eq('user_id', user.id)
         .single();
+
+    if (!userProfile) {
+        redirect("/user-profile");
+    }
 
     if (fitnessError) {
         console.error("Error fetching fitnessGoals:", fitnessError);

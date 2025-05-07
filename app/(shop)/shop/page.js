@@ -2,6 +2,7 @@ import {createSupabaseServerClient} from "@/utils/supabase/server";
 import ProductList from "@/components/shop/products/ProductList";
 import {getCart} from "@/app/(shop)/shop/actions";
 
+
 export const metadata = {
     title: "Shop",
     description: "Page for Shop",

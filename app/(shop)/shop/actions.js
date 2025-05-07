@@ -1,12 +1,38 @@
-
 'use server'
 
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 
-export async function updateReview() {
+export async function updateReview(formData) {
     console.log("se incearca editul")
+    const supabase = await createSupabaseServerClient();
+
+    const data = {
+        id: formData.get("review_id"),
+        title: formData.get("title"),
+        description: formData.get("description")
+    }
+
+    const starsRaw = formData.get("stars");
+    const stars = starsRaw ? parseInt(starsRaw, 10) : null;
+
+    const {error} = await supabase
+        .from('reviews')
+        .update({
+            title: data.title,
+            description: data.description,
+            stars: stars
+        })
+        .eq('id', data.id)
+        .select()
+
+    if (error) {
+        console.error(error);
+        redirect('/error');
+    }
+
+    revalidatePath('/', 'layout');
 }
 
 export async function deleteReview(formData) {
@@ -47,11 +73,10 @@ export async function saveReview(formData) {
     revalidatePath('/', 'layout');
 }
 
-// Add or update cart item
 export async function updateCart(userId, productId, quantity) {
     const supabase = await createSupabaseServerClient();
     console.log(userId, productId, quantity);
-    // If quantity is 0, remove item from cart
+
     if (quantity === 0) {
         const {error} = await supabase
             .from("cart_products")
@@ -64,7 +89,6 @@ export async function updateCart(userId, productId, quantity) {
         return {success: true, isInCart: false};
     }
 
-    // Upsert to either insert or update existing item
     const {error} = await supabase
         .from("cart_products")
         .upsert([{user_id: userId, product_id: productId, quantity}], {onConflict: ["user_id", "product_id"]});
@@ -79,7 +103,6 @@ export async function updateCart(userId, productId, quantity) {
     return {success: true, isInCart: true};
 }
 
-// Fetch user cart
 export async function getCart(userId) {
     const supabase = await createSupabaseServerClient();
     const {data, error} = await supabase
@@ -90,7 +113,6 @@ export async function getCart(userId) {
     return {success: true, cart: data};
 }
 
-// New function: Remove an item completely
 export async function removeFromCart(userId, productId) {
     const supabase = await createSupabaseServerClient();
     const {error} = await supabase

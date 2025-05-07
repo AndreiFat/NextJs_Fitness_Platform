@@ -31,11 +31,14 @@ export default async function UserProfilePage() {
 
             <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
                 <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"/>
-                <UserProfileInput label="Enter your weight here:" name="weight" type="number" placeholder="75 kg"/>
+                <UserProfileInput label="Enter your initial weight here:" name="initial_weight" type="number"
+                                  placeholder="75 kg"/>
                 <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"/>
-                <UserProfileInput label="What is your abdominal circumference?" name="abdominal_circumference"
+                <UserProfileInput label="What is your initial abdominal circumference?"
+                                  name="initial_abdominal_circumference"
                                   type="number" placeholder="78 cm"/>
-                <UserProfileInput label="What is your hip circumference?" name="hip_circumference" type="number"
+                <UserProfileInput label="What is your initial hip circumference?" name="initial_hip_circumference"
+                                  type="number"
                                   placeholder="93 cm"/>
 
                 {/*Fitness Goal Type*/}

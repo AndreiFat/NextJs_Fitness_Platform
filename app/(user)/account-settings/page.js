@@ -53,15 +53,16 @@ export default async function accountSettings() {
                 <PhoneInput value={user?.user_metadata.phone}/>
                 <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"
                                   value={userProfile?.age}/>
-                <UserProfileInput label="Enter your weight here:" name="weight" type="number" placeholder="75 kg"
-                                  value={userProfile?.weight}/>
+                <UserProfileInput label="Enter your weight here:" name="initial_weight" type="number"
+                                  placeholder="75 kg"
+                                  value={userProfile?.initial_weight}/>
                 <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"
                                   value={userProfile?.height}/>
-                <UserProfileInput label="What is your abdominal circumference?" name="abdominal_circumference"
+                <UserProfileInput label="What is your abdominal circumference?" name="initial_abdominal_circumference"
                                   type="number"
-                                  placeholder="78 cm" value={userProfile?.abdominal_circumference}/>
-                <UserProfileInput label="What is your hip circumference?" name="hip_circumference" type="number"
-                                  placeholder="93 cm" value={userProfile?.hip_circumference}/>
+                                  placeholder="78 cm" value={userProfile?.initial_abdominal_circumference}/>
+                <UserProfileInput label="What is your hip circumference?" name="initial_hip_circumference" type="number"
+                                  placeholder="93 cm" value={userProfile?.initial_hip_circumference}/>
 
                 {/* Fitness Goal Type */}
                 <div className="flex flex-col space-y-2">

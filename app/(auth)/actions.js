@@ -140,10 +140,10 @@ export async function saveUserProfile(formData) {
 
     const data = {
         age: formData.get("age"),
-        weight: formData.get("weight"),
+        initial_weight: formData.get("initial_weight"),
         height: formData.get("height"),
-        abdominal_circumference: formData.get("abdominal_circumference"),
-        hip_circumference: formData.get("hip_circumference"),
+        initial_abdominal_circumference: formData.get("initial_abdominal_circumference"),
+        initial_hip_circumference: formData.get("initial_hip_circumference"),
         notes: formData.get("notes"),
         goal_type: formData.get("goal_type"),
     };
@@ -160,16 +160,16 @@ export async function saveUserProfile(formData) {
             {
                 id: userId,
                 age: data.age,
-                weight: data.weight,
+                initial_weight: data.initial_weight,
                 height: data.height,
-                abdominal_circumference: data.abdominal_circumference,
-                hip_circumference: data.hip_circumference,
+                initial_abdominal_circumference: data.initial_abdominal_circumference,
+                initial_hip_circumference: data.initial_hip_circumference,
                 notes: data.notes
             },
         ])
         .select()
 
-    const IMC = (data.weight / (data.height * data.height)) * 10000;
+    const initial_IMC = (data.initial_weight / (data.height * data.height)) * 10000;
 
     const {error: goalError} = await supabase
         .from('fitness_goals')
@@ -177,7 +177,7 @@ export async function saveUserProfile(formData) {
             {
                 user_id: userId,
                 goal_type: data.goal_type,
-                IMC: IMC
+                initial_IMC: initial_IMC
             }
         ]);
 
@@ -207,26 +207,26 @@ export async function updateUserProfile(formData) {
         phone: formData.get("phone"),
         email: formData.get("email"),
         age: formData.get("age"),
-        weight: formData.get("weight"),
+        initial_weight: formData.get("initial_weight"),
         height: formData.get("height"),
-        abdominal_circumference: formData.get("abdominal_circumference"),
-        hip_circumference: formData.get("hip_circumference"),
+        initial_abdominal_circumference: formData.get("initial_abdominal_circumference"),
+        initial_hip_circumference: formData.get("initial_hip_circumference"),
         notes: formData.get("notes"),
         goal_type: formData.get("goal_type"),
     };
 
     console.log(data)
 
-    const IMC = (data.weight / (data.height * data.height)) * 10000;
+    const initial_IMC = (data.initial_weight / (data.height * data.height)) * 10000;
 
     const {userProfileError} = await supabase
         .from('user_profiles')
         .update({
             age: data.age,
-            weight: data.weight,
+            initial_weight: data.initial_weight,
             height: data.height,
-            abdominal_circumference: data.abdominal_circumference,
-            hip_circumference: data.hip_circumference,
+            initial_abdominal_circumference: data.initial_abdominal_circumference,
+            initial_hip_circumference: data.initial_hip_circumference,
             notes: data.notes
         })
         .eq('id', userId)
@@ -235,7 +235,7 @@ export async function updateUserProfile(formData) {
 
     const {fitnessError} = await supabase
         .from('fitness_goals')
-        .update({goal_type: data.goal_type, IMC: IMC})
+        .update({goal_type: data.goal_type, initial_IMC: initial_IMC})
         .eq('user_id', userId)
         .select()
 

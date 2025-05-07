@@ -25,7 +25,7 @@ export default async function accountSettings() {
         .from('fitness_goals')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
     if (!userProfile) {
         redirect("/user-profile");

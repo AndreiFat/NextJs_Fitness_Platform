@@ -1,20 +1,30 @@
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
-import {saveProduct} from "@/app/(shop)/admin/actions";
 import FormInput from "@/components/auth/forms/FormInput";
 import ProductTable from "@/components/shop/products/ProductTable";
+import {createSupabaseServerClient} from "@/utils/supabase/server";
+import SaveButton from "@/components/shop/products/SaveButton";
+import {saveProduct} from "@/app/(shop)/admin/actions";
 
 export const metadata = {
     title: "AdminProducts",
     description: "Page for AdminProducts",
 };
 
-export default function AdminProducts() {
+export default async function AdminProducts() {
+    const supabase = await createSupabaseServerClient();
+    const user = await supabase.auth.getUser();
+    const userId = user.data.user.id;
+
+    const {data: products, error} = await supabase
+        .from('products')
+        .select('*')
+
     return (
         <div>
-            <p>All the products from database: </p>
-            <ProductTable></ProductTable>
-
             <ModalOpenButton buttonName={"Add product"} id="addProductModal"></ModalOpenButton>
+
+            <p>All the products from database: </p>
+            <ProductTable products={products}></ProductTable>
 
             <dialog id={"addProductModal"} className="modal">
                 <div className="modal-box">
@@ -24,7 +34,7 @@ export default function AdminProducts() {
                         </button>
                     </form>
                     <h3 className="font-bold text-lg">Add new product: </h3>
-                    <form method={"dialog"}
+                    <form id="add-product-form" action={saveProduct}
                           className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
                         <FormInput type="text" placeholder="ex: L-Carnitine" label="Product name: "
                                    name="name"></FormInput>
@@ -37,19 +47,10 @@ export default function AdminProducts() {
                             <input type="file" className="file-input" multiple accept="image/*" name="images"/>
                             <label className="fieldset-label">Max size 2MB</label>
                         </fieldset>
-
-                        <button
-                            type="submit"
-                            formAction={saveProduct}
-                            className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                        >
-                            Save Address
-                        </button>
+                        <SaveButton formId="add-product-form" modalId="addProductModal" label="Save Product"/>
                     </form>
                 </div>
             </dialog>
-
-
         </div>
     );
 }

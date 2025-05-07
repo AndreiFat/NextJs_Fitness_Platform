@@ -4,6 +4,8 @@ import {faPen, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {deleteAddress, updateAddress} from "@/app/(user)/addresses/actions";
 import FormInput from "@/components/auth/forms/FormInput";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
+import SaveButton from "@/components/shop/products/SaveButton";
+import React from "react";
 
 export default function AddressList({addresses}) {
     return (
@@ -27,7 +29,7 @@ export default function AddressList({addresses}) {
                                 </form>
                                 <h3 className="font-bold text-lg">Edit the address: </h3>
                                 <p className="py-4">{address.city}</p>
-                                <form action={updateAddress}>
+                                <form action={updateAddress} id={`edit-form-${address.id}`}>
                                     <input type="hidden" id={`address_id_${address.id}`} name="address_id"
                                            value={address.id}/>
                                     <FormInput label={"Country: "} placeholder={"country"} name={"country"}
@@ -39,12 +41,8 @@ export default function AddressList({addresses}) {
                                     <FormInput label={"Address: "} placeholder={"address"} name={"address"}
                                                value={address?.address}
                                                type={"text"}/>
-                                    <button
-                                        type="submit"
-                                        className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                                    >
-                                        Update Address
-                                    </button>
+                                    <SaveButton formId={`edit-form-${address.id}`}
+                                                modalId={`edit_address_modal_${address.id}`}/>
                                 </form>
                             </div>
                         </dialog>

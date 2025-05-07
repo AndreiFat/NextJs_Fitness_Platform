@@ -6,10 +6,11 @@ import Link from "next/link";
 import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
 import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
 
-function ProductList({initialProducts, userId, initialFavoriteIds}) {
+function ProductList({initialProducts, userId, initialFavoriteIds, initialCartItems}) {
     const [products, setProducts] = useState(initialProducts);
     const [favoriteIds, setFavoritesIds] = useState(initialFavoriteIds);
-
+    const [cartItems, setCartItems] = useState(initialCartItems);
+    console.log("cartItems", initialCartItems);
     useEffect(() => {
         const supabase = createSupabaseClient();
 
@@ -44,7 +45,8 @@ function ProductList({initialProducts, userId, initialFavoriteIds}) {
                         <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
                         <SaveToFavoritesButton userId={userId} productId={product.id}
                                                initialFavorite={favoriteIds.includes(product.id)}/>
-                        <AddToCartButton/>
+                        <AddToCartButton userId={userId} productId={product.id}
+                                         initialQuantity={cartItems[product.id] || 0}/>
                     </div>
                 </li>))}
             </ul>

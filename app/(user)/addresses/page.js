@@ -1,8 +1,9 @@
-import AddressInput from "@/components/auth/forms/AddressInput";
+import FormInput from "@/components/auth/forms/FormInput";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import AddressList from "@/components/auth/addresses/AddressList";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import {saveAddress} from "@/app/(user)/addresses/actions";
+import SaveButton from "@/components/shop/products/SaveButton";
 
 export const metadata = {
     title: "AddressPage",
@@ -33,20 +34,13 @@ export default async function AddressPage() {
                             </button>
                         </form>
                         <h3 className="font-bold text-lg">Add new address: </h3>
-                        <form method={"dialog"}
+                        <form id="add-address-form" action={saveAddress}
                               className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-                            <AddressInput label="Country: " name="country" type="text" placeholder="United States"/>
-                            <AddressInput label="Your city: " name="city" type="text" placeholder="New York"/>
-                            <AddressInput label="Your address: " name="address" type="text"
-                                          placeholder="Avenue Street, 23"/>
-
-                            <button
-                                type="submit"
-                                formAction={saveAddress}
-                                className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                            >
-                                Save Address
-                            </button>
+                            <FormInput label="Country: " name="country" type="text" placeholder="United States"/>
+                            <FormInput label="Your city: " name="city" type="text" placeholder="New York"/>
+                            <FormInput label="Your address: " name="address" type="text"
+                                       placeholder="Avenue Street, 23"/>
+                            <SaveButton formId="add-address-form" modalId="addAddressesForm" label="Save Address"/>
                         </form>
                     </div>
                 </dialog>

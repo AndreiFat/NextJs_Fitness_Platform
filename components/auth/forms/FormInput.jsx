@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AddressInput({label, name, type = "", placeholder, value}) {
+function FormInput({label, name, type = "", placeholder, value}) {
     return (
         <div>
             <div>
@@ -20,4 +20,4 @@ function AddressInput({label, name, type = "", placeholder, value}) {
     );
 }
 
-export default AddressInput;
+export default FormInput;

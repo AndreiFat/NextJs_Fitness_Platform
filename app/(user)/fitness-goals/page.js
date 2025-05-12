@@ -47,6 +47,28 @@ export default async function FitnessGoals() {
         console.error("Error fetching logs:", logError);
     }
 
+    // BMR and caloric recommendation calculation
+    const gender = userProfile.gender;
+    const weight = userProfile.initial_weight;
+    const height = userProfile.height;
+    const age = userProfile.age;
+    const activityLevel = userProfile.activity_level;
+
+    const activityMultipliers = {
+        sedentary: 1.2,
+        light: 1.375,
+        moderate: 1.55,
+        heavy: 1.725,
+        very_intense: 1.9
+    };
+
+    const bmr = gender === "male"
+        ? 10 * weight + 6.25 * height - 5 * age + 5
+        : 10 * weight + 6.25 * height - 5 * age - 161;
+
+    const tdee = bmr * (activityMultipliers[activityLevel] || 1.2);
+    const recommendedCalories = Math.round(tdee);
+
     const chartData = [
         {
             date: "Inițial",
@@ -95,7 +117,19 @@ export default async function FitnessGoals() {
                 </p>
                 <p><strong>Initial hip circumference:</strong> {userProfile.initial_hip_circumference} cm</p>
                 <p><strong>Initial IMC:</strong> {fitness_goals.initial_IMC}</p>
+                <p><strong>Activity level</strong> {userProfile.activity_level}</p>
                 <p><strong>Date:</strong> {formattedDate}</p>
+            </div>
+            <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-2 mt-4">
+                <h2 className="text-xl font-semibold">Caloric Recommendation</h2>
+                <p><strong>BMR:</strong> {Math.round(bmr)} kcal/day</p>
+                <p><strong>Estimated TDEE:</strong> {recommendedCalories} kcal/day</p>
+            </div>
+            <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-2 mt-4">
+                <h2 className="text-xl font-semibold">Suggested Daily Intake</h2>
+                <p><strong>For weight loss:</strong> {Math.round(recommendedCalories - 500)} kcal/day</p>
+                <p><strong>For maintenance:</strong> {recommendedCalories} kcal/day</p>
+                <p><strong>For muscle gain:</strong> {Math.round(recommendedCalories + 300)} kcal/day</p>
             </div>
             <IMCProgressChart data={chartData}/>
             <FitnessComposedChart data={fitnessComposedChart}/>

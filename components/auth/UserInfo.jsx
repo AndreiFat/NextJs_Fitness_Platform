@@ -8,15 +8,29 @@ import {faUser} from "@fortawesome/free-solid-svg-icons";
 
 export default function UserInfo({userInfo}) {
     const [user, setUser] = useState(userInfo);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
-            const supabase = await createSupabaseClient()
+            const supabase = await createSupabaseClient();
             const {data, error} = await supabase.auth.getUser();
             if (data?.user) setUser(data.user || userInfo);
         };
         fetchUser();
+
+        const fetchUserAdmin = async () => {
+            const supabase = await createSupabaseClient();
+            const {data: users, error} = await supabase
+                .from('users')
+                .select('*')
+                .eq('id', user.id)
+                .single()
+
+            if (users?.is_admin) setIsAdmin(true);
+        }
+        fetchUserAdmin();
     }, []);
+
 
     return <>
         {user ? (<div>
@@ -44,6 +58,7 @@ export default function UserInfo({userInfo}) {
                     <li><Link href={"/"}>Orders</Link></li>
                     <li><Link href={"/addresses"}>Addresses</Link></li>
                     <li><Link href={"/fitness-goals"}>Fitness Goals</Link></li>
+                    {isAdmin ? (<li><Link href={"/admin/products"}>Products</Link></li>) : ""}
                     <li className={""}><LogoutButton/></li>
                 </ul>
             </div>

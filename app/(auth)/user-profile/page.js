@@ -41,7 +41,41 @@ export default async function UserProfilePage() {
                                   type="number"
                                   placeholder="93 cm"/>
 
-                {/*Fitness Goal Type*/}
+                <div className="flex flex-col space-y-2">
+                    <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
+                        What is your gender?
+                    </label>
+                    <select
+                        id="gender"
+                        name="gender"
+                        className="select select-bordered"
+                        defaultValue="male"
+                        required
+                    >
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div className="flex flex-col space-y-2">
+                    <label htmlFor="activity_level" className="block text-sm font-medium text-gray-700">
+                        Physical activity level
+                    </label>
+                    <select
+                        id="activity_level"
+                        name="activity_level"
+                        className="select select-bordered"
+                        defaultValue="sedentary"
+                        required
+                    >
+                        <option value="sedentary">Sedentary (little or no exercise)</option>
+                        <option value="light">Light activity (1–3 days/week)</option>
+                        <option value="moderate">Moderate activity (3–5 days/week)</option>
+                        <option value="heavy">Heavy activity (6–7 days/week)</option>
+                        <option value="intense">Very intense (twice daily training or physical job)</option>
+                    </select>
+                </div>
+
                 <div className="flex flex-col space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
                         What is your fitness goal?

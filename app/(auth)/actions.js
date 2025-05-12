@@ -145,6 +145,8 @@ export async function saveUserProfile(formData) {
         initial_abdominal_circumference: formData.get("initial_abdominal_circumference"),
         initial_hip_circumference: formData.get("initial_hip_circumference"),
         notes: formData.get("notes"),
+        gender: formData.get("gender"),
+        activity_level: formData.get("activity_level"),
         goal_type: formData.get("goal_type"),
     };
 
@@ -164,6 +166,8 @@ export async function saveUserProfile(formData) {
                 height: data.height,
                 initial_abdominal_circumference: data.initial_abdominal_circumference,
                 initial_hip_circumference: data.initial_hip_circumference,
+                gender: data.gender,
+                activity_level: data.activity_level,
                 notes: data.notes
             },
         ])
@@ -212,10 +216,10 @@ export async function updateUserProfile(formData) {
         initial_abdominal_circumference: formData.get("initial_abdominal_circumference"),
         initial_hip_circumference: formData.get("initial_hip_circumference"),
         notes: formData.get("notes"),
+        gender: formData.get("gender"),
+        activity_level: formData.get("activity_level"),
         goal_type: formData.get("goal_type"),
     };
-
-    console.log(data)
 
     const initial_IMC = (data.initial_weight / (data.height * data.height)) * 10000;
 
@@ -227,11 +231,12 @@ export async function updateUserProfile(formData) {
             height: data.height,
             initial_abdominal_circumference: data.initial_abdominal_circumference,
             initial_hip_circumference: data.initial_hip_circumference,
+            gender: data.gender,
+            activity_level: data.activity_level,
             notes: data.notes
         })
         .eq('id', userId)
         .select()
-
 
     const {fitnessError} = await supabase
         .from('fitness_goals')

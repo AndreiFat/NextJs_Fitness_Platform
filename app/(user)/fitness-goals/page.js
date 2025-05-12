@@ -3,7 +3,7 @@ import {getUserProfile} from "@/utils/user/profile/getUserProfile";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import FormInput from "@/components/auth/forms/FormInput";
 import SaveButton from "@/components/shop/products/SaveButton";
-import saveFitnessLog from "@/app/(user)/fitness-goals/actions";
+import saveFitnessLog, {generateMealPlan, generateWorkoutPlan} from "@/app/(user)/fitness-goals/actions";
 import React from "react";
 import IMCProgressChart from "@/components/charts/IMCProgressChart";
 import FitnessComposedChart from "@/components/charts/FitnessComposedChart";
@@ -108,6 +108,8 @@ export default async function FitnessGoals() {
         }))
     ];
 
+    const {plan, videos} = await generateWorkoutPlan("Weight Loss");
+
     return (
         <>
             <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
@@ -158,6 +160,33 @@ export default async function FitnessGoals() {
                     </form>
                 </div>
             </dialog>
+            <form action={generateMealPlan}>
+                <button type="submit" className="btn btn-primary">Ask AI</button>
+            </form>
+            <form action={generateWorkoutPlan}>
+                <button type="submit" className="btn btn-primary">Generate Plan</button>
+            </form>
+            <div>
+                <h1>Your 7-Day Workout Plan</h1>
+                <pre>{plan}</pre>
+
+                <h2>Suggested YouTube Videos:</h2>
+                {videos.map((dayVideos, index) => (
+                    <div key={index}>
+                        <h3>Day {index + 1}: {dayVideos.keyword}</h3>
+                        <ul>
+                            {dayVideos.videos.map((video) => (
+                                <li key={video.videoId}>
+                                    <a href={video.url} target="_blank" rel="noopener noreferrer">
+                                        <img src={video.thumbnail} alt={video.title}/>
+                                        <p>{video.title}</p>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
             <div className="mt-6 space-y-4">
                 <h3 className="text-lg font-semibold">Progress Logs</h3>
                 {metabolic_progress_logs && metabolic_progress_logs.length > 0 ? (

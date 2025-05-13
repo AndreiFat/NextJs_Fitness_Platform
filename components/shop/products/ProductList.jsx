@@ -38,17 +38,18 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
     return (
         <div>
             <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {products.map((product) => (<li key={product.id} className="border p-4 rounded-md shadow-sm">
-                    <h3 className="text-lg font-semibold">{product.name}</h3>
-                    <p className="text-gray-500">{product.description}</p>
-                    <div className="flex gap-2">
-                        <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
-                        <SaveToFavoritesButton userId={userId} productId={product.id}
-                                               initialFavorite={favoriteIds.includes(product.id)}/>
-                        <AddToCartButton userId={userId} productId={product.id}
-                                         initialQuantity={cartItems[product.id] || 0}/>
-                    </div>
-                </li>))}
+                {products.map((product) => (
+                    <li key={product.id} className="border p-4 rounded-md shadow-sm">
+                        <h3 className="text-lg font-semibold">{product.name}</h3>
+                        <p className="text-gray-500">{product.description}</p>
+                        <div className="flex gap-2">
+                            <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
+                            <SaveToFavoritesButton userId={userId} productId={product.id}
+                                                   initialFavorite={favoriteIds.includes(product.id)}/>
+                            <AddToCartButton userId={userId} productId={product.id}
+                                             initialQuantity={cartItems[product.id] || 0}/>
+                        </div>
+                    </li>))}
             </ul>
         </div>
     );

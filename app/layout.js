@@ -17,7 +17,7 @@ export default function RootLayout({children}) {
         <html lang="en" data-theme="emerald">
         <body className="pt-[76px]">
         <NavbarComponent/>
-        <div className="py-3 md:py-5">
+        <div>
             {children}
         </div>
         <MinimalFooterComponent></MinimalFooterComponent></body>

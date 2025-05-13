@@ -17,7 +17,7 @@ export default async function ShoppingCart() {
             quantity, 
             product:products (id, name, price, images, description)`)
         .order('added_at', {ascending: true});
-
+    console.log(cartProducts);
     if (cartError) {
         console.error("Error fetching cart products:", cartError.message);
         return <p>Failed to load cart items.</p>;
@@ -40,9 +40,6 @@ export default async function ShoppingCart() {
         let subtotal = item.quantity * item.product.price;
         return subtotal.toFixed(2) || 0
     }
-
-    console.log(cartProducts)
-    console.log(userAddresses)
 
 
     return (
@@ -89,7 +86,6 @@ export default async function ShoppingCart() {
                     <div className="mt-3 sm:mt-0">
                         <div className="card card-border">
                             <div className="card-body">
-
                                 <SubtotalComponent userEmail={user.email} cartProducts={cartProducts}
                                                    userAddresses={userAddresses}/>
                             </div>

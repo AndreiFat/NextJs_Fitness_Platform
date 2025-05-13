@@ -7,7 +7,6 @@ export async function POST(req) {
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
-        console.log(cartProducts)
         // Create Checkout Sessions from body params.
         const session = await stripe.checkout.sessions.create({
             line_items: cartProducts.map((item) => ({
@@ -21,12 +20,18 @@ export async function POST(req) {
                         ),
                         name: item.product.name,
                         description: item.product.description || 'descriere aici',
+                        metadata: {
+                            db_product_id: item.product.id
+                        }
                     },
                     unit_amount: Math.round(item.product.price * 100),
                 },
                 quantity: item.quantity,
             })),
             customer_email: userEmail,
+            metadata: {
+                address_id: addressId
+            },
             mode: 'payment',
             submit_type: 'auto',
             success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,

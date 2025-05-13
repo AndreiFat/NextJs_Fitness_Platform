@@ -10,8 +10,11 @@ export default function Admin() {
         <div>
             <h1>Admin</h1>
             <p>This is the Admin page.</p>
-            <Link href={"/admin/products"}>Products</Link>
-            <Link href={"/admin/categories"}>Categories</Link>
+            <div className="flex gap-3">
+                <Link className={"btn btn-accent"} href={"/admin/products"}>Products</Link>
+                <Link className={"btn btn-accent"} href={"/admin/categories"}>Categories</Link>
+                <Link className={"btn btn-accent"} href={"/admin/orders"}>Orders</Link>
+            </div>
         </div>
     );
 }

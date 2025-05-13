@@ -12,7 +12,7 @@ export default function Favorites() {
         <div>
             <h1>Favorites</h1>
             <p>This is the Favorites page.</p>
-            {/* name of each tab group should be unique */}
+
             <div className="tabs tabs-lift px-4">
                 <label className="tab">
                     <input type="radio" name="my_tabs_4" defaultChecked/>

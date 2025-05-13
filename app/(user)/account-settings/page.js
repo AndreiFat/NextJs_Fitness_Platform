@@ -42,7 +42,6 @@ export default async function accountSettings() {
 
             <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
 
-                {/*Username*/}
                 <fieldset className="fieldset">
                     <legend className="fieldset-legend">What is your name?</legend>
                     <input name="name" id="name" type="text" className="input w-full" placeholder="Type here"
@@ -53,17 +52,53 @@ export default async function accountSettings() {
                 <PhoneInput value={user?.user_metadata.phone}/>
                 <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"
                                   value={userProfile?.age}/>
-                <UserProfileInput label="Enter your weight here:" name="weight" type="number" placeholder="75 kg"
-                                  value={userProfile?.weight}/>
+
+                <div className="flex flex-col space-y-2">
+                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                        What is your sex?
+                    </label>
+                    <select
+                        id="gender"
+                        name="gender"
+                        className="select select-bordered"
+                        defaultValue={userProfile?.gender || "male"}
+                        required
+                    >
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <UserProfileInput label="Enter your weight here:" name="initial_weight" type="number"
+                                  placeholder="75 kg"
+                                  value={userProfile?.initial_weight}/>
                 <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"
                                   value={userProfile?.height}/>
-                <UserProfileInput label="What is your abdominal circumference?" name="abdominal_circumference"
+                <UserProfileInput label="What is your abdominal circumference?" name="initial_abdominal_circumference"
                                   type="number"
-                                  placeholder="78 cm" value={userProfile?.abdominal_circumference}/>
-                <UserProfileInput label="What is your hip circumference?" name="hip_circumference" type="number"
-                                  placeholder="93 cm" value={userProfile?.hip_circumference}/>
+                                  placeholder="78 cm" value={userProfile?.initial_abdominal_circumference}/>
+                <UserProfileInput label="What is your hip circumference?" name="initial_hip_circumference" type="number"
+                                  placeholder="93 cm" value={userProfile?.initial_hip_circumference}/>
 
-                {/* Fitness Goal Type */}
+                <div className="flex flex-col space-y-2">
+                    <label htmlFor="activity_level" className="block text-sm font-medium text-gray-700">
+                        Physical activity level
+                    </label>
+                    <select
+                        id="activity_level"
+                        name="activity_level"
+                        className="select select-bordered"
+                        defaultValue={userProfile?.activity_level || "sedentary"}
+                        required
+                    >
+                        <option value="sedentary">Sedentary (little or no exercise)</option>
+                        <option value="light">Light activity (1–3 days/week)</option>
+                        <option value="moderate">Moderate activity (3–5 days/week)</option>
+                        <option value="heavy">Heavy activity (6–7 days/week)</option>
+                        <option value="intense">Very intense (twice daily or physical job)</option>
+                    </select>
+                </div>
+
                 <div className="flex flex-col space-y-2">
                     <label className="block text-sm font-medium text-gray-700">What is your fitness goal?</label>
 

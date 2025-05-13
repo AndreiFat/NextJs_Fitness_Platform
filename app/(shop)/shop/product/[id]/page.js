@@ -4,6 +4,9 @@ import {deleteReview, saveReview, updateReview} from "@/app/(shop)/shop/actions"
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import FormInput from "@/components/auth/forms/FormInput";
 import SaveButton from "@/components/shop/products/SaveButton";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPen} from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 export const metadata = {
     title: "Product",
@@ -132,10 +135,51 @@ export default async function Product({params}) {
                             </div>
                             {user?.id === review.user_id && (
                                 <div className="flex gap-3">
-                                    <form action={updateReview}>
-                                        <input type="hidden" name="reviewId" value={review.id}/>
-                                        <button className="text-blue-600 text-sm hover:underline">Edit</button>
-                                    </form>
+                                    {/*<form action={updateReview}>*/}
+                                    {/*    <input type="hidden" name="reviewId" value={review.id}/>*/}
+                                    {/*    <button className="text-blue-600 text-sm hover:underline">Edit</button>*/}
+                                    {/*</form>*/}
+                                    <ModalOpenButton id={`edit_review_modal_${review.id}`} buttonName={<FontAwesomeIcon
+                                        icon={faPen}/>}></ModalOpenButton>
+                                    <dialog id={`edit_review_modal_${review.id}`} className="modal">
+                                        <div className="modal-box">
+                                            <form method="dialog">
+                                                <button
+                                                    className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                                                </button>
+                                            </form>
+                                            <h3 className="font-bold text-lg">Edit the review: </h3>
+                                            <p className="py-4">{review.title}</p>
+                                            <form action={updateReview} id={`edit-form-${review.id}`}>
+                                                <input type="hidden" id={`review_id_${review.id}`}
+                                                       name="review_id"
+                                                       value={review.id}/>
+                                                <FormInput label={"Review title: "} placeholder={"Title"} name={"title"}
+                                                           value={review?.title} type={"text"}/>
+                                                <FormInput label={"Review description: "} placeholder={"Description"}
+                                                           name={"description"}
+                                                           value={review?.description} type={"text"}/>
+
+                                                <div className="rating">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <input
+                                                            key={star}
+                                                            type="radio"
+                                                            name="stars"
+                                                            value={star}
+                                                            className="mask mask-star-2 bg-orange-400"
+                                                            aria-label={`${star} star`}
+                                                            defaultChecked={review.stars === star}
+                                                        />
+                                                    ))}
+                                                </div>
+
+
+                                                <SaveButton formId={`edit-form-${review.id}`}
+                                                            modalId={`edit_review_modal_${review.id}`}/>
+                                            </form>
+                                        </div>
+                                    </dialog>
                                     <form action={deleteReview}>
                                         <input type="hidden" name="reviewId" value={review.id}/>
                                         <button className="text-red-600 text-sm hover:underline">Delete</button>

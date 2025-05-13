@@ -36,21 +36,21 @@ export default async function saveFitnessLog(formData) {
     revalidatePath('/', 'layout');
 }
 
-export async function generateMealPlan(goalType, calories) {
-    //const prompt = `Generate a meal plan for someone who wants ${goalType}. Caloric goal: ${calories} kcal/day. Include 3 meals and 2 snacks.`;
-    const prompt = `
-List 5 existing YouTube workout videos for people who want to lose weight. 
-Only include real, full YouTube links (https://www.youtube.com/watch?v=...) and include the video title.
-Avoid making up URLs. 
-Format the result like:
-
-1. [Title] - https://www.youtube.com/watch?v=...
-2. ...
-`;
-    const result = await askGemini(prompt);
-    console.log(result);
-    //return result;
-}
+// export async function generateMealPlan(goalType, calories) {
+//     //const prompt = `Generate a meal plan for someone who wants ${goalType}. Caloric goal: ${calories} kcal/day. Include 3 meals and 2 snacks.`;
+//     const prompt = `
+// List 5 existing YouTube workout videos for people who want to lose weight.
+// Only include real, full YouTube links (https://www.youtube.com/watch?v=...) and include the video title.
+// Avoid making up URLs.
+// Format the result like:
+//
+// 1. [Title] - https://www.youtube.com/watch?v=...
+// 2. ...
+// `;
+//     const result = await askGemini(prompt);
+//     console.log(result);
+//     //return result;
+// }
 
 // export async function generateWorkoutPlan() {
 //     const apiKey = process.env.YOUTUBE_API_KEY;
@@ -77,24 +77,21 @@ Format the result like:
 export async function generateWorkoutPlan(goalType) {
     const apiKey = process.env.YOUTUBE_API_KEY;
 
-    // 1. Generarea planului de antrenament cu Gemini
     const prompt = `Create a 7-day fitness workout plan for someone who wants to lose weight. Include exercises for each day with a YouTube search keyword for each day. 
     Format: 
     Day 1: HIIT - search: "15 min full body HIIT no equipment"
     Day 2: Yoga - search: "morning yoga for weight loss"
     ... and so on.`;
 
-    const plan = await askGemini(prompt);  // Planul generat de Gemini
+    const plan = await askGemini(prompt);
 
     console.log("AI-generated workout plan:", plan);
 
-    // 2. Extrage cuvintele cheie din planul generat de Gemini
     const days = plan.split("\n").map(line => {
         const match = line.match(/search:\s*["']?(.+?)["']?$/i);
-        return match ? match[1] : null;  // Extrage keyword-ul de căutare
+        return match ? match[1] : null;
     }).filter(Boolean);
 
-    // 3. Căutarea videoclipurilor YouTube pentru fiecare cuvânt-cheie
     const allVideos = [];
     for (const keyword of days) {
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(keyword)}&key=${apiKey}&type=video`;
@@ -114,9 +111,8 @@ export async function generateWorkoutPlan(goalType) {
         }
     }
 
-    // 4. Returnează rezultatul final cu planul și videoclipurile
     return {
-        plan: plan,  // Planul generat de Gemini
-        videos: allVideos  // Videoclipurile relevante de pe YouTube
+        plan: plan,
+        videos: allVideos
     };
 }

@@ -43,7 +43,7 @@ export default async function accountSettings() {
             <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
 
                 <fieldset className="fieldset">
-                    <legend className="fieldset-legend">What is your name?</legend>
+                    <legend className="text-sm font-medium">What is your name?</legend>
                     <input name="name" id="name" type="text" className="input w-full" placeholder="Type here"
                            defaultValue={user?.user_metadata.username || ""}/>
                 </fieldset>

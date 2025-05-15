@@ -44,6 +44,13 @@ export default async function OrderList({orders}) {
                             </div>
                             <div className="col-span-3 card bg-white rounded-xl border border-gray-200 w-full">
                                 <div className="card-body flex md:flex-row justify-between gap-5">
+                                    <div id="user-details">
+                                        <p className="text-gray-600 text-sm">Detalii utilizator</p>
+                                        <p className="font-semibold text-gray-800">
+                                            {order.user.full_name ? (order.user.full_name) : <></>} <br/>
+                                            {order.user.email ? (order.user.email) : <></>} <br/>
+                                            {order.user.phone ? (order.user.phone) : <></>}</p>
+                                    </div>
                                     <div id="invoice-address">
                                         <p className="text-gray-600 text-sm">Adresa de facturare</p>
                                         <p className="font-semibold text-gray-800">

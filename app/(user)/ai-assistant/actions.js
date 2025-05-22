@@ -21,12 +21,19 @@ export async function handleAIGeneration(formData) {
         prompt.includes("exercițiu") ||
         prompt.includes("antrenament")
     ) {
-        const aiText = await askGeminiWorkouts(`User goal: ${goal}, calories: ${calories}. Generate a workout plan for: ${prompt}`);
+        const aiText = await askGeminiWorkouts(prompt, goal, calories);
         const videos = await searchYouTubeVideos(prompt);
 
+        let jsonResponse = null;
+        try {
+            jsonResponse = JSON.parse(aiText);
+        } catch (err) {
+            console.error("Failed to parse Gemini response:", err);
+            jsonResponse = {error: "Invalid JSON from AI", raw: aiText};
+        }
         result = {
             type: "workout",
-            ai: aiText,
+            response: jsonResponse.workout_plan,
             youtube: videos,
         };
     } else if (
@@ -36,19 +43,29 @@ export async function handleAIGeneration(formData) {
         prompt.includes("meal plan") ||
         prompt.includes("diet")
     ) {
-        const aiText = await askGeminiRecipes(`User goal: ${goal}, calories: ${calories}. Generate a meal plan for: ${prompt}`);
+        const aiText = await askGeminiRecipes(prompt, goal, calories);
+
+        let jsonResponse = null;
+        try {
+            jsonResponse = JSON.parse(aiText);
+        } catch (err) {
+            console.error("Failed to parse Gemini response:", err);
+            jsonResponse = {error: "Invalid JSON from AI", raw: aiText};
+        }
+        // TODO: validare pentru raspuns prea lung - in cazul in care se genereaza o eroare transmitem utilizatorului un mesaj
 
         result = {
             type: "meal",
-            ai: aiText
+            response: jsonResponse.recipes_plan
         };
+        console.log(result);
     } else {
         const aiText = await askGeminiEverything(prompt);
         result = {
             type: "everything",
-            ai: aiText
+            response: aiText
         };
     }
 
-    console.log("AI RESULT:", result);
+    return result;
 }

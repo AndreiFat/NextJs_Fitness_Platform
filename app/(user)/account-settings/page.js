@@ -5,9 +5,10 @@ import {getUserProfile} from "@/utils/user/profile/getUserProfile";
 import UserProfileInput from "@/components/auth/forms/UserProfileInput";
 import PhoneInput from "@/components/auth/forms/PhoneInput";
 import {redirect} from "next/navigation";
+import React from "react";
 
 export const metadata = {
-    title: "accountSettings",
+    title: "Account Settings",
     description: "Page for account-settings",
 };
 
@@ -22,9 +23,9 @@ export default async function accountSettings() {
     const userProfile = await getUserProfile(user.id);
 
     const {data: fitnessGoals, error: fitnessError} = await supabase
-        .from('fitness_goals')
-        .select('*')
-        .eq('user_id', user.id)
+        .from("fitness_goals")
+        .select("*")
+        .eq("user_id", user.id)
         .maybeSingle();
 
     if (!userProfile) {
@@ -36,112 +37,175 @@ export default async function accountSettings() {
     }
 
     return (
-        <div>
-            <h1>accountSettings</h1>
-            <p>This is the accountSettings page.</p>
-
-            <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-
-                <fieldset className="fieldset">
-                    <legend className="text-sm font-medium">What is your name?</legend>
-                    <input name="name" id="name" type="text" className="input w-full" placeholder="Type here"
-                           defaultValue={user?.user_metadata.username || ""}/>
-                </fieldset>
-
-                <EmailInput value={user?.email}/>
-                <PhoneInput value={user?.user_metadata.phone}/>
-                <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"
-                                  value={userProfile?.age}/>
-
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-                        What is your sex?
-                    </label>
-                    <select
-                        id="gender"
-                        name="gender"
-                        className="select select-bordered"
-                        defaultValue={userProfile?.gender || "male"}
-                        required
-                    >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-
-                <UserProfileInput label="Enter your weight here:" name="initial_weight" type="number"
-                                  placeholder="75 kg"
-                                  value={userProfile?.initial_weight}/>
-                <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"
-                                  value={userProfile?.height}/>
-                <UserProfileInput label="What is your abdominal circumference?" name="initial_abdominal_circumference"
-                                  type="number"
-                                  placeholder="78 cm" value={userProfile?.initial_abdominal_circumference}/>
-                <UserProfileInput label="What is your hip circumference?" name="initial_hip_circumference" type="number"
-                                  placeholder="93 cm" value={userProfile?.initial_hip_circumference}/>
-
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="activity_level" className="block text-sm font-medium text-gray-700">
-                        Physical activity level
-                    </label>
-                    <select
-                        id="activity_level"
-                        name="activity_level"
-                        className="select select-bordered"
-                        defaultValue={userProfile?.activity_level || "sedentary"}
-                        required
-                    >
-                        <option value="sedentary">Sedentary (little or no exercise)</option>
-                        <option value="light">Light activity (1–3 days/week)</option>
-                        <option value="moderate">Moderate activity (3–5 days/week)</option>
-                        <option value="heavy">Heavy activity (6–7 days/week)</option>
-                        <option value="intense">Very intense (twice daily or physical job)</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">What is your fitness goal?</label>
-
-                    {["Muscle Gain", "Weight loss", "Maintenance", "Performance & Endurance", "Flexibility & Mobility", "General Fitness & Well-being"].map(goal => (
-                        <div className="flex items-center space-x-2" key={goal}>
-                            <label>
-                                <input type="radio" name="goal_type" value={goal} className="radio radio-secondary"
-                                       defaultChecked={fitnessGoals?.goal_type === goal}/>
-                                <span className="pl-2">{goal}</span>
-                            </label>
+        <div
+            className="min-h-screen bg-base-200 py-10 flex justify-center pt-[100px] bg-linear-to-t from-primary/25 to-base-100">
+            <div className="w-full max-w-5xl bg-base-200/50 p-10 shadow-md card backdrop-blur-sm">
+                <h1 className="text-3xl font-bold text-center mb-2">Account Settings</h1>
+                <p className="text-center text-base-content/70 mb-8">
+                    Manage and update your profile details below.
+                </p>
+                <form action={updateUserProfile}>
+                    {/* Grid layout */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                        {/* Name */}
+                        <div className="form-control">
+                            <legend className="text-sm font-medium mb-1">Name</legend>
+                            <input
+                                name="name"
+                                type="text"
+                                className="input input-bordered w-full"
+                                placeholder="Your name"
+                                defaultValue={userProfile.user.full_name || ""}
+                            />
                         </div>
-                    ))}
-                </div>
 
-                {/*Notes - optional*/}
-                <div>
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">If you have any notes, enter them here</legend>
-                        <input name="notes" id="notes" type="text" className="input" placeholder="Type here"
-                               defaultValue={userProfile?.notes || ""}/>
-                        <p className="fieldset-label">Optional</p>
-                    </fieldset>
-                </div>
+                        {/* Age */}
+                        <UserProfileInput
+                            label="Your age"
+                            name="age"
+                            type="number"
+                            placeholder="23 years old"
+                            value={userProfile?.age}
+                        />
 
-                <button
-                    formAction={updateUserProfile}
-                    type="submit"
-                    className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                    Update Profile
-                </button>
-            </form>
+                        <EmailInput value={user?.email}/>
+                        <PhoneInput value={userProfile.user.phone}/>
 
+                        {/* Gender */}
+                        <div className="form-control">
+                            <legend className="text-sm font-medium mb-1">Gender</legend>
+                            <select
+                                name="gender"
+                                className="select select-bordered w-full"
+                                defaultValue={userProfile?.gender || "male"}
+                            >
+                                <option value="null">Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
 
-            {user.identities[0].provider === "google" ? (<></>) :
-                <div className={"flex justify-center p-4"}>
-                    <div className="w-full grid grid-cols-4 gap-4">
-                        <form action={sendPasswordReset}>
-                            <EmailInput/>
-                            <button type={"submit"} className={"btn btn-soft btn-accent mt-3"}>Reset Password</button>
-                        </form>
+                        {/* Activity level */}
+                        <div className="form-control">
+                            <legend className="text-sm font-medium mb-1">Activity Level</legend>
+                            <select
+                                name="activity_level"
+                                className="select select-bordered w-full"
+                                defaultValue={userProfile?.activity_level || "sedentary"}
+                            >
+                                <option value="sedentary">Sedentary</option>
+                                <option value="light">Light (1–3x/week)</option>
+                                <option value="moderate">Moderate (3–5x/week)</option>
+                                <option value="heavy">Heavy (6–7x/week)</option>
+                                <option value="intense">Very intense</option>
+                            </select>
+                        </div>
+
+                        {/* Weight, Height */}
+                        <UserProfileInput
+                            label="Weight (kg)"
+                            name="initial_weight"
+                            type="number"
+                            placeholder="75"
+                            value={userProfile?.initial_weight}
+                        />
+                        <UserProfileInput
+                            label="Height (cm)"
+                            name="height"
+                            type="number"
+                            placeholder="175"
+                            value={userProfile?.height}
+                        />
+                        <UserProfileInput
+                            label="Abdominal Circumference (cm)"
+                            name="initial_abdominal_circumference"
+                            type="number"
+                            placeholder="78"
+                            value={userProfile?.initial_abdominal_circumference}
+                        />
+                        <UserProfileInput
+                            label="Hip Circumference (cm)"
+                            name="initial_hip_circumference"
+                            type="number"
+                            placeholder="93"
+                            value={userProfile?.initial_hip_circumference}
+                        />
                     </div>
-                </div>}
+
+                    {/* Fitness Goals Cards */}
+                    <div className="mt-10">
+                        <label className="label mb-2">
+                            <span className="label-text font-medium text-lg">Choose your fitness goal</span>
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            {[
+                                {value: "Muscle Gain", icon: "💪"},
+                                {value: "Weight loss", icon: "⚖️"},
+                                {value: "Maintenance", icon: "🛠️"},
+                                {value: "Performance & Endurance", icon: "🏃‍♂️"},
+                                {value: "Flexibility & Mobility", icon: "🧘‍♂️"},
+                                {value: "General Fitness & Well-being", icon: "🌿"},
+                            ].map(({value, icon}) => (
+                                <label key={value} className="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="goal_type"
+                                        value={value}
+                                        className="hidden peer"
+                                        defaultChecked={fitnessGoals?.goal_type === value}
+                                    />
+                                    <div
+                                        className="p-4 card w-full text-start border border-base-content bg-base-100 hover:bg-base-200 peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary transition-all">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-xl">{icon}</div>
+                                            <div className="font-semibold">{value}</div>
+                                        </div>
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Notes */}
+                    <div className="form-control mt-8">
+                        <legend className="text-sm font-medium mb-1">Notes</legend>
+                        <textarea
+                            name="notes"
+                            className="textarea h-24 w-full px-5 py-3 "
+                            placeholder="Type your notes..."
+                            defaultValue={userProfile?.notes || ""}
+                        />
+                        <div className="label text-sm">Optional</div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-full mt-6"
+                    >
+                        Update Profile
+                    </button>
+                </form>
+
+                {/* Password Reset */}
+                {user.identities[0].provider !== "google" && (
+                    <div className="mt-12">
+                        <div className="card bg-base-100 shadow-md">
+                            <div className="card-body">
+                                <h3 className="text-lg font-semibold text-center">Reset Your Password</h3>
+                                <p className="text-sm text-center text-base-content/70 mb-4">
+                                    We'll send a reset link to your email.
+                                </p>
+                                <form action={sendPasswordReset} className="space-y-4">
+                                    <EmailInput/>
+                                    <button type="submit" className="btn btn-accent w-full">
+                                        Send Reset Link
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

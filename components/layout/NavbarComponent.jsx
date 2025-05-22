@@ -8,7 +8,7 @@ async function NavbarComponent() {
     const supabase = await createSupabaseServerClient();
     const {data: {user}, error} = await supabase.auth.getUser();
     return (
-        <div className="navbar z-50 fixed top-0 shadow-sm align-center h-[76px] bg-white/[10%] backdrop-blur-sm">
+        <div className="navbar z-50 fixed top-0 shadow-sm align-center h-[76px] bg-base-100/75 backdrop-blur-sm">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">

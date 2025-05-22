@@ -1,6 +1,6 @@
 function FooterComponent(props) {
     return (
-        <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
+        <footer className="footer sm:footer-horizontal bg-secondary-content text-neutral-content p-10">
             <aside>
                 <svg
                     width="50"

@@ -3,7 +3,7 @@ import {createSupabaseServerClient} from "@/utils/supabase/server";
 import {getUserProfile} from "@/utils/user/profile/getUserProfile";
 import {redirect} from "next/navigation";
 import UserProfileInput from "@/components/auth/forms/UserProfileInput";
-
+import React from "react";
 
 export const metadata = {
     title: "User Profile Page",
@@ -25,134 +25,132 @@ export default async function UserProfilePage() {
     }
 
     return (
-        <>
-            <h1>User Profile Page</h1>
-            <p>This is the User Profile Page page.</p>
+        <div className="min-h-screen bg-base-200 py-10 flex justify-center pt-[100px]">
+            <div className="w-full max-w-5xl bg-base-100 p-8 rounded-lg shadow-md">
+                <h1 className="text-3xl font-bold text-center mb-2">User Profile</h1>
+                <p className="text-center text-base-content/70 mb-8">
+                    Complete your profile so we can personalize your fitness plan.
+                </p>
 
-            <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-                <UserProfileInput label="What is your age?" name="age" type="number" placeholder="23 years old"/>
-                <UserProfileInput label="Enter your initial weight here:" name="initial_weight" type="number"
-                                  placeholder="75 kg"/>
-                <UserProfileInput label="Enter your height here:" name="height" type="number" placeholder="175 cm"/>
-                <UserProfileInput label="What is your initial abdominal circumference?"
-                                  name="initial_abdominal_circumference"
-                                  type="number" placeholder="78 cm"/>
-                <UserProfileInput label="What is your initial hip circumference?" name="initial_hip_circumference"
-                                  type="number"
-                                  placeholder="93 cm"/>
+                <form action={saveUserProfile}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                        <UserProfileInput
+                            label="What is your age?"
+                            name="age"
+                            type="number"
+                            placeholder="23 years old"
+                        />
+                        <UserProfileInput
+                            label="Weight (kg)"
+                            name="initial_weight"
+                            type="number"
+                            placeholder="75"
+                        />
+                        <UserProfileInput
+                            label="Height (cm)"
+                            name="height"
+                            type="number"
+                            placeholder="175"
+                        />
+                        <UserProfileInput
+                            label="Abdominal Circumference (cm)"
+                            name="initial_abdominal_circumference"
+                            type="number"
+                            placeholder="78"
+                        />
+                        <UserProfileInput
+                            label="Hip Circumference (cm)"
+                            name="initial_hip_circumference"
+                            type="number"
+                            placeholder="93"
+                        />
 
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="sex" className="block text-sm font-medium text-gray-700">
-                        What is your gender?
-                    </label>
-                    <select
-                        id="gender"
-                        name="gender"
-                        className="select select-bordered"
-                        defaultValue="male"
-                        required
+                        {/* Gender */}
+                        <div className="form-control">
+                            <legend className="text-sm font-medium mb-1">Gender</legend>
+                            <select
+                                name="gender"
+                                className="select select-bordered w-full"
+                                defaultValue="male"
+                                required
+                            >
+                                <option value="null">Select your gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+
+                        {/* Activity level */}
+                        <div className="form-control">
+                            <legend className="text-sm font-medium mb-1">Activity Level</legend>
+                            <select
+                                name="activity_level"
+                                className="select select-bordered w-full"
+                                defaultValue="sedentary"
+                                required
+                            >
+                                <option value="sedentary">Sedentary (little or no exercise)</option>
+                                <option value="light">Light activity (1–3 days/week)</option>
+                                <option value="moderate">Moderate activity (3–5 days/week)</option>
+                                <option value="heavy">Heavy activity (6–7 days/week)</option>
+                                <option value="intense">Very intense (twice daily or physical job)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Fitness Goals as Selectable Cards */}
+                    <div className="mt-10">
+                        <label className="label mb-2">
+                            <span className="label-text font-medium text-lg">Choose your fitness goal</span>
+                        </label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            {[
+                                {value: "Muscle Gain", icon: "💪"},
+                                {value: "Weight loss", icon: "⚖️"},
+                                {value: "Maintenance", icon: "🛠️"},
+                                {value: "Performance & Endurance", icon: "🏃‍♂️"},
+                                {value: "Flexibility & Mobility", icon: "🧘‍♂️"},
+                                {value: "General Fitness & Well-being", icon: "🌿"},
+                            ].map(({value, icon}) => (
+                                <label key={value} className="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="goal_type"
+                                        value={value}
+                                        className="hidden peer"
+                                        defaultChecked={value === "Muscle Gain"}
+                                    />
+                                    <div
+                                        className="card p-4 border bg-base-100 hover:bg-base-200 peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary transition-all">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-2xl">{icon}</div>
+                                            <div className="font-semibold">{value}</div>
+                                        </div>
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Notes */}
+                    <div className="form-control mt-8">
+                        <legend className="text-sm font-medium mb-1">Any notes? (Optional)</legend>
+                        <textarea
+                            name="notes"
+                            className="textarea h-24 w-full px-5 py-3 "
+                            placeholder="Type your notes..."
+                            defaultValue={userProfile?.notes || ""}
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-full mt-6"
                     >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="activity_level" className="block text-sm font-medium text-gray-700">
-                        Physical activity level
-                    </label>
-                    <select
-                        id="activity_level"
-                        name="activity_level"
-                        className="select select-bordered"
-                        defaultValue="sedentary"
-                        required
-                    >
-                        <option value="sedentary">Sedentary (little or no exercise)</option>
-                        <option value="light">Light activity (1–3 days/week)</option>
-                        <option value="moderate">Moderate activity (3–5 days/week)</option>
-                        <option value="heavy">Heavy activity (6–7 days/week)</option>
-                        <option value="intense">Very intense (twice daily training or physical job)</option>
-                    </select>
-                </div>
-
-                <div className="flex flex-col space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                        What is your fitness goal?
-                    </label>
-
-                    <div className="flex items-center space-x-2">
-                        <label className="">
-                            <input id="muscle_gain" type="radio" name="goal_type" value="Muscle Gain"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">Muscle Gain/Bulking</span>
-                        </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <label>
-                            <input id="weight_loss" type="radio" name="goal_type" value="Weight loss"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">Weight loss</span>
-                        </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <label>
-                            <input id="maintenance" type="radio" name="goal_type" value="Maintenance"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">Maintenance</span>
-                        </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <label>
-                            <input id="performance" type="radio" name="goal_type" value="Performance & Endurance"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">Performance & Endurance</span>
-                        </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <label>
-                            <input id="mobility" type="radio" name="goal_type" value="Flexibility & Mobility"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">Flexibility & Mobility</span>
-                        </label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <label>
-                            <input id="mobility" type="radio" name="goal_type" value="General Fitness & Well-being"
-                                   className="radio radio-secondary"
-                                   defaultChecked/>
-                            <span className="pl-2">General Fitness & Well-being</span>
-                        </label>
-                    </div>
-                </div>
-
-                {/*Notes - optional*/}
-                <div>
-                    <fieldset className="fieldset">
-                        <legend className="fieldset-legend">If you have any notes, enter them here</legend>
-                        <input name="notes" id="notes" type="text" className="input" placeholder="Type here"/>
-                        <p className="fieldset-label">Optional</p>
-                    </fieldset>
-                </div>
-
-                <button
-                    formAction={saveUserProfile}
-                    type="submit"
-                    className="w-50 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                >
-                    Save Profile
-                </button>
-            </form>
-        </>
+                        Save Profile
+                    </button>
+                </form>
+            </div>
+        </div>
     );
 }

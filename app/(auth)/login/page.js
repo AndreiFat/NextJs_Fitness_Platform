@@ -11,29 +11,40 @@ export const metadata = {
 
 export default function LoginPage() {
     return (
-        <div>
-            <form className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-4">
-                <EmailInput/>
-                <PasswordInput/>
+        <div
+            className="min-h-screen flex items-center justify-center bg-base-200 bg-linear-to-t from-primary/20 to-base-100">
+            <div className="card w-full max-w-md shadow-xl bg-base-100">
+                <div className="card-body space-y-3">
+                    <h2 className="text-2xl font-bold text-center">Login</h2>
 
-                <div className="flex justify-between">
-                    <button
-                        formAction={login}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                    >
-                        Log in
-                    </button>
+                    <form className="space-y-4" action={login}>
+                        <EmailInput/>
+                        <PasswordInput/>
 
-                    <Link href={"/signup"}
-                          className="w-full ml-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition duration-200 text-center"
-                    >
-                        Sign up
-                    </Link>
+                        <div className="form-control">
+                            <button
+                                type="submit"
+                                className="btn btn-primary w-full"
+                            >
+                                Log in
+                            </button>
+                        </div>
+
+                        <div className="text-center">
+                            <p className="text-sm">
+                                Don’t have an account?
+                                <Link href="/signup" className="link link-primary ml-1">
+                                    Sign up
+                                </Link>
+                            </p>
+                        </div>
+                    </form>
+
+                    <div className="divider">or</div>
+
+                    <LoginWithGoogleButton/>
                 </div>
-            </form>
-            <div className="flex justify-center mt-3">
-                <LoginWithGoogleButton/>
             </div>
         </div>
-    )
+    );
 }

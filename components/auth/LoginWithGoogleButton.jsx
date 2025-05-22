@@ -6,7 +6,7 @@ function LoginWithGoogleButton(props) {
     return (
         <button onClick={() => {
             signInWithGoogle()
-        }} className="btn bg-white text-black border-[#e5e5e5] hover:bg-secondary hover:text-white">
+        }} className="btn bg-white text-black border-[#e5e5e5] hover:bg-primary hover:text-white">
             <svg className={"rounded-full"} aria-label="Google logo" width="24" height="24"
                  xmlns="http://www.w3.org/2000/svg"
                  viewBox="0 0 512 512">

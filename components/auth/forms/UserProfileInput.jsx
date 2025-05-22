@@ -3,12 +3,12 @@ import React from 'react';
 function UserProfileInput({label, name, type = "number", placeholder, value}) {
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <legend className="text-sm font-medium mb-1">{label}</legend>
             <input
                 name={name}
                 id={name}
                 type={type}
-                className="input validator"
+                className="input validator w-full"
                 required
                 placeholder={placeholder}
                 min="1"

@@ -6,7 +6,7 @@ export async function getUserProfile(userId) {
 
     let {data: user_profiles, error} = await supabase
         .from('user_profiles')
-        .select('*')
+        .select('*, user: users(full_name, phone)')
         .eq("id", userId)
         .maybeSingle();
 
@@ -14,6 +14,6 @@ export async function getUserProfile(userId) {
         console.error(error);
         redirect('/error');
     }
-
+    console.log(user_profiles);
     return user_profiles;
 }

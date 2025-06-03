@@ -1,38 +1,36 @@
-import {createSupabaseServerClient} from '@/utils/supabase/server';
-import Link from "next/link";
 import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
+import Product from "@/components/shop/products/Product";
 import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
+import {getCart} from "@/app/(shop)/shop/actions";
 
-export default async function FavoriteList({userId}) {
-    const supabase = await createSupabaseServerClient();
+export default async function FavoriteList({favorites, userId}) {
 
-    // Fetch all favorite product IDs
-    const {data: favorites, error} = await supabase
-        .from('favorites')
-        .select('product_id, products(name)')
-        .eq('user_id', userId);
-    console.log(favorites);
-    if (error) return <p>Error loading favorites</p>;
-
+    // Fetch cart data
+    const {cart} = await getCart(userId);
+    const cartItems = cart.reduce((acc, item) => {
+        acc[item.product_id] = item.quantity;
+        return acc;
+    }, {});
     const favoriteIds = favorites ? favorites.map((fav) => fav.product_id) : [];
-    console.log("aici sunt id-urile produselor favorite", favoriteIds);
+
     return (
         <div>
-            <ul>
-                {favorites.length > 0 ? (
-                    favorites.map((product) =>
-                        <li key={product.product_id}>
-                            Product ID: {product.product_id} | {product.products.name}
-                            <Link className={"btn"}
-                                  href={`/shop/product/${product.id}`}>View
-                                Product</Link>
-                            <SaveToFavoritesButton userId={userId} productId={product.product_id}
-                                                   initialFavorite={favoriteIds.includes(product.product_id)}/>
-                            <AddToCartButton/></li>)
-                ) : (
-                    <p>No favorites yet.</p>
-                )}
-            </ul>
+            {favorites.length > 0 ? (
+                <div className="grid grid-cols-3 gap-6">
+                    {favorites.map((product, index) =>
+                        <Product key={index}
+                                 product={product.products}
+                                 addToCartButton={<AddToCartButton isDisabled={product.products.is_active}
+                                                                   userId={userId} productId={product.product_id}
+                                                                   initialQuantity={cartItems[product.product_id] || 0}/>}
+                                 addToFavoriteButton={
+                                     <SaveToFavoritesButton userId={userId} isDisabled={true}
+                                                            productId={product.product_id}
+                                                            initialFavorite={favoriteIds.includes(product.product_id)}/>}/>
+                    )}</div>
+            ) : (
+                <p>No favorites yet.</p>)
+            }
         </div>
     );
 }

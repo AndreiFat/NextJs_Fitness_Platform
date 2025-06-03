@@ -1,6 +1,9 @@
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import ModifyQuantityButton from "@/components/shop/buttons/ModifyQuantityButton";
 import SubtotalComponent from "@/components/shop/cart/SubtotalComponent";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFaceFrownOpen} from "@fortawesome/free-regular-svg-icons";
+import Link from "next/link";
 
 export const metadata = {
     title: "Shopping Cart",
@@ -43,11 +46,19 @@ export default async function ShoppingCart() {
 
 
     return (
-        <div className="container px-3 sm-px-0 sm:mx-auto">
-            <h1>Shopping Cart</h1>
-            <p>This is the Shopping Cart page.</p>
+        <div className="container px-3 sm-px-0 sm:mx-auto pt-32">
+            <h1 className="text-4xl font-extrabold text-primary mb-2">Your Shopping Cart</h1>
+            <p className="text-base text-muted-foreground">Review your selected items and proceed to checkout when
+                you're ready.</p>
+            <div className="divider"></div>
+
             {cartProducts.length === 0 ? (
-                <p>Your cart is empty.</p>
+                <div className="flex flex-col items-center justify-center text-center py-16 text-muted-foreground">
+                    <p className="text-5xl mb-3"><FontAwesomeIcon icon={faFaceFrownOpen}/></p>
+                    <p className="text-lg font-medium">Your cart is empty</p>
+                    <p className="text-sm text-base-content/50">Looks like you haven't added anything yet.</p>
+                    <Link className={"btn btn-outline btn-primary mt-3"} href={'/shop'}>Shop Now</Link>
+                </div>
             ) : (
                 <div
                     className={'grid grid-cols-1 md:grid-cols-3 md:gap-4'}>

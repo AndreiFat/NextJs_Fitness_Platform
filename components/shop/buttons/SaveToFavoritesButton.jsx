@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import {faHeart as faHeartRegular} from "@fortawesome/free-regular-svg-icons";
 
-function SaveToFavoritesButton({userId, productId, initialFavorite}) {
+function SaveToFavoritesButton({userId, productId, initialFavorite, isDisabled}) {
     const [isFavorite, setIsFavorite] = useState(initialFavorite);
 
     async function handleToggle() {
@@ -19,7 +19,7 @@ function SaveToFavoritesButton({userId, productId, initialFavorite}) {
 
     return (
         <button onClick={handleToggle}
-                className={`p-2 ${isFavorite ? 'bg-red-500 text-white rounded-xl hover:bg-red-600' : 'bg-gray-200 rounded-xl hover:bg-red-500 hover:text-white'}`}>
+                className={`btn btn-circle p-2 ${isFavorite ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-200 hover:bg-red-500 hover:text-white'} ${!isDisabled ? 'btn-disabled' : ''}`}>
             {isFavorite ? <FontAwesomeIcon icon={faHeartSolid}/> : <FontAwesomeIcon icon={faHeartRegular}/>}
         </button>
     );

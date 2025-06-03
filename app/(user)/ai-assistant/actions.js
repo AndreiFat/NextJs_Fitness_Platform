@@ -2,6 +2,9 @@
 
 import {askGeminiEverything, askGeminiRecipes, askGeminiWorkouts} from "@/utils/google-ai/lib/gemini";
 import {searchYouTubeVideos} from "@/utils/google-ai/lib/youtube-api";
+import {createSupabaseServerClient} from "@/utils/supabase/server";
+import crypto from 'crypto';
+import {revalidatePath} from "next/cache";
 
 export async function handleAIGeneration(formData) {
     const prompt = formData.get('prompt')?.toLowerCase();
@@ -19,6 +22,7 @@ export async function handleAIGeneration(formData) {
     if (
         prompt.includes("workout") ||
         prompt.includes("exercițiu") ||
+        prompt.includes("exercitii") ||
         prompt.includes("antrenament")
     ) {
         const aiText = await askGeminiWorkouts(prompt, goal, calories);
@@ -46,19 +50,26 @@ export async function handleAIGeneration(formData) {
         const aiText = await askGeminiRecipes(prompt, goal, calories);
 
         let jsonResponse = null;
+        const MAX_LENGTH = 30000;
         try {
+            if (!aiText || aiText.length > MAX_LENGTH) {
+                return {
+                    type: "meal",
+                    error: "Sorry, the AI response is too long. Please try again with a shorter prompt."
+                }
+            }
+
             jsonResponse = JSON.parse(aiText);
         } catch (err) {
-            console.error("Failed to parse Gemini response:", err);
-            jsonResponse = {error: "Invalid JSON from AI", raw: aiText};
+            return {
+                type: "meal",
+                error: "AI response is not in JSON format.",
+            };
         }
-        // TODO: validare pentru raspuns prea lung - in cazul in care se genereaza o eroare transmitem utilizatorului un mesaj
-
         result = {
             type: "meal",
             response: jsonResponse.recipes_plan
         };
-        console.log(result);
     } else {
         const aiText = await askGeminiEverything(prompt);
         result = {
@@ -67,5 +78,53 @@ export async function handleAIGeneration(formData) {
         };
     }
 
+    console.log(result);
     return result;
+}
+
+// Hashing function to match items (optional, for uniqueness)
+function hashItem(item) {
+    return crypto.createHash('sha256').update(JSON.stringify(item)).digest('hex');
+}
+
+export async function toggleFavoriteAIItem({type, item, itemHash}) {
+    const supabase = await createSupabaseServerClient();
+    const {
+        data: {user}
+    } = await supabase.auth.getUser();
+
+    if (!user) throw new Error('Not authenticated');
+
+    // Check if this item is already saved
+    const {data: existing, error: findError} = await supabase
+        .from('ai_favorite_items')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('item_hash', itemHash)
+        .maybeSingle();
+
+    if (findError) throw findError;
+
+    if (existing) {
+        const {error: deleteError} = await supabase
+            .from('ai_favorite_items')
+            .delete()
+            .eq('id', existing.id);
+        if (deleteError) throw deleteError;
+        revalidatePath('/admin/favorites', 'layout')
+        return {saved: false};
+    } else {
+        const {error: insertError} = await supabase
+            .from('ai_favorite_items')
+            .insert({
+                user_id: user.id,
+                type,
+                item,
+                item_hash: itemHash
+            });
+        if (insertError) throw insertError;
+        revalidatePath('/admin/favorites', 'layout')
+        return {saved: true};
+    }
+
 }

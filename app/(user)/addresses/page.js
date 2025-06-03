@@ -4,6 +4,8 @@ import AddressList from "@/components/auth/addresses/AddressList";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import {saveAddress} from "@/app/(user)/addresses/actions";
 import SaveButton from "@/components/shop/products/SaveButton";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export const metadata = {
     title: "AddressPage",
@@ -21,30 +23,70 @@ export default async function AddressPage() {
         .eq("user_id", userId);
 
     return (
-        <div>
-            <AddressList addresses={addresses}></AddressList>
-
-            <div className="flex gap-2">
-                <ModalOpenButton id={"addAddressesForm"} buttonName={"Add new address"}></ModalOpenButton>
-                <dialog id={"addAddressesForm"} className="modal">
-                    <div className="modal-box">
-                        <form method="dialog">
-                            <button
-                                className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
-                            </button>
-                        </form>
-                        <h3 className="font-bold text-lg">Add new address: </h3>
-                        <form id="add-address-form" action={saveAddress}
-                              className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-                            <FormInput label="Country: " name="country" type="text" placeholder="United States"/>
-                            <FormInput label="Your city: " name="city" type="text" placeholder="New York"/>
-                            <FormInput label="Your address: " name="address" type="text"
-                                       placeholder="Avenue Street, 23"/>
-                            <SaveButton formId="add-address-form" modalId="addAddressesForm" label="Save Address"/>
-                        </form>
-                    </div>
-                </dialog>
+        <div className="container mx-auto px-4 pt-32">
+            <div className="flex justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold mb-4 text-primary">Your Saved Addresses</h1>
+                    <p className="text-base-content/75 mb-6">
+                        Manage your delivery locations below. Add, update, or remove addresses as needed.
+                    </p>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                    <ModalOpenButton className={"btn-primary btn-outline"} id="addAddressesForm"
+                                     buttonName={<><FontAwesomeIcon icon={faPlus}/>Add New Address</>}/>
+                </div>
             </div>
+
+            <AddressList addresses={addresses}/>
+
+
+            {/* Modal */}
+            <dialog id="addAddressesForm" className="modal">
+                <div className="modal-box rounded-xl max-w-md w-full">
+                    <form method="dialog">
+                        <button
+                            className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3"
+                            aria-label="Close">
+                            ✕
+                        </button>
+                    </form>
+
+                    <h3 className="font-semibold text-xl text-primary mb-4">Add New Address</h3>
+
+                    <form
+                        id="add-address-form"
+                        action={saveAddress}
+                        className="space-y-4"
+                    >
+                        <FormInput
+                            label="Country"
+                            name="country"
+                            type="text"
+                            placeholder="e.g., United States"
+                        />
+                        <FormInput
+                            label="City"
+                            name="city"
+                            type="text"
+                            placeholder="e.g., New York"
+                        />
+                        <FormInput
+                            label="Address"
+                            name="address"
+                            type="text"
+                            placeholder="e.g., 23 Avenue Street"
+                        />
+
+                        <div className="pt-4">
+                            <SaveButton
+                                formId="add-address-form"
+                                modalId="addAddressesForm"
+                                label="Save Address"
+                            />
+                        </div>
+                    </form>
+                </div>
+            </dialog>
         </div>
     );
 }

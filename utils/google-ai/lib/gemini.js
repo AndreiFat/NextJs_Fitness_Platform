@@ -188,7 +188,8 @@ export async function askGeminiWorkouts(prompt, goal_type, calories) {
         config: {
             systemInstruction: `You are a helpful fitness and workout assistant.
               Always respect the user's goal: ${goal_type} and ${calories} calories.
-              Use structured output as defined in the responseSchema. `,
+              Use structured output as defined in the responseSchema. Do not include Sunday workouts, its rest day. 
+              Try equilibrate the number of exercises per day. Try to formulate the exercises in Romanian.`,
             responseMimeType: "application/json",
             responseSchema: {
                 "type": "object",

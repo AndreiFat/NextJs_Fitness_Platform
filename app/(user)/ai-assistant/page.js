@@ -1,10 +1,11 @@
 'use client';
 
 import {useSearchParams} from 'next/navigation';
-import {useActionState} from 'react';
+import React, {useActionState} from 'react';
 import {handleAIGeneration} from '@/app/(user)/ai-assistant/actions';
 import SkeletonOnLoad from "@/components/ai-assistant/SkeletonOnLoad";
 import AiGeneratedMeal from "@/components/ai-assistant/AiGeneratedMeal";
+import AiGeneratedWorkout from "@/components/ai-assistant/AiGeneratedWorkout";
 
 
 const initialState = null;
@@ -25,7 +26,7 @@ export default function AiGeneratedPlan() {
 
     return (
         <div
-            className={`ai-plan bg-linear-to-r from-cyan-400/8 to-teal-500/8 p-[100px] transition-all duration-500 ease-in-out ${response ? 'h-auto' : 'h-dvh'}`}>
+            className={`ai-plan bg-linear-to-r from-cyan-400/10 to-teal-500/2 pt-[100px] transition-all duration-500 ease-in-out min-h-screen ${response ? 'h-auto' : 'h-dvh'}`}>
             <div className="container mx-auto">
                 <div className="p-12 space-y-4 text-center">
                     <span
@@ -39,7 +40,7 @@ export default function AiGeneratedPlan() {
                         Personalized meals and workouts, tailored to your lifestyle and goals.
                     </p>
 
-                    <form action={formAction} className="space-y-4">
+                    <form action={formAction} className="space-y-8">
                         <label className="input border-0 w-full md:w-2xl input-xl text-base opacity-55 text-white">
                             <input className="p-3" type="search" name="prompt" required
                                    placeholder="e.g. Create a weekly meal plan for muscle gain with 2500 calories"/>
@@ -55,7 +56,6 @@ export default function AiGeneratedPlan() {
                             <div className="flex gap-6">
                                 <SkeletonOnLoad></SkeletonOnLoad>
                                 <SkeletonOnLoad></SkeletonOnLoad>
-                                <SkeletonOnLoad></SkeletonOnLoad>
                             </div>
                         </>
                     ) : (<>
@@ -63,9 +63,33 @@ export default function AiGeneratedPlan() {
                             <div className="mt-6 text-left">
                                 <h3 className="text-xl font-semibold">AI Response:</h3>
                                 {response.type === 'meal' ? (
-                                    <AiGeneratedMeal response={response.response}></AiGeneratedMeal>
+                                    <>{response.error ?
+                                        <div role="alert" className="alert alert-error my-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 className="h-6 w-6 shrink-0 stroke-current" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span>{response.error}</span>
+                                        </div> : null}
+                                        <AiGeneratedMeal response={response.response}></AiGeneratedMeal>
+                                    </>
                                 ) : (response.type === 'workout' ? (
-                                    'altceva'
+                                    <>
+                                        <div
+                                            className="flex overflow-x-auto space-x-4 p-4 bg-base-100/75 rounded-xl my-3">
+                                            {response.youtube.map((video, index) => (
+                                                <div key={index}>
+                                                    <iframe
+                                                        className="sm:min-w-[450px] sm:h-[250px] md:min-w-[650px] md:h-[350px] rounded-lg shadow"
+                                                        src={`https://www.youtube.com/embed/${video.videoId}`}
+                                                        allowFullScreen
+                                                    ></iframe>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AiGeneratedWorkout response={response.response}></AiGeneratedWorkout></>
                                 ) : ('ceva jmecher cu dublu jm'))}
 
                             </div>

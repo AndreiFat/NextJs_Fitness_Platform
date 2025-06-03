@@ -10,46 +10,78 @@ import React from "react";
 export default function AddressList({addresses}) {
     return (
         <div>
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {addresses.map((address) => (<li key={address.id} className="border p-4 rounded-md shadow-sm">
-                    <h3 className="text-lg font-semibold">{address.country}</h3>
-                    <p className="text-gray-500">{address.city}</p>
-                    <p className="text-gray-500">{address.address}</p>
-                    <div className="flex gap-2">
-                        <ModalOpenButton id={`edit_address_modal_${address.id}`} buttonName={<FontAwesomeIcon
-                            icon={faPen}/>}></ModalOpenButton>
-                        <button className="btn btn-ghost" onClick={() => deleteAddress(address.id)}><FontAwesomeIcon
-                            icon={faTrash}/></button>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {addresses.map((address) => (
+                    <li key={address.id} className="rounded-xl shadow-md bg-base-200/75 p-5 relative">
+                        <div className="flex flex-col gap-1 mb-4">
+                            <h3 className="text-xl font-semibold text-white">{address.country}</h3>
+                            <p className="text-gray-400">{address.city}</p>
+                            <p className="text-gray-500">{address.address}</p>
+                        </div>
+
+                        <div className="flex justify-end items-center gap-3">
+                            <ModalOpenButton
+                                id={`edit_address_modal_${address.id}`} className={"btn-outline btn-info"}
+                                buttonName={<><FontAwesomeIcon icon={faPen}/> Edit</>
+                                }
+                            />
+                            <button
+                                className="btn btn-outline btn-error"
+                                onClick={() => deleteAddress(address.id)}
+                            >
+                                <FontAwesomeIcon icon={faTrash}/> Delete
+                            </button>
+                        </div>
+
+                        {/* Edit Modal */}
                         <dialog id={`edit_address_modal_${address.id}`} className="modal">
-                            <div className="modal-box">
+                            <div className="modal-box rounded-xl">
                                 <form method="dialog">
                                     <button
-                                        className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                                        className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3"
+                                        aria-label="Close"
+                                    >
+                                        ✕
                                     </button>
                                 </form>
-                                <h3 className="font-bold text-lg">Edit the address: </h3>
-                                <p className="py-4">{address.city}</p>
-                                <form action={updateAddress} id={`edit-form-${address.id}`}>
-                                    <input type="hidden" id={`address_id_${address.id}`} name="address_id"
-                                           value={address.id}/>
-                                    <FormInput label={"Country: "} placeholder={"country"} name={"country"}
-                                               value={address?.country}
-                                               type={"text"}/>
-                                    <FormInput label={"City: "} placeholder={"city"} name={"city"}
-                                               value={address?.city}
-                                               type={"text"}/>
-                                    <FormInput label={"Address: "} placeholder={"address"} name={"address"}
-                                               value={address?.address}
-                                               type={"text"}/>
-                                    <SaveButton formId={`edit-form-${address.id}`}
-                                                modalId={`edit_address_modal_${address.id}`}/>
+                                <h3 className="font-semibold text-lg text-primary mb-4">Edit Address</h3>
+
+                                <form action={updateAddress} id={`edit-form-${address.id}`} className="space-y-3">
+                                    <input type="hidden" name="address_id" value={address.id}/>
+                                    <FormInput
+                                        label="Country"
+                                        name="country"
+                                        type="text"
+                                        placeholder="Country"
+                                        value={address.country}
+                                    />
+                                    <FormInput
+                                        label="City"
+                                        name="city"
+                                        type="text"
+                                        placeholder="City"
+                                        value={address.city}
+                                    />
+                                    <FormInput
+                                        label="Address"
+                                        name="address"
+                                        type="text"
+                                        placeholder="Full address"
+                                        value={address.address}
+                                    />
+                                    <div className="pt-3">
+                                        <SaveButton
+                                            formId={`edit-form-${address.id}`}
+                                            modalId={`edit_address_modal_${address.id}`}
+                                            label="Save Changes"
+                                        />
+                                    </div>
                                 </form>
                             </div>
                         </dialog>
-                    </div>
-                </li>))}
+                    </li>
+                ))}
             </ul>
-
         </div>
     );
 }

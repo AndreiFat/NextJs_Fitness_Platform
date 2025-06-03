@@ -1,51 +1,82 @@
 import FavoriteProducts from "@/app/(user)/favorites/products/FavoriteProducts";
 import FavoriteRecipes from "@/app/(user)/favorites/recipes/FavoriteRecipes";
 import FavoriteExercises from "@/app/(user)/favorites/exercises/FavoriteExercises";
+import {faCookie, faDumbbell, faStore} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {createSupabaseServerClient} from "@/utils/supabase/server";
 
 export const metadata = {
     title: "Favorites",
     description: "Page for Favorites",
 };
 
-export default function Favorites() {
+export default async function Favorites() {
+    const supabase = await createSupabaseServerClient()
+    const {data: {user}, error} = await supabase.auth.getUser();
+
+    const {data: products, count: productCount, error: productError} = await supabase
+        .from('favorites')
+        .select('product_id, products(*)', {count: 'exact'})
+        .eq('user_id', user.id);
+
+    const {data: meals, count: mealCount, error: mealError} = await supabase
+        .from('ai_favorite_items')
+        .select('item, item_hash', {count: 'exact'})
+        .eq('user_id', user.id)
+        .eq('type', 'meal');
+
+    const {data: workouts, count: workoutCount, error: workoutError} = await supabase
+        .from('ai_favorite_items')
+        .select('item, item_hash', {count: 'exact'})
+        .eq('user_id', user.id)
+        .eq('type', 'workout');
+
+    if (productError) {
+        console.error("Error loading favorite products:", error);
+    }
+
+    if (mealError) {
+        console.error("Error loading favorite meals:", error);
+    }
+
+    if (workoutError) {
+        console.error("Error loading favorite workouts:", error);
+    }
+
     return (
-        <div>
-            <h1>Favorites</h1>
-            <p>This is the Favorites page.</p>
-
-            <div className="tabs tabs-lift px-4">
-                <label className="tab">
+        <div className="container mx-auto p-4 sm:px-0 sm: py-4 pt-[120px]">
+            <div className="tabs tabs-lift">
+                <label className="tab gap-2">
                     <input type="radio" name="my_tabs_4" defaultChecked/>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                         stroke="currentColor" className="size-4 me-2">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/>
-                    </svg>
+                    <FontAwesomeIcon size={"lg"} icon={faStore}/>
                     Products
-                </label>
-                <div className="tab-content bg-base-100 border-base-300 p-6"><FavoriteProducts></FavoriteProducts></div>
+                    <div className="badge badge-soft badge-primary">{productCount}</div>
 
-                <label className="tab">
+                </label>
+                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                    <FavoriteProducts userId={user.id} products={products}></FavoriteProducts>
+                </div>
+
+                <label className="tab gap-2">
                     <input type="radio" name="my_tabs_4"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                         stroke="currentColor" className="size-4 me-2">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"/>
-                    </svg>
+                    <FontAwesomeIcon size={"lg"} icon={faCookie}/>
                     Recipes
-                </label>
-                <div className="tab-content bg-base-100 border-base-300 p-6"><FavoriteRecipes></FavoriteRecipes></div>
+                    <div className="badge badge-soft badge-primary">{mealCount}</div>
 
-                <label className="tab">
-                    <input type="radio" name="my_tabs_4"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                         stroke="currentColor" className="size-4 me-2">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
-                    </svg>
-                    Exercises
                 </label>
-                <div className="tab-content bg-base-100 border-base-300 p-6"><FavoriteExercises></FavoriteExercises>
+                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                    <FavoriteRecipes recipes={meals}/>
+                </div>
+
+                <label className="tab gap-2">
+                    <input type="radio" name="my_tabs_4"/>
+                    <FontAwesomeIcon size={"lg"} icon={faDumbbell}/>
+                    Exercises
+                    <div className="badge badge-soft badge-primary">{workoutCount}</div>
+
+                </label>
+                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                    <FavoriteExercises workouts={workouts}></FavoriteExercises>
                 </div>
             </div>
         </div>

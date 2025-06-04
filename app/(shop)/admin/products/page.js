@@ -1,30 +1,74 @@
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import FormInput from "@/components/auth/forms/FormInput";
-import ProductTable from "@/components/shop/products/ProductTable";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import SaveButton from "@/components/shop/products/SaveButton";
 import {saveProduct} from "@/app/(shop)/admin/actions";
+import SortButtons from "@/components/shop/buttons/SortButtons";
+import CategoryFilterDropdown from "@/components/shop/buttons/CategoryFilterDropdown";
+import ProductTable from "@/components/shop/products/ProductTable";
+import PaginationDropdown from "@/components/shop/buttons/PaginationDropdown";
+import PaginationControls from "@/components/shop/buttons/PaginationControls";
 
 export const metadata = {
     title: "AdminProducts",
     description: "Page for AdminProducts",
 };
 
-export default async function AdminProducts() {
+export default async function AdminProducts({searchParams}) {
     const supabase = await createSupabaseServerClient();
     const user = await supabase.auth.getUser();
     const userId = user.data.user.id;
 
-    const {data: products, error} = await supabase
+    const {sort} = await searchParams;
+    const {sortKey} = await searchParams;
+    const {category} = await searchParams;
+
+    const {page} = await searchParams;
+    const {limit} = await searchParams;
+
+    const sortAscOrDesc = sort === 'desc' ? 'desc' : 'asc';
+    const sortKeyByFilter = sortKey || 'name';
+    const sortByCategory = category || '';
+
+    const pageSort = parseInt(page || '1');
+    const limitSort = parseInt(limit || '10');
+    const from = (pageSort - 1) * limitSort;
+    const to = from + limitSort - 1;
+
+    // const {data: products, error} = await supabase
+    //     .from('products')
+    //     .select('*, category: categories(name)')
+    //     .order(sortKeyByFilter, {ascending: sortAscOrDesc === 'asc'});
+
+    let query = supabase
         .from('products')
-        .select('*')
+        .select('*, category: categories(name)', {count: 'exact'})
+        .order(sortKeyByFilter, {ascending: sortAscOrDesc === 'asc'})
+        .range(from, to)
+
+    if (sortByCategory) {
+        query = query.eq('category_id', sortByCategory);
+    }
+
+    const {data: products, count, error} = await query;
+
+    const {data: categories} = await supabase
+        .from('categories')
+        .select('id, name');
+
+    const totalPages = Math.ceil((count || 0) / limitSort);
 
     return (
         <div>
             <ModalOpenButton buttonName={"Add product"} id="addProductModal"></ModalOpenButton>
 
             <p>All the products from database: </p>
+            <SortButtons sortKey="name"/>
+            <SortButtons sortKey="price" labelAsc="1 → 2" labelDesc="2 → 1"/>
+            <CategoryFilterDropdown categories={categories}/>
+            <PaginationDropdown options={[10, 15, 30]} paramName={"limit"}></PaginationDropdown>
             <ProductTable products={products}></ProductTable>
+            <PaginationControls totalPages={totalPages}></PaginationControls>
 
             <dialog id={"addProductModal"} className="modal">
                 <div className="modal-box">
@@ -42,6 +86,17 @@ export default async function AdminProducts() {
                                    name="description"></FormInput>
                         <FormInput type="number" placeholder="100$" label="Product price: " name="price"></FormInput>
                         <FormInput type="number" placeholder="100" label="Product stock: " name="stock"></FormInput>
+                        <label className="form-control w-full">
+                            <div className="label">
+                                <span className="label-text">Select category:</span>
+                            </div>
+                            <select name="category_id" className="select select-bordered" required defaultValue="">
+                                <option disabled value="">Pick a category</option>
+                                {categories?.map((category) => (
+                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                ))}
+                            </select>
+                        </label>
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Pick an image</legend>
                             <input type="file" className="file-input" multiple accept="image/*" name="images"/>

@@ -5,18 +5,49 @@ import {createSupabaseClient} from "@/utils/supabase/client";
 import Link from "next/link";
 import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
 import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
+import {useSearchParams} from "next/navigation";
 
 function ProductList({initialProducts, userId, initialFavoriteIds, initialCartItems}) {
     const [products, setProducts] = useState(initialProducts);
     const [favoriteIds, setFavoritesIds] = useState(initialFavoriteIds);
     const [cartItems, setCartItems] = useState(initialCartItems);
-    console.log("cartItems", initialCartItems);
+
+    const searchParams = useSearchParams();
+
+    const sortAscOrDesc = searchParams.get("sort");
+    const sortKeyByFilter = searchParams.get("sortKey");
+    const sortByCategory = searchParams.get("category");
+
+    const page = searchParams.get("page");
+    const limit = searchParams.get("limit");
+
+    const pageSort = parseInt(page || '1');
+    const limitSort = parseInt(limit || '10');
+    const from = (pageSort - 1) * limitSort;
+    const to = from + limitSort - 1;
+
+    console.log(from, to);
     useEffect(() => {
         const supabase = createSupabaseClient();
 
         async function fetchProducts() {
-            let {data, error} = await supabase.from('products').select('*');
-            if (!error) setProducts(data);
+            let query = supabase
+                .from('products')
+                .select('*, category: categories(name)', {count: 'exact'})
+                .order(sortKeyByFilter, {ascending: sortAscOrDesc === 'asc'})
+                .range(from, to)
+
+            if (sortByCategory) {
+                query = query.eq('category_id', sortByCategory);
+            }
+
+            const {data: products, count, error} = await query;
+
+            if (!error) setProducts(products);
+
+            const totalPages = Math.ceil((count || 0) / limitSort);
+
+            console.log(products);
         }
 
         fetchProducts(); // Fetch inițial
@@ -33,7 +64,7 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
         return () => {
             supabase.removeChannel(channel); // Cleanup la demontare componentă
         };
-    }, []);
+    }, [sortAscOrDesc, sortKeyByFilter, sortByCategory, page, limit]);
 
     return (
         <div>

@@ -12,12 +12,12 @@ export default async function UserOrders() {
 
     const {data: orders, orderError} = await supabase
         .from('orders')
-        .select('id, status, total_price, created_at, delivery_time, is_invoice_generated, tracking_id, address: addresses(id, city, address, country)')
+        .select('id, status, total_price, created_at, delivery_time, is_invoice_generated, tracking_id, address: addresses(id, city, address, country), user: users(full_name, email, phone)')
         .eq("user_id", user.id)
         .order('created_at', {ascending: false});
 
     return (
-        <div className="container mx-auto py-5">
+        <div className="container mx-auto py-5 pt-[100px]">
             <OrderList orders={orders}></OrderList>
         </div>
     );

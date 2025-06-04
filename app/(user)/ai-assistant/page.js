@@ -1,61 +1,99 @@
-'use client'
+'use client';
 
-import FavoriteRecipes from "@/app/(user)/favorites/recipes/FavoriteRecipes";
-import FavoriteExercises from "@/app/(user)/favorites/exercises/FavoriteExercises";
-import {useSearchParams} from "next/navigation";
-import {handleAIGeneration} from "@/app/(user)/ai-assistant/actions";
+import {useSearchParams} from 'next/navigation';
+import React, {useActionState} from 'react';
+import {handleAIGeneration} from '@/app/(user)/ai-assistant/actions';
+import SkeletonOnLoad from "@/components/ai-assistant/SkeletonOnLoad";
+import AiGeneratedMeal from "@/components/ai-assistant/AiGeneratedMeal";
+import AiGeneratedWorkout from "@/components/ai-assistant/AiGeneratedWorkout";
+
+
+const initialState = null;
 
 export default function AiGeneratedPlan() {
     const searchParams = useSearchParams();
     const goal = searchParams.get('goal');
     const calories = searchParams.get('calories');
 
+    const [response, formAction, isPending] = useActionState(
+        async (prevState, formData) => {
+            formData.set('goal', goal);
+            formData.set('calories', calories);
+            return await handleAIGeneration(formData);
+        },
+        initialState
+    );
+
     return (
-        <div className="p-6 space-y-6">
-            <h2 className="text-xl font-semibold">
-                It's really nice that you've got here. What do you want? A weekly meal prep or a workout plan?
-            </h2>
+        <div
+            className={`ai-plan bg-linear-to-r from-cyan-400/10 to-teal-500/2 pt-[100px] transition-all duration-500 ease-in-out min-h-screen ${response ? 'h-auto' : 'h-dvh'}`}>
+            <div className="container mx-auto">
+                <div className="p-12 space-y-4 text-center">
+                    <span
+                        className="p-4 mb-4 font-medium border-0 bg-cyan-500 shadow-lg shadow-cyan-500/30  text-white
+                          badge bg-linear-to-r/decreasing from-indigo-500 to-teal-400">
+                        Smart Fitness & Nutrition Assistant</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-white">
+                        Discover smart recipes and workouts designed by AI to help you feel your best
+                    </h2>
+                    <p className="px-10">
+                        Personalized meals and workouts, tailored to your lifestyle and goals.
+                    </p>
 
-            <form action={handleAIGeneration} className="space-y-4">
-                <input type="hidden" name="goal" value={goal}/>
-                <input type="hidden" name="calories" value={calories}/>
+                    <form action={formAction} className="space-y-8">
+                        <label className="input border-0 w-full md:w-2xl input-xl text-base opacity-55 text-white">
+                            <input className="p-3" type="search" name="prompt" required
+                                   placeholder="e.g. Create a weekly meal plan for muscle gain with 2500 calories"/>
+                        </label>
+                        <div>
+                            <button type="submit"
+                                    className="btn p-6 w-[130px] bg-linear-to-r to-cyan-500 from-blue-500 text-white">
+                                {isPending ? <span className="loading loading-dots loading-md"></span> : 'Generate'}
+                            </button>
+                        </div>
+                    </form>
+                    {isPending ? (<>
+                            <div className="flex gap-6">
+                                <SkeletonOnLoad></SkeletonOnLoad>
+                                <SkeletonOnLoad></SkeletonOnLoad>
+                            </div>
+                        </>
+                    ) : (<>
+                        {response && (
+                            <div className="mt-6 text-left">
+                                <h3 className="text-xl font-semibold">AI Response:</h3>
+                                {response.type === 'meal' ? (
+                                    <>{response.error ?
+                                        <div role="alert" className="alert alert-error my-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 className="h-6 w-6 shrink-0 stroke-current" fill="none"
+                                                 viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span>{response.error}</span>
+                                        </div> : null}
+                                        <AiGeneratedMeal response={response.response}></AiGeneratedMeal>
+                                    </>
+                                ) : (response.type === 'workout' ? (
+                                    <>
+                                        <div
+                                            className="flex overflow-x-auto space-x-4 p-4 bg-base-100/75 rounded-xl my-3">
+                                            {response.youtube.map((video, index) => (
+                                                <div key={index}>
+                                                    <iframe
+                                                        className="sm:min-w-[450px] sm:h-[250px] md:min-w-[650px] md:h-[350px] rounded-lg shadow"
+                                                        src={`https://www.youtube.com/embed/${video.videoId}`}
+                                                        allowFullScreen
+                                                    ></iframe>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <AiGeneratedWorkout response={response.response}></AiGeneratedWorkout></>
+                                ) : ('ceva jmecher cu dublu jm'))}
 
-                <textarea
-                    name="prompt"
-                    className="textarea textarea-bordered w-full"
-                    placeholder="Tell us what you want (e.g. 'Give me a 7-day meal plan for weight loss')"
-                    required
-                />
-                <button type="submit" className="btn btn-primary">
-                    Generate
-                </button>
-            </form>
-
-            <div className="tabs tabs-lift px-4">
-                <label className="tab">
-                    <input type="radio" name="my_tabs_4"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
-                              d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Z"/>
-                    </svg>
-                    Menus
-                </label>
-                <div className="tab-content bg-base-100 border-base-300 p-6">
-                    <FavoriteRecipes/>
-                </div>
-
-                <label className="tab">
-                    <input type="radio" name="my_tabs_4"/>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
-                    </svg>
-                    Exercises
-                </label>
-                <div className="tab-content bg-base-100 border-base-300 p-6">
-                    <FavoriteExercises/>
+                            </div>
+                        )}</>)}
                 </div>
             </div>
         </div>

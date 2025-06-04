@@ -2,7 +2,7 @@
 import React, {useState, useTransition} from 'react';
 import {updateCart} from "@/app/(shop)/shop/actions";
 
-function AddToCartButton({userId, productId, initialQuantity}) {
+function AddToCartButton({userId, productId, initialQuantity, isDisabled}) {
     const [quantity, setQuantity] = useState(initialQuantity);
     const [isPending, startTransition] = useTransition();
 
@@ -16,11 +16,10 @@ function AddToCartButton({userId, productId, initialQuantity}) {
     };
 
     return (
-        <div className="flex items-center space-x-2">
-            <button onClick={() => handleCartUpdate(quantity + 1)} disabled={isPending}
-                    className="btn px-4 py-2 bg-blue-500 text-white rounded">Add to Cart
-            </button>
-        </div>
+        <button onClick={() => handleCartUpdate(quantity + 1)} disabled={isPending}
+                className={`btn w-full px-4 py-2 bg-white text-base-100 ${!isDisabled ? 'btn-disabled' : ''}`}>Add to
+            Cart
+        </button>
     );
 }
 

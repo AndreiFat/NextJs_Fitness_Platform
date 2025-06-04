@@ -4,11 +4,18 @@ const genAI = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GEMINI_API_KEY,
 });
 
-export async function askGeminiRecipes(prompt) {
+const today = new Date();
+const weekdayName = today.toLocaleDateString('en-US', {weekday: 'long'});
+
+export async function askGeminiRecipes(prompt, goal_type, calories) {
     const response = await genAI.models.generateContent({
         model: "gemini-2.0-flash",
         contents: prompt,
         config: {
+            systemInstruction: `You are a helpful nutrition assistant.
+            Always respect the user's goal: ${goal_type} and ${calories} calories.
+            If the meal plan includes a day labeled "today", use the current real-world date ${weekdayName} in the response.
+            Use structured output as defined in the responseSchema.`,
             responseMimeType: "application/json",
             responseSchema: {
                 "type": "object",
@@ -174,11 +181,15 @@ export async function askGeminiRecipes(prompt) {
     return response.text;
 }
 
-export async function askGeminiWorkouts(prompt) {
+export async function askGeminiWorkouts(prompt, goal_type, calories) {
     const response = await genAI.models.generateContent({
         model: "gemini-2.0-flash",
         contents: prompt,
         config: {
+            systemInstruction: `You are a helpful fitness and workout assistant.
+              Always respect the user's goal: ${goal_type} and ${calories} calories.
+              Use structured output as defined in the responseSchema. Do not include Sunday workouts, its rest day. 
+              Try equilibrate the number of exercises per day. Try to formulate the exercises in Romanian.`,
             responseMimeType: "application/json",
             responseSchema: {
                 "type": "object",

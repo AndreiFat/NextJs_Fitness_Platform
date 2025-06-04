@@ -7,8 +7,31 @@ import {faCartShopping, faHeart} from "@fortawesome/free-solid-svg-icons";
 async function NavbarComponent() {
     const supabase = await createSupabaseServerClient();
     const {data: {user}, error} = await supabase.auth.getUser();
+
+    let numberOfItems = 0;
+    let totalProductsInCart = 0;
+    if (user) {
+        let {data: ai_favorite_items, count: countAI, error: errorAI} = await supabase
+            .from('ai_favorite_items')
+            .select('id', {count: 'exact'})
+            .eq('user_id', user.id);
+
+        let {data: favorites, count: countProducts, error: errorProducts} = await supabase
+            .from('favorites')
+            .select('*', {count: 'exact'})
+            .eq('user_id', user.id);
+
+        let {data: cartProducts, count: countCartProducts, error: errorCartProducts} = await supabase
+            .from('cart_products')
+            .select('id', {count: 'exact'})
+            .eq('user_id', user.id);
+
+        numberOfItems = countAI + countProducts;
+        totalProductsInCart = countCartProducts;
+    }
+
     return (
-        <div className="navbar z-50 fixed top-0 shadow-sm align-center h-[76px] bg-white/[10%] backdrop-blur-sm">
+        <div className="navbar z-50 fixed top-0 shadow-sm align-center h-[76px] bg-base-100/75 backdrop-blur-sm">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -42,13 +65,15 @@ async function NavbarComponent() {
                 <Link href={"/shop/shopping-cart"} className="btn btn-ghost btn-circle">
                     <div className="indicator">
                         <FontAwesomeIcon icon={faCartShopping} size={"xl"}></FontAwesomeIcon>
-                        {/*<span className="badge badge-xs badge-primary indicator-item"></span>*/}
+                        {totalProductsInCart > 0 ? <span
+                            className="badge badge-xs px-1.5 badge-primary indicator-item">{totalProductsInCart}</span> : <></>}
                     </div>
                 </Link>
                 <Link href={"/favorites"} className="btn btn-ghost btn-circle">
                     <div className="indicator">
                         <FontAwesomeIcon icon={faHeart} size={"xl"}></FontAwesomeIcon>
-                        <span className="badge badge-xs badge-primary indicator-item"></span>
+                        {numberOfItems > 0 ? <span
+                            className="badge badge-xs px-1.5 badge-accent indicator-item">{numberOfItems}</span> : <></>}
                     </div>
                 </Link>
                 {user != null ? (<UserInfo userInfo={user}/>) : (<div className="flex gap-2">

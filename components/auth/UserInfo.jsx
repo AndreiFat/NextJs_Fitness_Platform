@@ -57,7 +57,6 @@ export default function UserInfo({userInfo}) {
                     <li><Link href={"/account-settings"}>Account</Link></li>
                     <li><Link href={"/orders"}>Orders</Link></li>
                     <li><Link href={"/addresses"}>Addresses</Link></li>
-                    <li><Link href={"/fitness-goals"}>Fitness Goals</Link></li>
                     {isAdmin ? (<li><Link href={"/admin/products"}>Products</Link></li>) : ""}
                     <li className={""}><LogoutButton/></li>
                 </ul>

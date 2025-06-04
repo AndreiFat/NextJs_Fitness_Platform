@@ -3,6 +3,7 @@ import React from 'react';
 function PasswordInput(props) {
     return (
         <div>
+            <legend className="text-sm font-medium mb-1">Password</legend>
             <label className="input validator w-full">
                 <svg className="h-[1.2em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none"

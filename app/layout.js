@@ -14,10 +14,11 @@ export const metadata = {
 
 export default function RootLayout({children}) {
     return (
-        <html lang="en" data-theme="emerald">
-        <body className="pt-[76px]">
+        <html lang="en" data-theme="forest">
+        <body
+        >
         <NavbarComponent/>
-        <div>
+        <div className="min-h-[calc(100vh-54px)] bg-linear-to-t from-primary/25 to-base-100">
             {children}
         </div>
         <MinimalFooterComponent></MinimalFooterComponent></body>

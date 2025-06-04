@@ -105,7 +105,6 @@ export default async function FitnessGoals() {
         }))
     ];
     
-    
     return (
         <div className="flex gap-[2%] flex-wrap content-start">
             <div className="w-1/4 h-3/4">

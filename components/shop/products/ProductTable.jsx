@@ -23,6 +23,7 @@ async function ProductTable({products}) {
                         <th className="px-4 py-3">Description</th>
                         <th className="px-4 py-3">Price</th>
                         <th className="px-4 py-3">Stock</th>
+                        <th className="px-4 py-3">Category</th>
                         <th className="px-4 py-3">Active</th>
                         <th className="px-4 py-3">Actions</th>
                     </tr>
@@ -45,6 +46,7 @@ async function ProductTable({products}) {
                             <td className="px-4 py-3 max-w-xs truncate">{product.description}</td>
                             <td className="px-4 py-3">${product.price}</td>
                             <td className="px-4 py-3">{product.stock}</td>
+                            <td className="px-4 py-3">{product.category.name}</td>
                             <td className="px-4 py-3">
                                 <ToggleButton
                                     productId={product.id}

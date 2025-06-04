@@ -12,6 +12,7 @@ export async function saveProduct(formData) {
     const price = formData.get("price");
     const stock = formData.get("stock");
     const images = formData.getAll("images");
+    const category_id = formData.get("category_id");
 
     console.log(images)
 
@@ -41,6 +42,7 @@ export async function saveProduct(formData) {
                 price,
                 stock,
                 images: imageUrls,
+                category_id
             }
         ]);
 

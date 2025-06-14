@@ -19,7 +19,7 @@ function SaveToFavoritesButton({userId, productId, initialFavorite, isDisabled})
 
     return (
         <button onClick={handleToggle}
-                className={`btn btn-circle p-2 ${isFavorite ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-200 hover:bg-red-500 hover:text-white'} ${!isDisabled ? 'btn-disabled' : ''}`}>
+                className={`btn btn-circle p-2 ${isFavorite ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-200 text-gray-600 hover:bg-red-500 hover:text-white'} ${!isDisabled ? 'btn-disabled' : ''}`}>
             {isFavorite ? <FontAwesomeIcon icon={faHeartSolid}/> : <FontAwesomeIcon icon={faHeartRegular}/>}
         </button>
     );

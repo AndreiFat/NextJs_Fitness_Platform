@@ -74,28 +74,26 @@ export default async function Product({params}) {
             <div className="px-4 md:px-0 gap-8 py-32">
                 <div className={"max-w-6xl mx-auto p-6 bg-base-100 shadow-lg rounded-lg"}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
-                        {/* Left side - Images */}
                         <div className="w-full">
                             <ProductImageViewer images={product.images}/>
                         </div>
 
-                        {/* Right side - Details */}
                         <div className="w-full space-y-4">
                             <p className="text-sm"><span className="badge badge-soft"># {product.id}</span></p>
                             <h1 className="text-4xl font-bold">{product.name}</h1>
                             {averageRating && (
-                                <p className="text-yellow-600">★ {averageRating} ({reviewCount} Reviews) </p>
+                                <p className="text-yellow-600">★ {averageRating} ({reviewCount} Recenzii) </p>
                             )}
                             <div className="text-sm p-4 bg-base-200 rounded-lg">
-                                <p className="text-base-content/65 font-light mb-1">Description</p> {product.description}
+                                <p className="text-base-content/65 font-light mb-1">Descriere</p> {product.description}
                             </div>
 
                             {product.is_active && product.stock > 0 ? (
                                 <span className={"flex gap-2 items-center text-success"}><FontAwesomeIcon size={"lg"}
-                                                                                                          icon={faCircleDot}/>In Stock ({product.stock} available)</span>
+                                                                                                          icon={faCircleDot}/>In Stoc ({product.stock} disponibile)</span>
 
                             ) : (<span className={"flex gap-2 items-center text-error"}><FontAwesomeIcon size={"lg"}
-                                                                                                         icon={faCircleXmark}/>Out of Stock</span>)}
+                                                                                                         icon={faCircleXmark}/>Lipsa Stoc</span>)}
                             <div className="flex items-baseline gap-1">
                                 <span className="text-3xl font-extrabold text-primary">RON {product.price}</span>
                                 <span className="text-sm text-base-content/75 ml-1">incl. TVA</span>
@@ -114,10 +112,10 @@ export default async function Product({params}) {
                     <div className="space-y-4">
                         <div className="flex justify-between gap-2">
                             <div>
-                                <h2 className={"text-2xl font-semibold"}>Reviews</h2>
-                                <p className={"text-base-content/75"}>What our customers are saying</p>
+                                <h2 className={"text-2xl font-semibold"}>Recenzii</h2>
+                                <p className={"text-base-content/75"}>Ce spun cumparatorii nostrii</p>
                             </div>
-                            <ModalOpenButton id={"addReviewForm"} buttonName={"Add new review"}></ModalOpenButton>
+                            <ModalOpenButton id={"addReviewForm"} buttonName={"Adauga un review"}></ModalOpenButton>
                             <dialog id={"addReviewForm"} className="modal">
                                 <div className="modal-box">
                                     <form method="dialog">
@@ -125,13 +123,13 @@ export default async function Product({params}) {
                                             className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
                                         </button>
                                     </form>
-                                    <h3 className="font-bold text-lg mb-4">Write a review</h3>
+                                    <h3 className="font-bold text-lg mb-4">Scrie o recenzie</h3>
                                     <form id="add-review-form" action={saveReview}
                                           className="bg-base-100 p-2">
                                         <input type="hidden" name="product_id" value={product.id}/>
-                                        <FormInput label="Title" name="title" type="text" placeholder="Title"/>
-                                        <FormInput label="Description" name="description" type="text"
-                                                   placeholder="Description"/>
+                                        <FormInput label="Titlu" name="title" type="text" placeholder="Titlu"/>
+                                        <FormInput label="Descriere" name="description" type="text"
+                                                   placeholder="Descriere"/>
                                         <div className="flex flex-col gap-2">
                                             <div>
                                                 <InputLabel label={"Rating"}></InputLabel>
@@ -142,7 +140,7 @@ export default async function Product({params}) {
                                                 </div>
                                             </div>
                                             <SaveButton formId="add-review-form" modalId="addReviewForm"
-                                                        label="Save Review"/>
+                                                        label="Salveaza Recenzie"/>
                                         </div>
                                     </form>
                                 </div>
@@ -161,14 +159,14 @@ export default async function Product({params}) {
                                         </div>
                                     </div>
                                     {user?.id === review.user_id && (
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 mb-3">
                                             {/*<form action={updateReview}>*/}
                                             {/*    <input type="hidden" name="reviewId" value={review.id}/>*/}
                                             {/*    <button className="text-blue-600 text-sm hover:underline">Edit</button>*/}
                                             {/*</form>*/}
                                             <ModalOpenButton id={`edit_review_modal_${review.id}`}
                                                              className={"btn-info"}
-                                                             buttonName={"Edit"}></ModalOpenButton>
+                                                             buttonName={"Editeaza"}></ModalOpenButton>
                                             <dialog id={`edit_review_modal_${review.id}`} className="modal">
                                                 <div className="modal-box">
                                                     <form method="dialog">
@@ -214,7 +212,7 @@ export default async function Product({params}) {
                                             <form action={deleteReview}>
                                                 <input type="hidden" name="reviewId" value={review.id}/>
                                                 <button
-                                                    className="btn btn-error text-sm hover:underline">Delete
+                                                    className="btn btn-error text-sm hover:underline">Sterge
                                                 </button>
                                             </form>
                                         </div>
@@ -226,6 +224,6 @@ export default async function Product({params}) {
                     </div>
                 </div>
             </div>
-        ) : ("Product Not Found")
+        ) : ("Produsul nu este gasit")
     );
 }

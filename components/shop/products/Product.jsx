@@ -56,13 +56,13 @@ function Product({product, addToFavoriteButton, addToCartButton}) {
                     <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
                     {product.is_active ?
                         <span className={"flex gap-2 items-center text-success"}><FontAwesomeIcon size={"lg"}
-                                                                                                  icon={faCircleDot}/>In Stock</span> :
+                                                                                                  icon={faCircleDot}/>In Stoc</span> :
                         <span className={"flex gap-2 items-center text-error"}><FontAwesomeIcon size={"lg"}
-                                                                                                icon={faCircleXmark}/>Out of Stock</span>}
+                                                                                                icon={faCircleXmark}/>Lipsa Stoc</span>}
                     <div className={"my-2"}>
                         {averageRating ? (
-                            <p className="text-sm text-yellow-600">⭐ Average Rating: {averageRating} / 5 </p>
-                        ) : <p>No ratings yet.</p>}
+                            <p className="text-sm text-yellow-600">⭐ Rating: {averageRating} / 5 </p>
+                        ) : <p>Nu sunt recenzii.</p>}
                     </div>
                     <div className="flex items-baseline gap-1">
                         <span className="text-2xl font-extrabold text-primary">RON {product.price}</span>

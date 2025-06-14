@@ -25,7 +25,7 @@ export default async function UserProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-base-200 py-10 flex justify-center pt-[100px]">
+        <div className="min-h-screen bg-base-200 py-10 flex justify-center pt-32">
             <div className="w-full max-w-5xl bg-base-100 p-8 rounded-lg shadow-md">
                 <h1 className="text-3xl font-bold text-center mb-2">Profil Utilizator</h1>
                 <p className="text-center text-base-content/70 mb-8">
@@ -105,12 +105,12 @@ export default async function UserProfilePage() {
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {[
-                                {value: "Muscle Gain", icon: "💪"},
-                                {value: "Weight loss", icon: "⚖️"},
-                                {value: "Maintenance", icon: "🛠️"},
-                                {value: "Performance & Endurance", icon: "🏃‍♂️"},
-                                {value: "Flexibility & Mobility", icon: "🧘‍♂️"},
-                                {value: "General Fitness & Well-being", icon: "🌿"},
+                                {value: "Creștere musculară", icon: "💪"},
+                                {value: "Slăbire", icon: "⚖️"},
+                                {value: "Menținere", icon: "🛠️"},
+                                {value: "Performanță & Rezistență", icon: "🏃‍♂️"},
+                                {value: "Flexibilitate & Mobilitate", icon: "🧘‍♂️"},
+                                {value: "Fitness general & Stare de bine", icon: "🌿"},
                             ].map(({value, icon}) => (
                                 <label key={value} className="cursor-pointer">
                                     <input

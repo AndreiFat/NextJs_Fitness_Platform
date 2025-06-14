@@ -2,7 +2,11 @@
 
 import {useRouter, useSearchParams} from 'next/navigation';
 
-export default function SortButtons({sortKey = 'name', labelAsc = 'A → Z', labelDesc = 'Z → A'}) {
+export default function SortButtons({
+                                        sortKey = 'name',
+                                        labelAsc = 'Crescător după nume',
+                                        labelDesc = 'Desrescător după nume'
+                                    }) {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -17,11 +21,11 @@ export default function SortButtons({sortKey = 'name', labelAsc = 'A → Z', lab
     const currentSort = searchParams.get('sort') || 'asc';
 
     return (
-        <div className="flex items-center gap-2 mb-4">
-            <label htmlFor={`sort-${sortKey}`} className="font-medium capitalize">Sort by {sortKey}:</label>
+        <div className="flex flex-col gap-1 w-full">
+            <label htmlFor={`sort-${sortKey}`} className="font-medium capitalize">Sorteaza după {sortKey}</label>
             <select
                 id={`sort-${sortKey}`}
-                className="select select-bordered select-sm"
+                className="select select-bordered select-sm w-full"
                 onChange={(e) => handleSort(e.target.value)}
                 value={currentSort}
             >

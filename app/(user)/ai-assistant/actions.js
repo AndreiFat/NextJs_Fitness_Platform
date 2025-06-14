@@ -71,7 +71,7 @@ export async function handleAIGeneration(formData) {
             response: jsonResponse.recipes_plan
         };
     } else {
-        const aiText = await askGeminiEverything(prompt);
+        const aiText = await askGeminiEverything(prompt, goal, calories);
         result = {
             type: "everything",
             response: aiText

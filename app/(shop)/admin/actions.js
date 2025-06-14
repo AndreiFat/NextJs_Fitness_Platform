@@ -191,13 +191,11 @@ export async function updateCategory(formData) {
         id: formData.get("category_id"),
         name: formData.get("name")
     }
-    //console.log("FORM ACTIVE", formData.get("is_active"))
-    const isActive = formData.get("is_active") === "true";
-    //console.log("isActive", isActive);
+    const isActive = formData.get('is_active') === 'on'
 
     const {error} = await supabase
         .from('categories')
-        .update({name: data.name, is_active: !isActive})
+        .update({name: data.name, is_active: isActive})
         .eq('id', data.id)
         .select()
 

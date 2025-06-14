@@ -2,10 +2,10 @@
 
 import {useEffect, useState} from "react";
 import {createSupabaseClient} from "@/utils/supabase/client";
-import Link from "next/link";
 import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
 import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
 import {useSearchParams} from "next/navigation";
+import Product from "@/components/shop/products/Product";
 
 function ProductList({initialProducts, userId, initialFavoriteIds, initialCartItems}) {
     const [products, setProducts] = useState(initialProducts);
@@ -14,8 +14,8 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
 
     const searchParams = useSearchParams();
 
-    const sortAscOrDesc = searchParams.get("sort");
-    const sortKeyByFilter = searchParams.get("sortKey");
+    const sortAscOrDesc = searchParams.get("sort") === 'desc' ? 'desc' : 'asc';
+    const sortKeyByFilter = searchParams.get("sortKey") || 'name';
     const sortByCategory = searchParams.get("category");
 
     const page = searchParams.get("page");
@@ -26,7 +26,6 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
     const from = (pageSort - 1) * limitSort;
     const to = from + limitSort - 1;
 
-    console.log(from, to);
     useEffect(() => {
         const supabase = createSupabaseClient();
 
@@ -34,6 +33,7 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
             let query = supabase
                 .from('products')
                 .select('*, category: categories(name)', {count: 'exact'})
+                .eq('is_active', "TRUE")
                 .order(sortKeyByFilter, {ascending: sortAscOrDesc === 'asc'})
                 .range(from, to)
 
@@ -41,13 +41,12 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
                 query = query.eq('category_id', sortByCategory);
             }
 
-            const {data: products, count, error} = await query;
+            const {data: updateProducts, count, error} = await query;
 
-            if (!error) setProducts(products);
-
+            if (!error) {
+                setProducts(updateProducts)
+            }
             const totalPages = Math.ceil((count || 0) / limitSort);
-
-            console.log(products);
         }
 
         fetchProducts(); // Fetch inițial
@@ -68,20 +67,19 @@ function ProductList({initialProducts, userId, initialFavoriteIds, initialCartIt
 
     return (
         <div>
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-                {products.map((product) => (
-                    <li key={product.id} className="border p-4 rounded-md shadow-sm">
-                        <h3 className="text-lg font-semibold">{product.name}</h3>
-                        <p className="text-gray-500">{product.description}</p>
-                        <div className="flex gap-2">
-                            <Link className={"btn"} href={`/shop/product/${product.id}`}>View Product</Link>
-                            <SaveToFavoritesButton userId={userId} productId={product.id}
-                                                   initialFavorite={favoriteIds.includes(product.id)}/>
-                            <AddToCartButton userId={userId} productId={product.id}
-                                             initialQuantity={cartItems[product.id] || 0}/>
-                        </div>
-                    </li>))}
-            </ul>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6 gap-4">
+                {products.map((product, index) => (
+                    <Product key={index}
+                             product={product}
+                             addToCartButton={<AddToCartButton isDisabled={product.is_active}
+                                                               userId={userId} productId={product.id}
+                                                               initialQuantity={cartItems[product.id] || 0}/>}
+                             addToFavoriteButton={
+                                 <SaveToFavoritesButton userId={userId} isDisabled={product.is_active}
+                                                        productId={product.id}
+                                                        initialFavorite={favoriteIds.includes(product.id)}/>}/>
+                ))}
+            </div>
         </div>
     );
 }

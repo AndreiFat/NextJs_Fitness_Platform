@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import React, {useState} from 'react';
 
 export default function ProductImageViewer({images}) {
     const [selected, setSelected] = useState(images?.[0]?.publicUrl || null);
@@ -8,14 +8,13 @@ export default function ProductImageViewer({images}) {
 
     return (
         <div className="relative w-full">
-            <div className="overflow-hidden rounded-lg border">
-                <img
-                    src={selected}
-                    alt="Selected product"
-                    className="w-full object-cover max-h-[400px]"
-                />
-            </div>
-            <div className="grid grid-cols-4 gap-2 mt-4">
+            <div
+                className="h-[350px] w-full bg-cover bg-center rounded-xl shadow-2xl  shadow-white/12"
+                style={{
+                    backgroundImage: `url(${selected})`
+                }}
+            ></div>
+            <div className="grid grid-cols-4 gap-2 mt-4 w-full">
                 {images.map((img, index) => (
                     <img
                         key={index}
@@ -23,7 +22,7 @@ export default function ProductImageViewer({images}) {
                         onClick={() => setSelected(img.publicUrl)}
                         alt={`Thumbnail ${index + 1}`}
                         className={`h-16 w-full object-cover rounded-md border cursor-pointer transition hover:opacity-80 ${
-                            selected === img.publicUrl ? 'ring-2 ring-indigo-500' : ''
+                            selected === img.publicUrl ? 'ring-2 ring-primary' : ''
                         }`}
                     />
                 ))}

@@ -29,6 +29,7 @@ export async function toggleFavorite(userId, productId) {
         if (insertError) {
             return {success: false, message: 'Failed to add favorite'};
         }
+        revalidatePath("/", "layout")
         return {success: true, isFavorite: true};
     }
     console.log(favorites);

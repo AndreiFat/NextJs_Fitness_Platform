@@ -2,7 +2,7 @@ function MinimalFooterComponent(props) {
     return (
         <footer className="footer sm:footer-horizontal footer-center bg-primary text-white p-4">
             <aside>
-                <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>
+                © {new Date().getFullYear()} FitMind — Toate drepturile rezervate.
             </aside>
         </footer>
     );

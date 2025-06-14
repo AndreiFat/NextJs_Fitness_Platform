@@ -10,54 +10,81 @@ import {updateCategory} from "@/app/(shop)/admin/actions";
 
 export default function CategoryList({categories}) {
     return (
-        <div>
-            <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+        <div className="overflow-x-auto">
+            <table className="table w-full bg-base-100 rounded-2xl">
+                <thead>
+                <tr>
+                    <th className="w-1/3">Nume categorie</th>
+                    <th className="text-center">Status</th>
+                    <th className="text-center">Acțiuni</th>
+                </tr>
+                </thead>
+                <tbody>
                 {categories.map((category) => (
-                    <li key={category.id} className="border p-4 rounded-md shadow-sm">
-                        <h3 className="text-lg font-semibold">{category.name}</h3>
-                        <p className="text-gray-500">Activ: </p>
-                        <pre>{category.is_active ? 'Active' : 'Inactive'}</pre>
-                        <div className="flex gap-2">
-                            <ModalOpenButton id={`edit_category_modal_${category.id}`} buttonName={<FontAwesomeIcon
-                                icon={faPen}/>}></ModalOpenButton>
-                            <dialog id={`edit_category_modal_${category.id}`} className="modal">
+                    <tr key={category.id}>
+                        <td className="font-medium">{category.name}</td>
+
+                        <td className="text-center">
+              <span
+                  className={`badge badge-soft ${category.is_active ? 'badge-success' : 'badge-error'}`}
+              >
+                {category.is_active ? 'Activă' : 'Inactivă'}
+              </span>
+                        </td>
+
+                        <td className="text-center">
+                            <ModalOpenButton
+                                id={`edit_category_modal_${category.id}`}
+                                buttonName={<><FontAwesomeIcon icon={faPen}/></>}
+                                className={"btn-outline btn-info btn-circle"}
+                            />
+
+                            {/* Modal */}
+                            <dialog id={`edit_category_modal_${category.id}`} className="modal text-left">
                                 <div className="modal-box">
                                     <form method="dialog">
-                                        <button
-                                            className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                                        <button className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3">✕
                                         </button>
                                     </form>
-                                    <h3 className="font-bold text-lg">Edit the address: </h3>
-                                    <p className="py-4">{category.name}</p>
-                                    <form action={updateCategory} id={`edit-form-${category.id}`}>
-                                        <input type="hidden" id={`category_id_${category.id}`} name="category_id"
-                                               value={category.id}/>
-                                        <FormInput label={"Category name: "} placeholder={"Name"} name={"name"}
-                                                   value={category?.name}
-                                                   type={"text"}/>
 
-                                        <div className="form-control py-2">
-                                            <label className="label cursor-pointer justify-start gap-4">
-                                                <span className="label-text">Active</span>
-                                                <input type="hidden" name="is_active" value={category.is_active}/>
+                                    <h3 className="font-bold text-lg mb-2 text-left">Editează categoria</h3>
+
+                                    <form action={updateCategory} id={`edit-form-${category.id}`} className="mt-4">
+                                        <input type="hidden" name="category_id" value={category.id}/>
+
+                                        <FormInput
+                                            label="Nume categorie"
+                                            placeholder="Ex: Produse vegane"
+                                            name="name"
+                                            value={category?.name}
+                                            type="text"
+                                        />
+
+                                        <div className="form-control">
+                                            <label className="label cursor-pointer justify-between">
                                                 <input
                                                     type="checkbox"
                                                     name="is_active"
                                                     defaultChecked={category.is_active}
-                                                    className={"toggle"}
+                                                    className="toggle toggle-primary"
                                                 />
+                                                <span
+                                                    className="label-text mr-2 text-white">{category.is_active ? 'Activă' : 'Inactivă'}</span>
                                             </label>
                                         </div>
 
-                                        <SaveButton formId={`edit-form-${category.id}`}
-                                                    modalId={`edit_category_modal_${category.id}`}/>
+                                        <SaveButton
+                                            formId={`edit-form-${category.id}`}
+                                            modalId={`edit_category_modal_${category.id}`}
+                                        />
                                     </form>
                                 </div>
                             </dialog>
-                        </div>
-                    </li>))}
-            </ul>
-
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
         </div>
     )
 }

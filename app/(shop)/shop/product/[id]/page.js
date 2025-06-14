@@ -1,12 +1,15 @@
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 import ProductImageViewer from "@/components/shop/products/ProductImageViewer";
-import {deleteReview, saveReview, updateReview} from "@/app/(shop)/shop/actions";
+import {deleteReview, getCart, saveReview, updateReview} from "@/app/(shop)/shop/actions";
 import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import FormInput from "@/components/auth/forms/FormInput";
 import SaveButton from "@/components/shop/products/SaveButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPen} from "@fortawesome/free-solid-svg-icons";
+import {faCircleDot, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import InputLabel from "@/components/forms/InputLabel";
+import AddToCartButton from "@/components/shop/buttons/AddToCartButton";
+import SaveToFavoritesButton from "@/components/shop/buttons/SaveToFavoritesButton";
 
 export const metadata = {
     title: "Product",
@@ -29,6 +32,11 @@ export default async function Product({params}) {
         .eq("id", id)
         .single();
 
+    const {data: products, count: productCount, error: productError} = await supabase
+        .from('favorites')
+        .select('product_id, products(*)', {count: 'exact'})
+        .eq('user_id', user.id);
+
     if (error || !product) {
         return (
             <div className="p-6">
@@ -37,9 +45,9 @@ export default async function Product({params}) {
         );
     }
 
-    const {data: reviews, reviewError} = await supabase
+    const {data: reviews, count: reviewCount, reviewError} = await supabase
         .from('reviews')
-        .select('*')
+        .select('*, user: users(full_name)', {count: 'exact'})
         .eq("product_id", product.id)
 
     if (reviewError) {
@@ -52,148 +60,172 @@ export default async function Product({params}) {
         ? (reviews.reduce((acc, r) => acc + (r.stars || 0), 0) / reviews.length).toFixed(1)
         : null;
 
+    // Fetch cart data
+    const {cart} = await getCart(user.id);
+    const cartItems = cart.reduce((acc, item) => {
+        acc[item.product_id] = item.quantity;
+        return acc;
+    }, {});
+
+    const favoriteIds = products ? products.map((fav) => fav.product_id) : [];
+
     return (
-        <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6 flex gap-8">
-            {/* Left side - Images */}
-            <div className="w-100">
-                <ProductImageViewer images={product.images}/>
-            </div>
-
-            {/* Right side - Details */}
-            <div className="w-1/2 space-y-4">
-                <h1 className="text-3xl font-bold">{product.name}</h1>
-                <p className="text-lg text-gray-700"><span className="font-semibold">ID:</span> {product.id}</p>
-                <p className="text-gray-600"><span className="font-semibold">Description:</span> {product.description}
-                </p>
-                <p className="text-2xl text-indigo-600 font-bold">
-                    ${product.price}
-                </p>
-                {averageRating && (
-                    <p className="text-sm text-yellow-600">⭐ Average Rating: {averageRating} / 5 </p>
-                )}
-                <p className="text-gray-600"><span className="font-semibold">Stock:</span> {product.stock}</p>
-                <p>
-                    <span className="font-semibold text-gray-600">Status:</span>{" "}
-                    {product.is_active ? (
-                        <span
-                            className="inline-block px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Active</span>
-                    ) : (
-                        <span
-                            className="inline-block px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm">Inactive</span>
-                    )}
-                </p>
-            </div>
-
-            <div className="space-y-6">
-                <div className="flex gap-2">
-
-                    <ModalOpenButton id={"addReviewForm"} buttonName={"Add new review"}></ModalOpenButton>
-                    <dialog id={"addReviewForm"} className="modal">
-                        <div className="modal-box">
-                            <form method="dialog">
-                                <button
-                                    className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
-                                </button>
-                            </form>
-                            <h3 className="font-bold text-lg">Write a review: </h3>
-                            <form id="add-review-form" action={saveReview}
-                                  className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-                                <input type="hidden" name="product_id" value={product.id}/>
-                                <FormInput label="Title: " name="title" type="text" placeholder="Review title:"/>
-                                <FormInput label="Description: " name="description" type="text"
-                                           placeholder="Review description:"/>
-                                <div className="rating">
-                                    <input type="radio" name="stars" value="1"
-                                           className="mask mask-star-2 bg-orange-400"
-                                           aria-label="1 star"/>
-                                    <input type="radio" name="stars" value="2"
-                                           className="mask mask-star-2 bg-orange-400"
-                                           aria-label="2 star" defaultChecked/>
-                                    <input type="radio" name="stars" value="3"
-                                           className="mask mask-star-2 bg-orange-400"
-                                           aria-label="3 star"/>
-                                    <input type="radio" name="stars" value="4"
-                                           className="mask mask-star-2 bg-orange-400"
-                                           aria-label="4 star"/>
-                                    <input type="radio" name="stars" value="5"
-                                           className="mask mask-star-2 bg-orange-400"
-                                           aria-label="5 star"/>
-                                </div>
-
-                                <SaveButton formId="add-review-form" modalId="addReviewForm" label="Save Review"/>
-                            </form>
+        product ? (
+            <div className="px-4 md:px-0 gap-8 py-32">
+                <div className={"max-w-6xl mx-auto p-6 bg-base-100 shadow-lg rounded-lg"}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
+                        {/* Left side - Images */}
+                        <div className="w-full">
+                            <ProductImageViewer images={product.images}/>
                         </div>
-                    </dialog>
-                </div>
-                {reviews.map((review) => (
-                    <div key={review.id} className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <span
-                                    className="text-yellow-500 text-lg">{"★".repeat(review.stars)}{"☆".repeat(5 - review.stars)}</span>
-                                <span className="text-gray-600 text-sm">{review.stars}/5</span>
+
+                        {/* Right side - Details */}
+                        <div className="w-full space-y-4">
+                            <p className="text-sm"><span className="badge badge-soft"># {product.id}</span></p>
+                            <h1 className="text-4xl font-bold">{product.name}</h1>
+                            {averageRating && (
+                                <p className="text-yellow-600">★ {averageRating} ({reviewCount} Reviews) </p>
+                            )}
+                            <div className="text-sm p-4 bg-base-200 rounded-lg">
+                                <p className="text-base-content/65 font-light mb-1">Description</p> {product.description}
                             </div>
-                            {user?.id === review.user_id && (
-                                <div className="flex gap-3">
-                                    {/*<form action={updateReview}>*/}
-                                    {/*    <input type="hidden" name="reviewId" value={review.id}/>*/}
-                                    {/*    <button className="text-blue-600 text-sm hover:underline">Edit</button>*/}
-                                    {/*</form>*/}
-                                    <ModalOpenButton id={`edit_review_modal_${review.id}`} buttonName={<FontAwesomeIcon
-                                        icon={faPen}/>}></ModalOpenButton>
-                                    <dialog id={`edit_review_modal_${review.id}`} className="modal">
-                                        <div className="modal-box">
-                                            <form method="dialog">
-                                                <button
-                                                    className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
-                                                </button>
-                                            </form>
-                                            <h3 className="font-bold text-lg">Edit the review: </h3>
-                                            <p className="py-4">{review.title}</p>
-                                            <form action={updateReview} id={`edit-form-${review.id}`}>
-                                                <input type="hidden" id={`review_id_${review.id}`}
-                                                       name="review_id"
-                                                       value={review.id}/>
-                                                <FormInput label={"Review title: "} placeholder={"Title"} name={"title"}
-                                                           value={review?.title} type={"text"}/>
-                                                <FormInput label={"Review description: "} placeholder={"Description"}
-                                                           name={"description"}
-                                                           value={review?.description} type={"text"}/>
 
-                                                <div className="rating">
+                            {product.is_active && product.stock > 0 ? (
+                                <span className={"flex gap-2 items-center text-success"}><FontAwesomeIcon size={"lg"}
+                                                                                                          icon={faCircleDot}/>In Stock ({product.stock} available)</span>
+
+                            ) : (<span className={"flex gap-2 items-center text-error"}><FontAwesomeIcon size={"lg"}
+                                                                                                         icon={faCircleXmark}/>Out of Stock</span>)}
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-3xl font-extrabold text-primary">RON {product.price}</span>
+                                <span className="text-sm text-base-content/75 ml-1">incl. TVA</span>
+                            </div>
+                            <div className={"flex gap-2 items-center w-full"}>
+                                <div className={"w-full"}>{<AddToCartButton isDisabled={product.is_active}
+                                                                            userId={user.id} productId={product.id}
+                                                                            initialQuantity={cartItems[product.id] || 0}/>}</div>
+                                <div><SaveToFavoritesButton userId={user.id} isDisabled={product.is_active}
+                                                            productId={product.id}
+                                                            initialFavorite={favoriteIds.includes(product.id)}/></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={"divider"}></div>
+                    <div className="space-y-4">
+                        <div className="flex justify-between gap-2">
+                            <div>
+                                <h2 className={"text-2xl font-semibold"}>Reviews</h2>
+                                <p className={"text-base-content/75"}>What our customers are saying</p>
+                            </div>
+                            <ModalOpenButton id={"addReviewForm"} buttonName={"Add new review"}></ModalOpenButton>
+                            <dialog id={"addReviewForm"} className="modal">
+                                <div className="modal-box">
+                                    <form method="dialog">
+                                        <button
+                                            className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                                        </button>
+                                    </form>
+                                    <h3 className="font-bold text-lg mb-4">Write a review</h3>
+                                    <form id="add-review-form" action={saveReview}
+                                          className="bg-base-100 p-2">
+                                        <input type="hidden" name="product_id" value={product.id}/>
+                                        <FormInput label="Title" name="title" type="text" placeholder="Title"/>
+                                        <FormInput label="Description" name="description" type="text"
+                                                   placeholder="Description"/>
+                                        <div className="flex flex-col gap-2">
+                                            <div>
+                                                <InputLabel label={"Rating"}></InputLabel>
+                                                <div className="rating flex gap-0.5 mb-4">
                                                     {[1, 2, 3, 4, 5].map((star) => (
-                                                        <input
-                                                            key={star}
-                                                            type="radio"
-                                                            name="stars"
-                                                            value={star}
-                                                            className="mask mask-star-2 bg-orange-400"
-                                                            aria-label={`${star} star`}
-                                                            defaultChecked={review.stars === star}
-                                                        />
-                                                    ))}
+                                                        <input key={star} type="radio" name="stars" value={star}
+                                                               className="mask mask-star-2 bg-orange-400"/>))}
                                                 </div>
-
-
-                                                <SaveButton formId={`edit-form-${review.id}`}
-                                                            modalId={`edit_review_modal_${review.id}`}/>
-                                            </form>
+                                            </div>
+                                            <SaveButton formId="add-review-form" modalId="addReviewForm"
+                                                        label="Save Review"/>
                                         </div>
-                                    </dialog>
-                                    <form action={deleteReview}>
-                                        <input type="hidden" name="reviewId" value={review.id}/>
-                                        <button className="text-red-600 text-sm hover:underline">Delete</button>
                                     </form>
                                 </div>
-                            )}
+                            </dialog>
                         </div>
-                        <p className="mt-3 text-gray-700">{review.title}</p>
-                        <p className="mt-3 text-gray-700">{review.description}</p>
+                        {reviews.map((review) => (
+                            <div key={review.id}
+                                 className="border border-base-content/10 bg-base-200 rounded-2xl p-4 shadow-sm">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-1 md:gap-3">
+                                        <h3 className={"text-xl font-semibold"}>{review.title}</h3>
+                                        <div>
+                                            <span
+                                                className="text-yellow-600 text-xl mr-1">{"★".repeat(review.stars)}{"☆".repeat(5 - review.stars)}</span>
+                                            <span className="">({review.stars}/5)</span>
+                                        </div>
+                                    </div>
+                                    {user?.id === review.user_id && (
+                                        <div className="flex gap-2">
+                                            {/*<form action={updateReview}>*/}
+                                            {/*    <input type="hidden" name="reviewId" value={review.id}/>*/}
+                                            {/*    <button className="text-blue-600 text-sm hover:underline">Edit</button>*/}
+                                            {/*</form>*/}
+                                            <ModalOpenButton id={`edit_review_modal_${review.id}`}
+                                                             className={"btn-info"}
+                                                             buttonName={"Edit"}></ModalOpenButton>
+                                            <dialog id={`edit_review_modal_${review.id}`} className="modal">
+                                                <div className="modal-box">
+                                                    <form method="dialog">
+                                                        <button
+                                                            className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                                                        </button>
+                                                    </form>
+                                                    <h3 className="font-bold text-lg mb-4">Edit the review</h3>
+                                                    <form action={updateReview} id={`edit-form-${review.id}`}
+                                                          className={"p-2"}>
+                                                        <input type="hidden" id={`review_id_${review.id}`}
+                                                               name="review_id"
+                                                               value={review.id}/>
+                                                        <FormInput label={"Review title: "} placeholder={"Title"}
+                                                                   name={"title"}
+                                                                   value={review?.title} type={"text"}/>
+                                                        <FormInput label={"Review description: "}
+                                                                   placeholder={"Description"}
+                                                                   name={"description"}
+                                                                   value={review?.description} type={"text"}/>
+
+                                                        <InputLabel label={"Rating"}></InputLabel>
+                                                        <div className="rating flex gap-0.5 mb-4">
+                                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                                <input
+                                                                    key={star}
+                                                                    type="radio"
+                                                                    name="stars"
+                                                                    value={star}
+                                                                    className="mask mask-star-2 bg-orange-400"
+                                                                    aria-label={`${star} star`}
+                                                                    defaultChecked={review.stars === star}
+                                                                />
+                                                            ))}
+                                                        </div>
+
+
+                                                        <SaveButton formId={`edit-form-${review.id}`}
+                                                                    modalId={`edit_review_modal_${review.id}`}/>
+                                                    </form>
+                                                </div>
+                                            </dialog>
+                                            <form action={deleteReview}>
+                                                <input type="hidden" name="reviewId" value={review.id}/>
+                                                <button
+                                                    className="btn btn-error text-sm hover:underline">Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    )}
+                                </div>
+                                <p className="text-sm text-base-content/75 italic">"{review.description}"</p>
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
-
-
-        </div>
+        ) : ("Product Not Found")
     );
 }

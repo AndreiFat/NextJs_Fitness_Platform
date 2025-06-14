@@ -1,20 +1,39 @@
-import React from 'react';
+'use client'
+import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import {faCircleDot, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {createSupabaseServerClient} from "@/utils/supabase/server";
+import {createSupabaseClient} from "@/utils/supabase/client";
 
-async function Product({product, addToFavoriteButton, addToCartButton}) {
-    const supabase = await createSupabaseServerClient()
+function Product({product, addToFavoriteButton, addToCartButton}) {
+    const [supabase] = useState(() => createSupabaseClient());
+    const [reviews, setReviews] = useState([]);
+    const [reviewsCount, setReviewsCount] = useState(0);
+    const [error, setError] = useState(null);
 
-    const {data: reviews, count: reviewsCount, error: reviewsError} = await supabase
-        .from('reviews')
-        .select('*', {count: 'exact'})
-        .eq('product_id', product.product_id);
-
-    const averageRating = reviews && reviews.length > 0
+    const averageRating = reviews.length > 0
         ? (reviews.reduce((acc, r) => acc + (r.stars || 0), 0) / reviews.length).toFixed(1)
         : null;
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const {data, count, error} = await supabase
+                .from("reviews")
+                .select("*", {count: "exact"})
+                .eq("product_id", product.id);
+
+            if (error) {
+                setError(error);
+                console.log(error);
+            } else {
+                setReviews(data);
+                setReviewsCount(count);
+                console.log("count:", count);
+            }
+        };
+
+        fetchReviews();
+    }, [product.id, supabase]);
 
     return (
         <div className="relative card bg-base-100">
@@ -25,7 +44,7 @@ async function Product({product, addToFavoriteButton, addToCartButton}) {
 
             <Link href={`/shop/product/${product.id}`}>
                 <div
-                    className="h-[350px] w-full bg-cover bg-center rounded-t-xl"
+                    className="h-[300px] w-full bg-cover bg-center rounded-t-xl"
                     style={{
                         backgroundImage: `url(${product.images[0]?.publicUrl})`
                     }}
@@ -40,9 +59,15 @@ async function Product({product, addToFavoriteButton, addToCartButton}) {
                                                                                                   icon={faCircleDot}/>In Stock</span> :
                         <span className={"flex gap-2 items-center text-error"}><FontAwesomeIcon size={"lg"}
                                                                                                 icon={faCircleXmark}/>Out of Stock</span>}
-                    {averageRating ? (
-                        <p className="text-sm text-yellow-600">⭐ Average Rating: {averageRating} / 5 </p>
-                    ) : <p>No ratings yet.</p>}
+                    <div className={"my-2"}>
+                        {averageRating ? (
+                            <p className="text-sm text-yellow-600">⭐ Average Rating: {averageRating} / 5 </p>
+                        ) : <p>No ratings yet.</p>}
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-extrabold text-primary">RON {product.price}</span>
+                        <span className="text-sm text-base-content/75 ml-1">incl. TVA</span>
+                    </div>
                 </Link>
                 <div className={"flex gap-2 items-center w-full"}>
                     <div className={"w-full"}>{addToCartButton}</div>

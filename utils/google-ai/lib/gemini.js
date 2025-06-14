@@ -292,10 +292,19 @@ export async function askGeminiWorkouts(prompt, goal_type, calories) {
     return response.text;
 }
 
-export async function askGeminiEverything(prompt) {
+export async function askGeminiEverything(prompt, goal_type, calories) {
     const response = await genAI.models.generateContent({
         model: "gemini-2.0-flash",
-        contents: prompt
+        contents: prompt,
+        config: {
+            systemInstruction: `
+            If the user asks about anything unrelated to fitness, health, gym, or physical exercises,
+            respond with a clear, well-structured message that politely redirects or explains
+            you specialize in fitness and workout guidance.
+            
+            Try to formulate all exercise-related advice and messages in Romanian.
+            `,
+        }
     });
     return response.text;
 }

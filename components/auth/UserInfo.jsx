@@ -31,7 +31,6 @@ export default function UserInfo({userInfo}) {
         fetchUserAdmin();
     }, []);
 
-
     return <>
         {user ? (<div>
             <div className="dropdown focus:outline-accent">
@@ -57,7 +56,9 @@ export default function UserInfo({userInfo}) {
                     <li><Link href={"/account-settings"}>Account</Link></li>
                     <li><Link href={"/orders"}>Orders</Link></li>
                     <li><Link href={"/addresses"}>Addresses</Link></li>
-                    {isAdmin ? (<li><Link href={"/admin/products"}>Products</Link></li>) : ""}
+                    {isAdmin ? (<>
+                        <li className={"font-semibold text-primary"}><Link href={"/admin"}>Admin Panel</Link></li>
+                    </>) : ""}
                     <li className={""}><LogoutButton/></li>
                 </ul>
             </div>

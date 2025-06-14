@@ -1,6 +1,6 @@
 'use client'
 import React, {useState, useTransition} from 'react';
-import {modifyStatus} from "@/app/(user)/orders/actions";
+import {modifyStatus} from "@/app/(shop)/admin/orders/actions";
 
 function ModifyStatus({currentStatus, orderId, existingTrackingId}) {
     const validStatuses = ['paid', 'on delivery', 'shipped', 'cancelled'];

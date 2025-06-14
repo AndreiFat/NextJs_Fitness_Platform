@@ -23,13 +23,13 @@ async function NavbarComponent() {
 
         let {data: cartProducts, count: countCartProducts, error: errorCartProducts} = await supabase
             .from('cart_products')
-            .select('id', {count: 'exact'})
+            .select('quantity', {count: 'exact'})
             .eq('user_id', user.id);
 
-        numberOfItems = countAI + countProducts;
-        totalProductsInCart = countCartProducts;
-    }
 
+        numberOfItems = countAI + countProducts;
+        totalProductsInCart = cartProducts?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+    }
     return (
         <div className="navbar z-50 fixed top-0 shadow-sm align-center h-[76px] bg-base-100/75 backdrop-blur-sm">
             <div className="navbar-start">
@@ -48,11 +48,13 @@ async function NavbarComponent() {
                         <li><a href={"/"}>Homepage</a></li>
                         <li><a href={"/shop"}>Shop</a></li>
                         <li><a href={"/fitness"}>Fitness</a></li>
+                        <li><a href={"/community"}>Community</a></li>
                     </ul>
                 </div>
             </div>
             <div className="navbar-center w-50">
-                <a className="btn btn-ghost text-xl" href={"/"}>Fitness Shop</a>
+                <a className="" href={"/"}><img src="/assets/logo.png" className={"h-[42px]"}
+                                                alt=""/></a>
             </div>
             <div className="navbar-end flex gap-2">
                 {/*<button className="btn btn-ghost btn-circle">*/}

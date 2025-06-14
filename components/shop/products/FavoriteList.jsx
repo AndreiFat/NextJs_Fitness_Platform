@@ -29,7 +29,7 @@ export default async function FavoriteList({favorites, userId}) {
                                                             initialFavorite={favoriteIds.includes(product.product_id)}/>}/>
                     )}</div>
             ) : (
-                <p>No favorites yet.</p>)
+                <p>Nu sunt produse salvate la favorite inca.</p>)
             }
         </div>
     );

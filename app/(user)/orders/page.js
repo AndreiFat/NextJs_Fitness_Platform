@@ -2,8 +2,8 @@ import {createSupabaseServerClient} from "@/utils/supabase/server";
 import OrderList from "@/components/shop/orders/OrderList";
 
 export const metadata = {
-    title: "Comenzile utilizatorului",
-    description: "Page for UserOrders",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} - Comenzi`,
+    description: "",
 };
 
 export default async function UserOrders() {

@@ -18,14 +18,14 @@ async function ProductTable({products}) {
                 <table className="min-w-full table-auto bg-base-200">
                     <thead className="bg-base-100">
                     <tr className="text-left text-sm font-semibold">
-                        <th className="p-4">Image</th>
-                        <th className="p-4">Name</th>
-                        <th className="p-4">Description</th>
-                        <th className="p-4">Price</th>
-                        <th className="p-4">Stock</th>
-                        <th className="p-4">Category</th>
-                        <th className="p-4">Active</th>
-                        <th className="p-4">Actions</th>
+                        <th className="p-4">#</th>
+                        <th className="p-4">Nume</th>
+                        <th className="p-4">Descriere</th>
+                        <th className="p-4">Preț</th>
+                        <th className="p-4">Stoc</th>
+                        <th className="p-4">Categorie</th>
+                        <th className="p-4">Activ</th>
+                        <th className="p-4">Acțiuni</th>
                     </tr>
                     </thead>
                     <tbody>

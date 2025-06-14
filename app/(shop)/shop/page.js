@@ -6,9 +6,10 @@ import CategoryFilterDropdown from "@/components/shop/buttons/CategoryFilterDrop
 import PaginationControls from "@/components/shop/buttons/PaginationControls";
 import PaginationDropdown from "@/components/shop/buttons/PaginationDropdown";
 import PromotionSlider from "@/components/shop/products/PromotionSlider";
+import {redirect} from "next/navigation";
 
 export const metadata = {
-    title: "Shop",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Magazin`,
     description: "Page for Shop",
 };
 
@@ -17,7 +18,7 @@ export default async function Shop({searchParams}) {
 
     const {data: {user}} = await supabase.auth.getUser();
 
-    if (!user) return <p>Please log in</p>;
+    if (!user) return redirect("/login");
 
     const {sort} = await searchParams;
     const {sortKey} = await searchParams;

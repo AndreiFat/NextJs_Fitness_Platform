@@ -14,7 +14,7 @@ export default async function OrderList({orders}) {
             <p className="text-base-content/70 text-sm text-center mb-6">
                 {is_admin ? ("Panoul de administrare pentru toate comenzile înregistrate pe platformă.") : ("Accesează detalii complete despre comenzile tale și starea livrării.")}
             </p>
-            {orders.map((order, index) => (
+            {orders.length > 0 ? (orders.map((order, index) => (
                 <div
                     key={index}
                     className="collapse collapse-arrow bg-base-100 border border-base-300 rounded-xl shadow-sm md:mt-2 mt-1"
@@ -118,7 +118,14 @@ export default async function OrderList({orders}) {
                         </div>
                     </div>
                 </div>
-            ))}
+            ))) : (
+                <>
+                    <div className="divider"></div>
+                    <div className="text-center">
+                        Nu sunt comenzi inca.
+                    </div>
+                </>
+            )}
         </div>
     );
 }

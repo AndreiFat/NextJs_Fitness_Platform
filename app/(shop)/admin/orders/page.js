@@ -2,7 +2,7 @@ import {createSupabaseServerClient} from "@/utils/supabase/server";
 import OrderList from "@/components/shop/orders/OrderList";
 
 export const metadata = {
-    title: "AdminOrders",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Admin / Comenzi`,
     description: "Page for AdminOrders",
 };
 

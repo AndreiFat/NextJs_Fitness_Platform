@@ -38,7 +38,7 @@ export function FriendRequests({userId}) {
                             .select("email, full_name")
                             .eq("id", newRequest.user_id)
                             .single();
-                        
+
                         setRequests((prev) => [
                             ...prev,
                             {
@@ -70,7 +70,7 @@ export function FriendRequests({userId}) {
 
     return (
         <div className="space-y-4">
-            {requests.length === 0 && <p className="text-sm">No incoming requests.</p>}
+            {requests.length === 0 && <p className="text-sm">Nu sunt cereri.</p>}
             {requests.map((req) => (
                 <div key={req.id} className="flex justify-between items-center p-3 rounded-xl bg-base-200 w-full">
                     <div>
@@ -82,13 +82,13 @@ export function FriendRequests({userId}) {
                             className="btn btn-sm btn-success"
                             onClick={() => respondToRequest(req.user_id, true)}
                         >
-                            Accept
+                            Acceptă
                         </button>
                         <button
                             className="btn btn-sm btn-outline"
                             onClick={() => respondToRequest(req.user_id, false)}
                         >
-                            Reject
+                            Respinge
                         </button>
                     </div>
                 </div>

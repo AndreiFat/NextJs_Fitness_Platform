@@ -3,7 +3,7 @@ import React from 'react';
 function PasswordInput(props) {
     return (
         <div>
-            <legend className="text-sm font-medium mb-1">Password</legend>
+            <legend className="text-sm font-medium mb-1">Parola</legend>
             <label className="input validator w-full">
                 <svg className="h-[1.2em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none"
@@ -13,15 +13,15 @@ function PasswordInput(props) {
                         <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
                     </g>
                 </svg>
-                <input name="password" id="password" type="password" required placeholder="Password" minLength="8"
+                <input name="password" id="password" type="password" required placeholder="Parola" minLength="8"
                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                        title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"/>
             </label>
             <p className="validator-hint hidden">
-                Must be more than 8 characters, including
-                <br/>At least one number
-                <br/>At least one lowercase letter
-                <br/>At least one uppercase letter
+                Trebuie să aibă mai mult de 8 caractere, inclusiv
+                <br/>Cel puțin o cifră
+                <br/>Cel puțin o literă mică
+                <br/>Cel puțin o literă mare
             </p>
         </div>
     );

@@ -6,7 +6,7 @@ export default function IMCProgressChart({data}) {
 
     return (
         <div className="rounded mt-4 pr-6">
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={380}>
                 <LineChart data={data}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151"/> {/* gri închis */}
                     <XAxis dataKey="date" stroke="#ffffff"/> {/* font alb */}

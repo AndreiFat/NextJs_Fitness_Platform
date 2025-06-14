@@ -4,7 +4,7 @@ function PhoneInput({value}) {
     return (
         <div>
             <fieldset className="fieldset">
-                <legend className="text-sm font-medium">Phone Number</legend>
+                <legend className="text-sm font-medium">Numar de telefon</legend>
                 <label className="input validator w-full">
                     <svg className="h-[1.2em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                         <g fill="none">
@@ -16,12 +16,13 @@ function PhoneInput({value}) {
                                   fill="currentColor"></path>
                         </g>
                     </svg>
-                    <input name="phone" id="phone" type="tel" className="tabular-nums" required placeholder="Phone"
+                    <input name="phone" id="phone" type="tel" className="tabular-nums" required
+                           placeholder="Numar de telefon"
                            pattern="[0-9]*"
                            minLength="10" maxLength="10" defaultValue={value || ""} title="Must be 10 digits"/>
                 </label>
             </fieldset>
-            <div className="validator-hint hidden">Must be 10 digits</div>
+            <div className="validator-hint hidden">Trebuie sa fie 10 caractere</div>
         </div>
     );
 }

@@ -6,7 +6,7 @@ import React from "react";
 import Link from "next/link";
 
 export const metadata = {
-    title: "Sign Up",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Inregistrare`,
     description: "Page for Sign Up",
 };
 
@@ -16,9 +16,9 @@ export default function SignUpPage() {
             className="min-h-screen flex items-center justify-center bg-base-200 bg-linear-to-t from-primary/20 to-base-100">
             <div className="card w-full max-w-md shadow-xl bg-base-100">
                 <div className="card-body space-y-3">
-                    <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+                    <h2 className="text-2xl font-bold text-center">Inregistrare</h2>
                     <p className="text-center text-sm text-base-content/70">
-                        Hello there! Welcome aboard!
+                        Bine ai venit! Hai să-ți atingem obiectivele împreună! 💪
                     </p>
 
                     <form className="space-y-4" action={signup}>
@@ -28,7 +28,7 @@ export default function SignUpPage() {
                                 name="name"
                                 id="name"
                                 type="text"
-                                placeholder="Type your full name"
+                                placeholder="Introdu numele tau complet"
                                 className="input input-bordered w-full"
                                 required
                             />
@@ -40,16 +40,16 @@ export default function SignUpPage() {
 
                         <div className="text-center">
                             <p className="text-sm">
-                                Already have an account?
+                                Ai deja un cont?
                                 <Link href="/login" className="link link-primary ml-1">
-                                    Sign in
+                                    Autentifica-te
                                 </Link>
                             </p>
                         </div>
 
                         <div className="form-control mt-4">
                             <button type="submit" className="btn btn-primary w-full">
-                                Sign Up
+                                Inregistrare
                             </button>
                         </div>
                     </form>

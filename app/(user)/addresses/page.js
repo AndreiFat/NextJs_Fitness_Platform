@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export const metadata = {
-    title: "AddressPage",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Adrese`,
     description: "Page for AddressPage",
 };
 
@@ -26,19 +26,18 @@ export default async function AddressPage() {
         <div className="container mx-auto px-4 pt-32">
             <div className="flex justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold mb-4 text-primary">Your Saved Addresses</h1>
+                    <h1 className="text-3xl font-bold mb-4 text-primary">Adresele tale salvate</h1>
                     <p className="text-base-content/75 mb-6">
-                        Manage your delivery locations below. Add, update, or remove addresses as needed.
+                        Gestionează-ți locațiile de livrare mai jos. Adaugă, actualizează sau șterge adrese după nevoie.
                     </p>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
                     <ModalOpenButton className={"btn-primary btn-outline"} id="addAddressesForm"
-                                     buttonName={<><FontAwesomeIcon icon={faPlus}/>Add New Address</>}/>
+                                     buttonName={<><FontAwesomeIcon icon={faPlus}/> Adaugă adresă nouă</>}/>
                 </div>
             </div>
 
             <AddressList addresses={addresses}/>
-
 
             {/* Modal */}
             <dialog id="addAddressesForm" className="modal">
@@ -46,42 +45,42 @@ export default async function AddressPage() {
                     <form method="dialog">
                         <button
                             className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3"
-                            aria-label="Close">
+                            aria-label="Închide">
                             ✕
                         </button>
                     </form>
 
-                    <h3 className="font-semibold text-xl text-primary mb-4">Add New Address</h3>
+                    <h3 className="font-semibold text-xl text-primary mb-4">Adaugă adresă nouă</h3>
 
                     <form
                         id="add-address-form"
                         action={saveAddress}
-                        className="space-y-4"
+                        className="mt-4"
                     >
                         <FormInput
-                            label="Country"
+                            label="Țară"
                             name="country"
                             type="text"
-                            placeholder="e.g., United States"
+                            placeholder="ex: România"
                         />
                         <FormInput
-                            label="City"
+                            label="Oraș"
                             name="city"
                             type="text"
-                            placeholder="e.g., New York"
+                            placeholder="ex: București"
                         />
                         <FormInput
-                            label="Address"
+                            label="Adresă"
                             name="address"
                             type="text"
-                            placeholder="e.g., 23 Avenue Street"
+                            placeholder="ex: Str. Exemplu nr. 23"
                         />
 
                         <div className="pt-4">
                             <SaveButton
                                 formId="add-address-form"
                                 modalId="addAddressesForm"
-                                label="Save Address"
+                                label="Salvează adresa"
                             />
                         </div>
                     </form>

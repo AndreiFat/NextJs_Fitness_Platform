@@ -7,7 +7,7 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-    title: "Shopping Cart",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Cos de cumparaturi`,
     description: "Page for Shopping Cart",
 };
 
@@ -44,7 +44,7 @@ export default async function ShoppingCart() {
         let subtotal = item.quantity * item.product.price;
         return subtotal.toFixed(2) || 0
     }
-    
+
     return (
         <div className="container px-3 sm-px-0 sm:mx-auto pt-32">
             <h1 className="text-4xl font-extrabold text-primary mb-2">Cosul tau de cumparaturi</h1>
@@ -57,7 +57,7 @@ export default async function ShoppingCart() {
                     <p className="text-5xl mb-3"><FontAwesomeIcon icon={faFaceFrownOpen}/></p>
                     <p className="text-lg font-medium">Cosul este gol</p>
                     <p className="text-sm text-base-content/50">Pare ca inca nu ai nimic in cos inca.</p>
-                    <Link className={"btn btn-outline btn-primary mt-3"} href={'/shop'}>Shop Now</Link>
+                    <Link className={"btn btn-outline btn-primary mt-3"} href={'/shop'}>Cumpara acum</Link>
                 </div>
             ) : (
                 <div

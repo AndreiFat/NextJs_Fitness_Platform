@@ -67,7 +67,7 @@ export default function SubtotalComponent({cartProducts, userAddresses, userEmai
 
             <section className="mt-3">
                 <button type="button" onClick={handleCheckout} className="btn btn-primary w-full">
-                    Checkout
+                    Plaseaza comanda
                 </button>
             </section>
         </>

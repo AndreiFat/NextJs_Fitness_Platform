@@ -6,7 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {createSupabaseServerClient} from "@/utils/supabase/server";
 
 export const metadata = {
-    title: "Favorites",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Favorite`,
     description: "Page for Favorites",
 };
 
@@ -44,38 +44,38 @@ export default async function Favorites() {
     }
 
     return (
-        <div className="container mx-auto p-4 sm:px-0 sm: py-4 pt-[120px]">
+        <div className="container mx-auto p-4 sm:px-0 sm: py-4 pt-32">
             <div className="tabs tabs-lift">
                 <label className="tab gap-2">
                     <input type="radio" name="my_tabs_4" defaultChecked/>
                     <FontAwesomeIcon size={"lg"} icon={faStore}/>
-                    Products
+                    Produse
                     <div className="badge badge-soft badge-primary">{productCount}</div>
 
                 </label>
-                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                <div className="tab-content bg-base-200/75 border-base-300 p-6">
                     <FavoriteProducts userId={user.id} products={products}></FavoriteProducts>
                 </div>
 
                 <label className="tab gap-2">
                     <input type="radio" name="my_tabs_4"/>
                     <FontAwesomeIcon size={"lg"} icon={faCookie}/>
-                    Recipes
+                    Retete
                     <div className="badge badge-soft badge-primary">{mealCount}</div>
 
                 </label>
-                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                <div className="tab-content bg-base-200/75 border-base-300 p-6">
                     <FavoriteRecipes recipes={meals}/>
                 </div>
 
                 <label className="tab gap-2">
                     <input type="radio" name="my_tabs_4"/>
                     <FontAwesomeIcon size={"lg"} icon={faDumbbell}/>
-                    Exercises
+                    Exercitii
                     <div className="badge badge-soft badge-primary">{workoutCount}</div>
 
                 </label>
-                <div className="tab-content bg-base-100/75 border-base-300 p-6">
+                <div className="tab-content bg-base-200/75 border-base-300 p-6">
                     <FavoriteExercises workouts={workouts}></FavoriteExercises>
                 </div>
             </div>

@@ -5,7 +5,7 @@ function EmailInput({value}) {
         <div>
             {/*Email*/}
             <fieldset className="fieldset">
-                <legend className="text-sm font-medium">Email Address</legend>
+                <legend className="text-sm font-medium">Adresă Email</legend>
                 <label className="input validator w-full ">
                     <svg className="h-[1.2em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none"
@@ -18,7 +18,7 @@ function EmailInput({value}) {
                            required/>
                 </label>
             </fieldset>
-            <div className="validator-hint hidden">Enter valid email address</div>
+            <div className="validator-hint hidden">Introdu o adresa de email valida</div>
         </div>
     );
 }

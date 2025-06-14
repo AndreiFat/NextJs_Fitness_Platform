@@ -44,11 +44,11 @@ async function NavbarComponent() {
                     </div>
                     <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a href={"/"}>Homepage</a></li>
-                        <li><a href={"/shop"}>Shop</a></li>
+                        className="menu dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li><a href={"/"}>Acasă</a></li>
+                        <li><a href={"/shop"}>Magazin</a></li>
                         <li><a href={"/fitness"}>Fitness</a></li>
-                        <li><a href={"/community"}>Community</a></li>
+                        <li><a href={"/community"}>Comunitate</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,23 +64,24 @@ async function NavbarComponent() {
                 {/*              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>*/}
                 {/*    </svg>*/}
                 {/*</button>*/}
-                <Link href={"/shop/shopping-cart"} className="btn btn-ghost btn-circle">
-                    <div className="indicator">
-                        <FontAwesomeIcon icon={faCartShopping} size={"xl"}></FontAwesomeIcon>
-                        {totalProductsInCart > 0 ? <span
-                            className="badge badge-xs px-1.5 badge-primary indicator-item">{totalProductsInCart}</span> : <></>}
-                    </div>
-                </Link>
-                <Link href={"/favorites"} className="btn btn-ghost btn-circle">
-                    <div className="indicator">
-                        <FontAwesomeIcon icon={faHeart} size={"xl"}></FontAwesomeIcon>
-                        {numberOfItems > 0 ? <span
-                            className="badge badge-xs px-1.5 badge-accent indicator-item">{numberOfItems}</span> : <></>}
-                    </div>
-                </Link>
+                {user && (<>
+                    <Link href={"/shop/shopping-cart"} className="btn btn-ghost btn-circle">
+                        <div className="indicator">
+                            <FontAwesomeIcon icon={faCartShopping} size={"xl"}></FontAwesomeIcon>
+                            {totalProductsInCart > 0 ? <span
+                                className="badge badge-xs px-1.5 badge-primary indicator-item">{totalProductsInCart}</span> : <></>}
+                        </div>
+                    </Link>
+                    <Link href={"/favorites"} className="btn btn-ghost btn-circle">
+                        <div className="indicator">
+                            <FontAwesomeIcon icon={faHeart} size={"xl"}></FontAwesomeIcon>
+                            {numberOfItems > 0 ? <span
+                                className="badge badge-xs px-1.5 badge-accent indicator-item">{numberOfItems}</span> : <></>}
+                        </div>
+                    </Link></>)}
                 {user != null ? (<UserInfo userInfo={user}/>) : (<div className="flex gap-2">
-                    <Link className={"btn btn-soft"} href={"/login"}>Login</Link>
-                    <Link className={"btn btn-soft btn-secondary"} href={"/signup"}>Sign Up</Link>
+                    <Link className={"btn btn-soft"} href={"/login"}>Autentificare</Link>
+                    <Link className={"btn btn-soft btn-secondary"} href={"/signup"}>Inregistrare</Link>
                 </div>)}
             </div>
         </div>

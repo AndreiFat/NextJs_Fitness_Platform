@@ -245,25 +245,23 @@ export async function updateUserProfile(formData) {
         .select()
 
     const {userMetaData, error} = await supabase.auth.updateUser({
-        email: data.email,
+        // email: data.email,
         data: {
             full_name: data.username,
             phone: data.phone,
         }
     });
 
-    if (userProfileError) {
-        console.error(userProfileError);
-        redirect('/error');
-    }
+    const {users, errors} = await supabase
+        .from('users')
+        .update({
+            full_name: data.username,
+            phone: data.phone,
+        })
+        .eq('id', userId);
 
-    if (fitnessError) {
-        console.error(fitnessError);
-        redirect('/error');
-    }
 
-    if (error) {
-        console.error(error);
+    if (userProfileError || errors || fitnessError) {
         redirect('/error');
     }
 

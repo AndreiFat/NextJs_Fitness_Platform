@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import {FriendRequests} from "@/components/community/FriendRequest";
 import {AddFriend} from "@/components/community/AddFriend";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUserPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
+import {faPaperPlane, faUserPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
 
 export default function DirectMessages({user}) {
     const supabase = createSupabaseClient();
@@ -152,7 +152,7 @@ export default function DirectMessages({user}) {
             {/* Friends list */}
             <div className="w-1/3 border-r-2 border-base-content/25 p-4 overflow-y-auto flex flex-col justify-between">
                 <div>
-                    <h2 className="text-xl font-bold mb-4">Friends</h2>
+                    <h2 className="text-xl font-bold mb-4">Lista de prieteni</h2>
                     <ul className="">
                         {friends.map((friend) => (
                             <div key={friend.friend_id}>
@@ -174,7 +174,7 @@ export default function DirectMessages({user}) {
                         <input type="checkbox"/>
                         <div className="collapse-title font-semibold">
                             <FontAwesomeIcon className="mr-2" icon={faUsers}/>
-                            Friend Requests
+                            Cereri de prietenie
                             {requestCount > 0 && (
                                 <span className="ml-2 badge badge-sm badge-primary">{requestCount}</span>
                             )}
@@ -187,7 +187,7 @@ export default function DirectMessages({user}) {
                         <input type="checkbox"/>
                         <div className="collapse-title font-semibold">
                             <FontAwesomeIcon className="mr-2" icon={faUserPlus}/>
-                            Add new friend
+                            Adaugă un nou prieten
                         </div>
                         <div className="collapse-content text-sm">
                             <AddFriend currentUser={user}/>
@@ -203,7 +203,7 @@ export default function DirectMessages({user}) {
                     className="mt-4 mx-4 mb-0.5 p-4 border-base-content/30 bg-base-100 rounded-xl shadow-lg shadow-base-content/5">
                     <h3 className="text-lg">
                         <div className={"font-semibold text-primary"}>
-                            {activeFriend?.full_name || activeFriend?.email || "Select a friend"}
+                            {activeFriend?.full_name || activeFriend?.email || "Selectează un prieten"}
                         </div>
                         <div className={"text-sm font-light text-base-content/75"}>
                             {activeFriend?.email || ""}
@@ -234,15 +234,15 @@ export default function DirectMessages({user}) {
                 </div>
 
                 {/* Input */}
-                <div className="mx-4 mb-4 mt-0.5 p-4 bg-base-100 flex gap-2 rounded-xl">
+                <div className="mx-4 mb-4 mt-0.5 px-4 py-4.5 bg-base-100 flex gap-2 rounded-xl">
                     <input
                         className="input input-bordered flex-1"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Type your message..."
+                        placeholder="Scrie un mesaj..."
                     />
                     <button className="btn btn-primary" onClick={sendMessage}>
-                        Send
+                        Trimite <FontAwesomeIcon icon={faPaperPlane} size="lg"/>
                     </button>
                 </div>
             </div>

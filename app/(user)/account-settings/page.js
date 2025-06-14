@@ -38,93 +38,93 @@ export default async function accountSettings() {
 
     return (
         <div
-            className="min-h-screen bg-base-200 py-10 flex justify-center pt-[100px] bg-linear-to-t from-primary/25 to-base-100">
+            className="min-h-screen bg-base-200 py-10 flex justify-center pt-[100px] bg-gradient-to-t from-primary/25 to-base-100">
             <div className="w-full max-w-5xl bg-base-200/50 p-10 shadow-md card backdrop-blur-sm">
-                <h1 className="text-3xl font-bold text-center mb-2">Account Settings</h1>
+                <h1 className="text-3xl font-bold text-center mb-2">Setări cont</h1>
                 <p className="text-center text-base-content/70 mb-8">
-                    Manage and update your profile details below.
+                    Gestionează și actualizează detaliile contului tău mai jos.
                 </p>
+
                 <form action={updateUserProfile}>
-                    {/* Grid layout */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                        {/* Name */}
+                        {/* Nume */}
                         <div className="form-control">
-                            <legend className="text-sm font-medium mb-1">Name</legend>
+                            <legend className="text-sm font-medium mb-1">Nume</legend>
                             <input
                                 name="name"
                                 type="text"
                                 className="input input-bordered w-full"
-                                placeholder="Your name"
+                                placeholder="Numele tău"
                                 defaultValue={userProfile.user.full_name || ""}
                             />
                         </div>
 
-                        {/* Age */}
+                        {/* Vârstă */}
                         <UserProfileInput
-                            label="Your age"
+                            label="Vârsta ta"
                             name="age"
                             type="number"
-                            placeholder="23 years old"
+                            placeholder="23 ani"
                             value={userProfile?.age}
                         />
 
                         <EmailInput value={user?.email}/>
                         <PhoneInput value={userProfile.user.phone}/>
 
-                        {/* Gender */}
+                        {/* Gen */}
                         <div className="form-control">
-                            <legend className="text-sm font-medium mb-1">Gender</legend>
+                            <legend className="text-sm font-medium mb-1">Gen</legend>
                             <select
                                 name="gender"
                                 className="select select-bordered w-full"
                                 defaultValue={userProfile?.gender || "male"}
                             >
-                                <option value="null">Select your gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="null">Selectează genul</option>
+                                <option value="male">Masculin</option>
+                                <option value="female">Feminin</option>
                             </select>
                         </div>
 
-                        {/* Activity level */}
+                        {/* Nivel de activitate */}
                         <div className="form-control">
-                            <legend className="text-sm font-medium mb-1">Activity Level</legend>
+                            <legend className="text-sm font-medium mb-1">Nivel de activitate</legend>
                             <select
                                 name="activity_level"
                                 className="select select-bordered w-full"
                                 defaultValue={userProfile?.activity_level || "sedentary"}
                             >
-                                <option value="sedentary">Sedentary</option>
-                                <option value="light">Light (1–3x/week)</option>
-                                <option value="moderate">Moderate (3–5x/week)</option>
-                                <option value="heavy">Heavy (6–7x/week)</option>
-                                <option value="intense">Very intense</option>
+                                <option value="sedentary">Sedentar</option>
+                                <option value="light">Ușor (1–3x/săptămână)</option>
+                                <option value="moderate">Moderat (3–5x/săptămână)</option>
+                                <option value="heavy">Intens (6–7x/săptămână)</option>
+                                <option value="intense">Foarte intens</option>
                             </select>
                         </div>
 
-                        {/* Weight, Height */}
+                        {/* Greutate, Înălțime, Circumferințe */}
                         <UserProfileInput
-                            label="Weight (kg)"
+                            label="Greutate (kg)"
                             name="initial_weight"
                             type="number"
                             placeholder="75"
                             value={userProfile?.initial_weight}
                         />
                         <UserProfileInput
-                            label="Height (cm)"
+                            label="Înălțime (cm)"
                             name="height"
                             type="number"
                             placeholder="175"
                             value={userProfile?.height}
                         />
                         <UserProfileInput
-                            label="Abdominal Circumference (cm)"
+                            label="Circumferință abdominală (cm)"
                             name="initial_abdominal_circumference"
                             type="number"
                             placeholder="78"
                             value={userProfile?.initial_abdominal_circumference}
                         />
                         <UserProfileInput
-                            label="Hip Circumference (cm)"
+                            label="Circumferință șold (cm)"
                             name="initial_hip_circumference"
                             type="number"
                             placeholder="93"
@@ -132,19 +132,19 @@ export default async function accountSettings() {
                         />
                     </div>
 
-                    {/* Fitness Goals Cards */}
+                    {/* Obiective Fitness */}
                     <div className="mt-10">
                         <label className="label mb-2">
-                            <span className="label-text font-medium text-lg">Choose your fitness goal</span>
+                            <span className="label-text font-medium text-lg">Alege obiectivul tău</span>
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {[
-                                {value: "Muscle Gain", icon: "💪"},
-                                {value: "Weight loss", icon: "⚖️"},
-                                {value: "Maintenance", icon: "🛠️"},
-                                {value: "Performance & Endurance", icon: "🏃‍♂️"},
-                                {value: "Flexibility & Mobility", icon: "🧘‍♂️"},
-                                {value: "General Fitness & Well-being", icon: "🌿"},
+                                {value: "Creștere musculară", icon: "💪"},
+                                {value: "Slăbire", icon: "⚖️"},
+                                {value: "Menținere", icon: "🛠️"},
+                                {value: "Performanță & Rezistență", icon: "🏃‍♂️"},
+                                {value: "Flexibilitate & Mobilitate", icon: "🧘‍♂️"},
+                                {value: "Fitness general & Stare de bine", icon: "🌿"},
                             ].map(({value, icon}) => (
                                 <label key={value} className="cursor-pointer">
                                     <input
@@ -166,39 +166,39 @@ export default async function accountSettings() {
                         </div>
                     </div>
 
-                    {/* Notes */}
+                    {/* Notițe */}
                     <div className="form-control mt-8">
-                        <legend className="text-sm font-medium mb-1">Notes</legend>
+                        <legend className="text-sm font-medium mb-1">Notițe</legend>
                         <textarea
                             name="notes"
-                            className="textarea h-24 w-full px-5 py-3 "
-                            placeholder="Type your notes..."
+                            className="textarea h-24 w-full px-5 py-3"
+                            placeholder="Scrie notițele tale..."
                             defaultValue={userProfile?.notes || ""}
                         />
-                        <div className="label text-sm">Optional</div>
+                        <div className="label text-sm">Opțional</div>
                     </div>
 
                     <button
                         type="submit"
                         className="btn btn-primary w-full mt-6"
                     >
-                        Update Profile
+                        Actualizează profilul
                     </button>
                 </form>
 
-                {/* Password Reset */}
+                {/* Resetare parolă */}
                 {user.identities[0].provider !== "google" && (
                     <div className="mt-12">
                         <div className="card bg-base-100 shadow-md">
                             <div className="card-body">
-                                <h3 className="text-lg font-semibold text-center">Reset Your Password</h3>
+                                <h3 className="text-lg font-semibold text-center">Resetează parola</h3>
                                 <p className="text-sm text-center text-base-content/70 mb-4">
-                                    We'll send a reset link to your email.
+                                    Îți vom trimite un link de resetare pe email.
                                 </p>
                                 <form action={sendPasswordReset} className="space-y-4">
                                     <EmailInput/>
                                     <button type="submit" className="btn btn-accent w-full">
-                                        Send Reset Link
+                                        Trimite linkul de resetare
                                     </button>
                                 </form>
                             </div>

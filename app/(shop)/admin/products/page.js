@@ -11,7 +11,7 @@ import PaginationControls from "@/components/shop/buttons/PaginationControls";
 import InputLabel from "@/components/forms/InputLabel";
 
 export const metadata = {
-    title: "AdminProducts",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Admin / Produse`,
     description: "Page for AdminProducts",
 };
 
@@ -70,7 +70,7 @@ export default async function AdminProducts({searchParams}) {
                         Vizualizează, editează și adaugă produse în magazinul tău.
                     </p>
                 </div>
-                <ModalOpenButton buttonName={"Add product"} className={"btn-primary"}
+                <ModalOpenButton buttonName={"Adauga un produs nou"} className={"btn-primary"}
                                  id="addProductModal"></ModalOpenButton>
             </div>
             <div className="card bg-base-100 my-4">

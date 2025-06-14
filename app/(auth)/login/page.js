@@ -5,7 +5,7 @@ import EmailInput from "@/components/auth/forms/EmailInput";
 import PasswordInput from "@/components/auth/forms/PasswordInput";
 
 export const metadata = {
-    title: "Login",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Autentificare`,
     description: "Page for Login",
 };
 
@@ -15,7 +15,7 @@ export default function LoginPage() {
             className="min-h-screen flex items-center justify-center bg-base-200 bg-linear-to-t from-primary/20 to-base-100">
             <div className="card w-full max-w-md shadow-xl bg-base-100">
                 <div className="card-body space-y-3">
-                    <h2 className="text-2xl font-bold text-center">Login</h2>
+                    <h2 className="text-2xl font-bold text-center">Autentificare</h2>
 
                     <form className="space-y-4" action={login}>
                         <EmailInput/>
@@ -26,21 +26,21 @@ export default function LoginPage() {
                                 type="submit"
                                 className="btn btn-primary w-full"
                             >
-                                Log in
+                                Autentificare
                             </button>
                         </div>
 
                         <div className="text-center">
                             <p className="text-sm">
-                                Don’t have an account?
+                                Nu ai un cont?
                                 <Link href="/signup" className="link link-primary ml-1">
-                                    Sign up
+                                    Inregistreaza-te
                                 </Link>
                             </p>
                         </div>
                     </form>
 
-                    <div className="divider">or</div>
+                    <div className="divider">sau</div>
 
                     <LoginWithGoogleButton/>
                 </div>

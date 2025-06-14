@@ -15,7 +15,7 @@ export async function askGeminiRecipes(prompt, goal_type, calories) {
             systemInstruction: `You are a helpful nutrition assistant.
             Always respect the user's goal: ${goal_type} and ${calories} calories.
             If the meal plan includes a day labeled "today", use the current real-world date ${weekdayName} in the response.
-            Use structured output as defined in the responseSchema.`,
+            Use structured output as defined in the responseSchema. Try to formulate the recipes and days names in Romanian.`,
             responseMimeType: "application/json",
             responseSchema: {
                 "type": "object",
@@ -36,13 +36,13 @@ export async function askGeminiRecipes(prompt, goal_type, calories) {
                                             "day": {
                                                 "type": "string",
                                                 "enum": [
-                                                    "Monday",
-                                                    "Tuesday",
-                                                    "Wednesday",
-                                                    "Thursday",
-                                                    "Friday",
-                                                    "Saturday",
-                                                    "Sunday"
+                                                    "Luni",
+                                                    "Marti",
+                                                    "Miercuri",
+                                                    "Joi",
+                                                    "Vineri",
+                                                    "Sambata",
+                                                    "Duminica"
                                                 ]
                                             },
                                             "breakfast": {
@@ -211,13 +211,13 @@ export async function askGeminiWorkouts(prompt, goal_type, calories) {
                                         "day": {
                                             "type": "string",
                                             "enum": [
-                                                "Monday",
-                                                "Tuesday",
-                                                "Wednesday",
-                                                "Thursday",
-                                                "Friday",
-                                                "Saturday",
-                                                "Sunday"
+                                                "Luni",
+                                                "Marti",
+                                                "Miercuri",
+                                                "Joi",
+                                                "Vineri",
+                                                "Sambata",
+                                                "Duminica"
                                             ]
                                         },
                                         "focus": {

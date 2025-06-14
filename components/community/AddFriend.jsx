@@ -64,16 +64,16 @@ export function AddFriend({currentUser}) {
     };
 
     return (
-        <div className="space-y-2 max-w-md">
+        <div className="space-y-2">
             <input
                 type="email"
                 className="input input-bordered w-full"
-                placeholder="Enter user's email"
+                placeholder="Introdu adresa de email a prietenului"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
             <button className="btn btn-primary w-full" onClick={sendRequest}>
-                Send Friend Request
+                Trimite cererea
             </button>
             {status && <p className="text-sm text-muted-foreground">{status}</p>}
         </div>

@@ -8,7 +8,7 @@ import MinimalFooterComponent from "@/components/layout/MinimalFooterComponent";
 config.autoAddCss = false //
 
 export const metadata = {
-    title: "FitMind — Antrenorul tău AI pentru minte și corp",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Antrenorul tău AI pentru minte și corp`,
     description:
         "FitMind este platforma ta inteligentă de fitness și nutriție, alimentată de AI. Creează-ți planuri personalizate, urmărește progresul și atinge-ți obiectivele de sănătate fizică și mentală.",
     icons: {

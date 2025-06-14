@@ -24,8 +24,8 @@ import {
 import {faUserCircle} from "@fortawesome/free-regular-svg-icons";
 
 export const metadata = {
-    title: "FitnessGoals",
-    description: "Page for FitnessGoals",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} - Obiective Fitness`,
+    description: "Pagina pentru setarea și urmărirea obiectivelor tale de fitness",
 };
 
 export default async function FitnessGoals() {
@@ -172,7 +172,7 @@ export default async function FitnessGoals() {
                                 <div className="stat-figure text-success">
                                     <FontAwesomeIcon icon={faHeartPulse} className="text-3xl mt-4"/>
                                 </div>
-                                <div className="stat-title text-base-content/70">IMC</div>
+                                <div className="stat-title text-base-content/70">IMC (Indice de Masă Corporală)</div>
                                 <div className="stat-value text-success">{fitness_goals.initial_IMC}</div>
                             </div>
 
@@ -206,11 +206,13 @@ export default async function FitnessGoals() {
                             {/* Stats principale BMR/TDEE */}
                             <div className="stats stats-vertical sm:stats-horizontal w-full text-sm">
                                 <div className="stat">
-                                    <div className="stat-title text-base-content/70">BMR</div>
+                                    <div className="stat-title text-base-content/70">BMR (Rata Metabolică Bazală)</div>
                                     <div className="stat-value text-orange-500">{Math.round(bmr)} kCal</div>
                                 </div>
                                 <div className="stat">
-                                    <div className="stat-title text-base-content/70">TDEE</div>
+                                    <div className="stat-title text-base-content/70">TDEE (Consumul Energetic Zilnic
+                                        Total)
+                                    </div>
                                     <div className="stat-value text-orange-500">{recommendedCalories} kCal</div>
                                 </div>
                             </div>

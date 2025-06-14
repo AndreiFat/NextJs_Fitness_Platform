@@ -19,7 +19,10 @@ export default function FitnessComposedChart({data}) {
                 <CartesianGrid stroke="#374151"/> {/* neutral-700-ish for dark bg */}
                 <XAxis dataKey="date" stroke="#d1fae5"/> {/* light-emerald text */}
                 <YAxis stroke="#d1fae5"/>
-                <Tooltip/>
+                <Tooltip
+                    contentStyle={{backgroundColor: '#064e3b', borderRadius: '8px', borderColor: '#065f46'}}
+                    itemStyle={{color: '#ffffff'}}  // text alb tooltip
+                />
                 <Legend/>
 
                 {/* Weight as bar – primary (green) */}

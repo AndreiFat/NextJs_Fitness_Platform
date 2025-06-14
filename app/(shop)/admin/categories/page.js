@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 export const metadata = {
-    title: "CategoryPage",
+    title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} — Admin / Categorie`,
     description: "Page for CategoryPage",
 };
 

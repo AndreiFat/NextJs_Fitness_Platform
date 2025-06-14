@@ -22,58 +22,61 @@ export default function AddressList({addresses}) {
                         <div className="flex justify-end items-center gap-3">
                             <ModalOpenButton
                                 id={`edit_address_modal_${address.id}`} className={"btn-outline btn-info"}
-                                buttonName={<><FontAwesomeIcon icon={faPen}/> Edit</>
+                                buttonName={
+                                    <>
+                                        <FontAwesomeIcon icon={faPen}/> Editează
+                                    </>
                                 }
                             />
                             <button
                                 className="btn btn-outline btn-error"
                                 onClick={() => deleteAddress(address.id)}
                             >
-                                <FontAwesomeIcon icon={faTrash}/> Delete
+                                <FontAwesomeIcon icon={faTrash}/> Șterge
                             </button>
                         </div>
 
-                        {/* Edit Modal */}
+                        {/* Modificare adresă */}
                         <dialog id={`edit_address_modal_${address.id}`} className="modal">
                             <div className="modal-box rounded-xl">
                                 <form method="dialog">
                                     <button
                                         className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3"
-                                        aria-label="Close"
+                                        aria-label="Închide"
                                     >
                                         ✕
                                     </button>
                                 </form>
-                                <h3 className="font-semibold text-lg text-primary mb-4">Edit Address</h3>
+                                <h3 className="font-semibold text-lg text-primary mb-4">Editează adresa</h3>
 
-                                <form action={updateAddress} id={`edit-form-${address.id}`} className="space-y-3">
+                                <form action={updateAddress} id={`edit-form-${address.id}`}>
                                     <input type="hidden" name="address_id" value={address.id}/>
                                     <FormInput
-                                        label="Country"
+                                        label="Țară"
                                         name="country"
                                         type="text"
-                                        placeholder="Country"
+                                        placeholder="Țara"
                                         value={address.country}
                                     />
                                     <FormInput
-                                        label="City"
+                                        label="Oraș"
                                         name="city"
                                         type="text"
-                                        placeholder="City"
+                                        placeholder="Oraș"
                                         value={address.city}
                                     />
                                     <FormInput
-                                        label="Address"
+                                        label="Adresă completă"
                                         name="address"
                                         type="text"
-                                        placeholder="Full address"
+                                        placeholder="Adresă completă"
                                         value={address.address}
                                     />
                                     <div className="pt-3">
                                         <SaveButton
                                             formId={`edit-form-${address.id}`}
                                             modalId={`edit_address_modal_${address.id}`}
-                                            label="Save Changes"
+                                            label="Salvează modificările"
                                         />
                                     </div>
                                 </form>

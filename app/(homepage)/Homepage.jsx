@@ -9,7 +9,7 @@ function Homepage({products, error}) {
 
     useEffect(() => {
         if (videoRef.current) {
-            videoRef.current.playbackRate = 1.25;
+            videoRef.current.playbackRate = 1.35;
         }
     }, []);
 

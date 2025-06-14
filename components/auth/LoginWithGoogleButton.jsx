@@ -18,7 +18,7 @@ function LoginWithGoogleButton(props) {
                     <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path>
                 </g>
             </svg>
-            Login with Google
+            Autentificare cu Google
         </button>
     );
 }

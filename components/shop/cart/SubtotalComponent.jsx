@@ -1,6 +1,7 @@
 'use client'
 import {useMemo, useState} from 'react'
 import {useRouter} from 'next/navigation'
+import InputLabel from "@/components/forms/InputLabel";
 
 export default function SubtotalComponent({cartProducts, userAddresses, userEmail}) {
     const [selectedAddress, setSelectedAddress] = useState('')
@@ -42,17 +43,17 @@ export default function SubtotalComponent({cartProducts, userAddresses, userEmai
 
     return (
         <>
-            <h2>Sumar comanda</h2>
-            <pre>Number of items: {totalItems}</pre>
+            <h2 className={"font-semibold text-2xl"}>Sumar comanda</h2>
+            <p className={"text-base-content/75"}>Produse in comanda: {totalItems}</p>
 
-            <div className="p-4 bg-gray-100 rounded">
+            <div className="p-4 bg-base-100 rounded-lg">
                 <h2 className="text-lg font-semibold">Subtotal</h2>
                 <p className="text-xl font-bold">{subtotal.toFixed(2)} RON</p>
             </div>
-
-            <h3>Choose delivery address:</h3>
+            <div className="divider"></div>
+            <InputLabel label={"Alege adresa"}/>
             <select
-                className="select"
+                className="select w-full"
                 value={selectedAddress}
                 onChange={(e) => setSelectedAddress(e.target.value)}
             >

@@ -4,8 +4,24 @@ import React from "react";
 import IMCProgressChart from "@/components/charts/IMCProgressChart";
 import FitnessComposedChart from "@/components/charts/FitnessComposedChart";
 import CircumferenceComparisonChart from "@/components/charts/CircumferenceComparisonChart";
+import SaveButton from "@/components/shop/products/SaveButton";
+import FormInput from "@/components/auth/forms/FormInput";
+import saveFitnessLog from "@/app/(fitness)/fitness/actions";
+import ModalOpenButton from "@/components/auth/addresses/ModalOpenButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faWandMagicSparkles} from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowRight,
+    faCalendarDay,
+    faChartLine,
+    faFireFlameCurved,
+    faHeartPulse,
+    faPersonWalking,
+    faRuler,
+    faRulerCombined,
+    faWeight,
+    faWeightScale
+} from "@fortawesome/free-solid-svg-icons";
+import {faUserCircle} from "@fortawesome/free-regular-svg-icons";
 
 export const metadata = {
     title: "FitnessGoals",
@@ -27,7 +43,7 @@ export default async function FitnessGoals() {
     const formattedDate = new Date(initialDate).toLocaleDateString("ro-RO", {
         day: "2-digit",
         month: "2-digit",
-        year: "numeric",
+        // year: "numeric",
     });
 
     const {data: fitness_goals, fitnessError} = await supabase
@@ -104,111 +120,206 @@ export default async function FitnessGoals() {
             hip_circumference: log.hip_circumference,
         }))
     ];
-    
+
     return (
-        <div className="flex gap-[2%] flex-wrap content-start">
-            <div className="w-1/4 h-3/4">
-                <div className="flex gap-[20px] flex-col">
-                    <div className="w-auto">
-                        <div className="card bg-base-100 shadow-xl">
-                            <div className="card-body">
-                                <h2 className="card-title text-primary">
-                                    <i className="fa-solid fa-user-circle mr-2"></i> Fitness Profile
-                                </h2>
-                                <div className="space-y-2">
-                                    <div><i className="fa-solid fa-weight-scale mr-2 text-accent"/>
-                                        <strong>Weight:</strong> {userProfile.initial_weight} kg
-                                    </div>
-                                    <div><i className="fa-solid fa-ruler mr-2 text-accent"/>
-                                        <strong>Abdominal:</strong> {userProfile.initial_abdominal_circumference} cm
-                                    </div>
-                                    <div><i className="fa-solid fa-ruler-combined mr-2 text-accent"/>
-                                        <strong>Hip:</strong> {userProfile.initial_hip_circumference} cm
-                                    </div>
-                                    <div><i className="fa-solid fa-heart-pulse mr-2 text-accent"/>
-                                        <strong>IMC:</strong> {fitness_goals.initial_IMC}</div>
-                                    <div><i className="fa-solid fa-person-walking mr-2 text-accent"/>
-                                        <strong>Activity:</strong> {userProfile.activity_level}</div>
-                                    <div><i className="fa-solid fa-calendar-day mr-2 text-accent"/>
-                                        <strong>Date:</strong> {formattedDate}</div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-28 px-8 pb-8">
+            {/* Sidebar compact - col-span-4 */}
+
+            <aside className="grid grid-cols-1 lg:col-span-12 gap-6 justify-items-stretch">
+                <div
+                    className="card bg-gradient-to-br from-primary/10 to-base-100/50 shadow-lg border border-primary/30 transition hover:scale-[1.01] duration-200">
+                    <div className="card-body p-5">
+                        <div className="flex justify-between items-center">
+                            <h2 className="card-title text-primary mb-3">
+                                <FontAwesomeIcon icon={faUserCircle} className="mr-2" size="lg"/>
+                                Profil Fitness
+                            </h2>
+                            <ModalOpenButton
+                                id="addFitnessLogForm"
+                                buttonName="Adaugă progres"
+                                className="btn btn-sm btn-outline btn-primary"
+                            />
+                        </div>
+
+                        <div className="stats stats-vertical sm:stats-horizontal w-full text-sm">
+                            <div className="stat">
+                                <div className="stat-figure text-primary">
+                                    <FontAwesomeIcon icon={faWeightScale} className="text-3xl mt-4"/>
+                                </div>
+                                <div className="stat-title text-base-content/70">Greutate</div>
+                                <div className="stat-value text-primary">{userProfile.initial_weight} kg</div>
+                            </div>
+
+                            <div className="stat">
+                                <div className="stat-figure text-secondary">
+                                    <FontAwesomeIcon icon={faRuler} className="text-3xl mt-4"/>
+                                </div>
+                                <div className="stat-title text-base-content/70">Circ. Abdomen</div>
+                                <div
+                                    className="stat-value text-secondary">{userProfile.initial_abdominal_circumference} cm
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="w-auto">
-                        <div className="card bg-base-100 shadow-xl">
-                            <div className="card-body">
-                                <h2 className="card-title text-secondary">
-                                    <i className="fa-solid fa-fire-flame-curved mr-2"></i> Caloric Recommendation
-                                </h2>
-                                <div className="stats shadow mt-2">
-                                    <div className="stat">
-                                        <div className="stat-title">BMR</div>
-                                        <div className="stat-value text-accent">{Math.round(bmr)} kcal/day</div>
-                                    </div>
-                                    <div className="stat">
-                                        <div className="stat-title">TDEE</div>
-                                        <div className="stat-value">{recommendedCalories} kcal/day</div>
-                                    </div>
+
+                            <div className="stat">
+                                <div className="stat-figure text-accent">
+                                    <FontAwesomeIcon icon={faRulerCombined} className="text-3xl mt-4"/>
                                 </div>
+                                <div className="stat-title text-base-content/70">Circ. Șold</div>
+                                <div className="stat-value text-accent">{userProfile.initial_hip_circumference} cm</div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="w-auto">
-                        <div className="card bg-base-100 shadow-xl">
-                            <div className="card-body">
-                                <h2 className="card-title text-info">
-                                    <i className="fa-solid fa-bowl-food mr-2"></i> Suggested Daily Intake
-                                </h2>
-                                <ul className="mt-2 space-y-1">
-                                    <li><i className="fa-solid fa-circle-minus text-warning mr-2"/> <strong>Weight
-                                        loss:</strong> {Math.round(recommendedCalories - 500)} kcal/day
-                                    </li>
-                                    <li><i className="fa-solid fa-scale-balanced text-success mr-2"/>
-                                        <strong>Maintenance:</strong> {recommendedCalories} kcal/day
-                                    </li>
-                                    <li><i className="fa-solid fa-circle-plus text-primary mr-2"/> <strong>Muscle
-                                        gain:</strong> {Math.round(recommendedCalories + 300)} kcal/day
-                                    </li>
-                                </ul>
+
+                            <div className="stat">
+                                <div className="stat-figure text-success">
+                                    <FontAwesomeIcon icon={faHeartPulse} className="text-3xl mt-4"/>
+                                </div>
+                                <div className="stat-title text-base-content/70">IMC</div>
+                                <div className="stat-value text-success">{fitness_goals.initial_IMC}</div>
+                            </div>
+
+                            <div className="stat">
+                                <div className="stat-figure text-info">
+                                    <FontAwesomeIcon icon={faPersonWalking} className="text-3xl mt-4"/>
+                                </div>
+                                <div className="stat-title text-base-content/70">Activitate</div>
+                                <div className="stat-value capitalize text-info">{userProfile.activity_level}</div>
+                            </div>
+
+                            <div className="stat">
+                                <div className="stat-figure text-warning">
+                                    <FontAwesomeIcon icon={faCalendarDay} className="text-3xl mt-4"/>
+                                </div>
+                                <div className="stat-title text-base-content/70">Dată Inițială</div>
+                                <div className="stat-value text-warning">{formattedDate}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="grow h-3/4">
-                <div className="flex gap-[20px] flex-wrap">
-                    <div className="grow">
-                        <div className="card bg-white shadow-xl p-4">
-                            <h2 className="font-bold text-lg mb-2">IMC Progress</h2>
-                            <IMCProgressChart data={chartData}/>
+                <div className="grid cols-span-12 lg:grid-cols-2 gap-6 justify-items-stretch">
+                    <div
+                        className="card bg-gradient-to-br from-warning/10 to-base-100/50 shadow-lg border border-warning/25 transition hover:scale-[1.01] duration-200">
+                        <div className="card-body p-5">
+                            <h2 className="card-title text-warning">
+                                <FontAwesomeIcon icon={faFireFlameCurved} className="mr-2" size="lg"/> Calorii &
+                                Obiective
+                            </h2>
+
+                            {/* Stats principale BMR/TDEE */}
+                            <div className="stats stats-vertical sm:stats-horizontal w-full text-sm">
+                                <div className="stat">
+                                    <div className="stat-title text-base-content/70">BMR</div>
+                                    <div className="stat-value text-orange-500">{Math.round(bmr)} kCal</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="stat-title text-base-content/70">TDEE</div>
+                                    <div className="stat-value text-orange-500">{recommendedCalories} kCal</div>
+                                </div>
+                            </div>
+
+                            <div className="divider m-0"/>
+
+                            {/* Obiective */}
+                            <div className="stats stats-vertical sm:stats-horizontal w-full text-sm">
+                                <div className="stat">
+                                    <div className="stat-title text-base-content/70">Slăbire</div>
+                                    <div
+                                        className="stat-value text-orange-500">{Math.round(recommendedCalories - 500)} kCal
+                                    </div>
+                                    <div className="stat-desc text-error">↘︎ 500 kCal (14%)</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="stat-title text-base-content/70">Menținere</div>
+                                    <div className="stat-value text-orange-500">{recommendedCalories} kCal</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="stat-title text-base-content/70">Masă musculară</div>
+                                    <div
+                                        className="stat-value text-orange-500">{Math.round(recommendedCalories + 300)} kCal
+                                    </div>
+                                    <div className="stat-desc text-success">↗︎ 300 kCal (12%)</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="grow">
-                        <div className="card bg-white shadow-xl p-4">
-                            <h2 className="font-bold text-lg mb-2">Circumference Comparison</h2>
-                            <CircumferenceComparisonChart data={circumferenceChartData}/>
+
+                    <div
+                        className="card bg-gradient-to-br from-info/8 to-base-100/50 border border-accent/25 shadow-md p-6 hover:shadow-lg transition hover:scale-[1.01] duration-200 text-center flex flex-col items-center justify-center">
+                        <img src="assets/gemini.png" alt="" className={"h-[48px] mb-4"}/>
+                        <div>
+                            <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-500/90 via-blue-400/90 to-cyan-400/90  bg-clip-text text-transparent">
+                                Plan AI personalizat pentru tine
+                            </h2>
+                            <p className="text-base-content/90 mb-6 leading-relaxed text-md">
+                                Obține un plan de fitness și nutriție adaptat nevoilor tale cu ajutorul AI-ului.
+                            </p>
                         </div>
-                    </div>
-                    <div className="w-full">
-                        <div className="card bg-white shadow-xl p-4">
-                            <h2 className="font-bold text-lg mb-2">Weight & IMC</h2>
-                            <FitnessComposedChart data={fitnessComposedChart}/>
-                        </div>
-                    </div>
-                    <div className="grow">
-                        <div className="text-center">
-                            <p>Do you need a fitness plan based on your fitness profile?</p>
-                            <a href={`/ai-assistant?goal=${fitness_goals.goal_type}&calories=${recommendedCalories}`}>
-                                <button className="btn btn-primary mt-4 text-white text-lg">
-                                    Ask AI
-                                    <FontAwesomeIcon icon={faWandMagicSparkles}/>
-                                </button>
-                            </a>
-                        </div>
+                        <a href={`/ai-assistant?goal=${fitness_goals.goal_type}&calories=${recommendedCalories}`}>
+                            <button
+                                className="btn bg-linear-to-r/decreasing bg-cyan-500/50 shadow-cyan-500/30 from-indigo-500/90 to-teal-400/50 hover:border-0 transition-transform duration-200 hover:shadow-lg hover:scale-[1.02] flex items-center gap-2"
+                                type="button"
+                            >
+                                Cere un plan AI acum
+                                <FontAwesomeIcon icon={faArrowRight}/>
+                            </button>
+                        </a>
                     </div>
                 </div>
-            </div>
+            </aside>
+
+            <main className="lg:col-span-12 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        className="card bg-gradient-to-br from-secondary/10 to-base-100/50 border border-secondary/50 shadow-md p-5 hover:shadow-lg transition hover:scale-[1.01] duration-200">
+                        <h3 className="text-lg font-semibold text-secondary mb-3 flex items-center gap-2">
+                            <FontAwesomeIcon icon={faWeight} size={"lg"}/>
+                            Evoluție Greutate & IMC
+                        </h3>
+                        <FitnessComposedChart data={fitnessComposedChart}/>
+                    </div>
+
+                    <div
+                        className="card bg-gradient-to-br from-secondary/10 to-base-100/50 border border-secondary/50 shadow-md p-5 hover:shadow-lg transition hover:scale-[1.01] duration-200">
+                        <h3 className="text-lg font-semibold text-secondary mb-3 flex items-center gap-2">
+                            <FontAwesomeIcon icon={faChartLine} size={"lg"}/>
+                            Evoluția IMC
+                        </h3>
+                        <IMCProgressChart data={chartData}/>
+                    </div>
+
+                    <div
+                        className="card bg-gradient-to-br from-secondary/10 to-base-100/50 border border-secondary/50 shadow-md p-5 hover:shadow-lg transition hover:scale-[1.01] duration-200">
+                        <h3 className="text-lg font-semibold text-secondary mb-3 flex items-center gap-2">
+                            <FontAwesomeIcon icon={faRulerCombined} size={"lg"}/>
+                            Circumferințe
+                        </h3>
+                        <CircumferenceComparisonChart data={circumferenceChartData}/>
+                    </div>
+                </div>
+            </main>
+
+            <dialog id={"addFitnessLogForm"} className="modal">
+                <div className="modal-box">
+                    <form method="dialog">
+                        <button
+                            className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
+                        </button>
+                    </form>
+                    <h3 className="font-bold text-lg">Adauga progres </h3>
+                    <form id="add-fitness-log-form" action={saveFitnessLog}
+                          className="mt-6">
+                        <input type="hidden" id={"height"}
+                               name="height"
+                               value={userProfile.height}/>
+                        <FormInput label="Weight" name="weight" type="number" placeholder="Weight"/>
+                        <FormInput label="Abdominal circumference" name="abdominal_circumference" type="number"
+                                   placeholder="Abdominal circumference"/>
+                        <FormInput label="Hip circumference" name="hip_circumference" type="number"
+                                   placeholder="Hip circumference"/>
+
+                        <SaveButton formId="add-fitness-log-form" modalId="addFitnessLogForm"
+                                    label="Salveaza Progresul"/>
+                    </form>
+                </div>
+            </dialog>
         </div>
     );
 }

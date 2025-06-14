@@ -8,6 +8,7 @@ import CategoryFilterDropdown from "@/components/shop/buttons/CategoryFilterDrop
 import ProductTable from "@/components/shop/products/ProductTable";
 import PaginationDropdown from "@/components/shop/buttons/PaginationDropdown";
 import PaginationControls from "@/components/shop/buttons/PaginationControls";
+import InputLabel from "@/components/forms/InputLabel";
 
 export const metadata = {
     title: "AdminProducts",
@@ -59,14 +60,31 @@ export default async function AdminProducts({searchParams}) {
     const totalPages = Math.ceil((count || 0) / limitSort);
 
     return (
-        <div>
-            <ModalOpenButton buttonName={"Add product"} id="addProductModal"></ModalOpenButton>
+        <div className="py-32 container mx-auto">
+            <div className="flex justify-between items-center mb-6">
+                <div>
+                <span
+                    className="uppercase font-bold mb-2 badge badge-soft text-sm badge-lg">Admin Panel</span>
+                    <h1 className="text-3xl font-bold mb-2 text-primary">Administrare produse</h1>
+                    <p className="text-sm text-base-content/70">
+                        Vizualizează, editează și adaugă produse în magazinul tău.
+                    </p>
+                </div>
+                <ModalOpenButton buttonName={"Add product"} className={"btn-primary"}
+                                 id="addProductModal"></ModalOpenButton>
+            </div>
+            <div className="card bg-base-100 my-4">
+                <div className="card-body">
+                    <h2 className={"text-2xl font-bold mb-2 text-primary"}>Filters</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-between gap-4 lg:gap-6">
+                        <SortButtons sortKey="name"/>
+                        <SortButtons sortKey="price" labelAsc="1 → 2" labelDesc="2 → 1"/>
+                        <CategoryFilterDropdown categories={categories}/>
+                        <PaginationDropdown options={[10, 15, 30]} paramName={"limit"}></PaginationDropdown>
+                    </div>
+                </div>
+            </div>
 
-            <p>All the products from database: </p>
-            <SortButtons sortKey="name"/>
-            <SortButtons sortKey="price" labelAsc="1 → 2" labelDesc="2 → 1"/>
-            <CategoryFilterDropdown categories={categories}/>
-            <PaginationDropdown options={[10, 15, 30]} paramName={"limit"}></PaginationDropdown>
             <ProductTable products={products}></ProductTable>
             <PaginationControls totalPages={totalPages}></PaginationControls>
 
@@ -77,32 +95,33 @@ export default async function AdminProducts({searchParams}) {
                             className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
                         </button>
                     </form>
-                    <h3 className="font-bold text-lg">Add new product: </h3>
+                    <h3 className="font-bold text-lg">Adauga un produs nou</h3>
                     <form id="add-product-form" action={saveProduct}
-                          className="max-w-sm mx-auto bg-white p-6 rounded-lg shadow-md space-y-2">
-                        <FormInput type="text" placeholder="ex: L-Carnitine" label="Product name: "
+                          className="mt-4">
+                        <FormInput type="text" placeholder="ex: L-Carnitine" label="Numele produsului"
                                    name="name"></FormInput>
-                        <FormInput type="text" placeholder="ex: Composition and so on" label="Product description: "
+                        <FormInput type="text" placeholder="ex: Composition and so on" label="Descriere"
                                    name="description"></FormInput>
-                        <FormInput type="number" placeholder="100$" label="Product price: " name="price"></FormInput>
-                        <FormInput type="number" placeholder="100" label="Product stock: " name="stock"></FormInput>
+                        <div className="flex gap-4 w-full">
+                            <FormInput type="number" placeholder="100$" label="Product price" name="price"></FormInput>
+                            <FormInput type="number" placeholder="100" label="Product stock" name="stock"></FormInput>
+                        </div>
                         <label className="form-control w-full">
-                            <div className="label">
-                                <span className="label-text">Select category:</span>
-                            </div>
-                            <select name="category_id" className="select select-bordered" required defaultValue="">
-                                <option disabled value="">Pick a category</option>
+                            <InputLabel label={"Selecteaza o categorie"}></InputLabel>
+                            <select name="category_id" className="select select-bordered w-full" required
+                                    defaultValue="">
+                                <option disabled value="">Alege o categorie</option>
                                 {categories?.map((category) => (
                                     <option key={category.id} value={category.id}>{category.name}</option>
                                 ))}
                             </select>
                         </label>
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend">Pick an image</legend>
-                            <input type="file" className="file-input" multiple accept="image/*" name="images"/>
-                            <label className="fieldset-label">Max size 2MB</label>
+                        <fieldset className="fieldset mt-3">
+                            <InputLabel label={"Alege o imagine"}></InputLabel>
+                            <input type="file" className="file-input w-full" multiple accept="image/*" name="images"/>
+                            <label className="fieldset-label">Dimensiune maxima 2MB</label>
                         </fieldset>
-                        <SaveButton formId="add-product-form" modalId="addProductModal" label="Save Product"/>
+                        <SaveButton formId="add-product-form" modalId="addProductModal" label="Salveaza produsul"/>
                     </form>
                 </div>
             </dialog>

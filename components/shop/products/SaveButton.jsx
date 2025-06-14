@@ -25,7 +25,7 @@ export default function SaveButton({formId, modalId, label = "Save Changes"}) {
                 });
             }}
             disabled={isPending}
-            className="btn btn-primary"
+            className="btn btn-primary mt-3"
         >
             {isPending ? "Saving..." : label}
         </button>

@@ -8,13 +8,13 @@ export default function PaginationControls({totalPages}) {
     const currentPage = parseInt(searchParams.get('page') || '1');
 
     const handlePageChange = (page) => {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(window.location.search);
         params.set('page', page);
         router.push(`?${params.toString()}`);
     };
 
     return (
-        <div className="flex justify-center gap-2 my-4">
+        <div className="flex justify-center gap-2 mt-6">
             {Array.from({length: totalPages}, (_, i) => i + 1).map((pageNum) => (
                 <button
                     key={pageNum}

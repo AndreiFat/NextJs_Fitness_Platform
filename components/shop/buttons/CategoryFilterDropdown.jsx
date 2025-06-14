@@ -20,15 +20,15 @@ export default function CategoryFilterDropdown({categories}) {
     };
 
     return (
-        <div className="mb-4">
-            <label htmlFor="categoryFilter" className="mr-2 font-semibold">Filter by category:</label>
+        <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="categoryFilter" className="font-medium capitalize">Filtreaza după categorie</label>
             <select
                 id="categoryFilter"
-                className="select select-bordered select-sm"
+                className="select select-bordered select-sm w-full"
                 defaultValue={searchParams.get('category') || ''}
                 onChange={handleChange}
             >
-                <option value="">All categories</option>
+                <option value="">Toate categoriile</option>
                 {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                         {category.name}

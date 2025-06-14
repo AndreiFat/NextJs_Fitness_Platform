@@ -32,7 +32,7 @@ function DeleteProductImagesButton({product}) {
                     <button
                         type="button"
                         onClick={() => handleDelete(img.publicUrl)}
-                        className="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full px-1 py-0.5 hover:bg-red-700"
+                        className="absolute top-1 right-1 bg-red-600 text-xs rounded-full px-1 py-0.5 hover:bg-red-700"
                     >
                         ✕
                     </button>

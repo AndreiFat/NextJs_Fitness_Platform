@@ -3,3 +3,8 @@
 @plugin "daisyui" {
     themes: all;
 }
+
+body.modal-open {
+    overflow: hidden;
+    margin-right: 0 !important;
+}

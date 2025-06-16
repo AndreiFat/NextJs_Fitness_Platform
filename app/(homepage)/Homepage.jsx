@@ -30,10 +30,8 @@ function Homepage({products, error}) {
                     Browserul tău nu suportă elementul video.
                 </video>
 
-                {/* 🟦 Overlay */}
                 <div className="absolute inset-0 bg-black/75 z-10"/>
 
-                {/* 📝 Text centrat */}
                 <div
                     className="relative z-20 flex flex-col items-center justify-center min-h-screen text-white text-center px-6">
                     <div className="max-w-2xl">
@@ -81,7 +79,6 @@ function Homepage({products, error}) {
                 </div>
             </section>
 
-            {/* Secțiune Shop – Cele mai vândute produse */}
             <section className="py-20 bg-secondary-content">
                 <div className="container mx-auto px-4">
                     <h2 className="text-3xl font-bold mb-4 text-primary text-center">Cele mai vândute produse</h2>
@@ -104,16 +101,13 @@ function Homepage({products, error}) {
                 </div>
             </section>
 
-            {/* Call to Action */}
             <section
                 className="relative bg-cover bg-center bg-no-repeat min-h-[60vh] flex items-center justify-center"
                 style={{backgroundImage: "url('/assets/fitness-bg.jpg')"}} // înlocuiește cu imaginea ta
             >
-                {/* Overlay întunecat pentru lizibilitate */}
                 <div
                     className="absolute inset-0 bg-gradient-to-br bg-base-300/85 from-primary/20 to-secondary/10 backdrop-blur-xs"></div>
 
-                {/* Conținut centrat */}
                 <div className="relative z-10 text-center px-6 max-w-2xl">
                     <h2 className="text-4xl font-extrabold text-primary mb-4 drop-shadow-lg">
                         Pregătit să-ți transformi stilul de viață?
@@ -122,9 +116,9 @@ function Homepage({products, error}) {
                         Creează un cont și lasă inteligența artificială să-ți contureze drumul către un stil de viață
                         mai sănătos.
                     </p>
-                    <button className="btn btn-primary btn-lg px-10 shadow-lg hover:shadow-xl transition">
+                    <a href={"/fitness"} className="btn btn-primary btn-lg px-10 shadow-lg hover:shadow-xl transition">
                         Începe acum
-                    </button>
+                    </a>
                 </div>
             </section>
 

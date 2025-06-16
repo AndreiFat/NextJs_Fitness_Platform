@@ -5,7 +5,6 @@ import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 
 export async function updateReview(formData) {
-    console.log("se incearca editul")
     const supabase = await createSupabaseServerClient();
 
     const data = {
@@ -36,7 +35,6 @@ export async function updateReview(formData) {
 }
 
 export async function deleteReview(formData) {
-    console.log("se incearca delete review")
     const supabase = await createSupabaseServerClient();
 
     const reviewId = formData.get("reviewId");
@@ -50,7 +48,6 @@ export async function deleteReview(formData) {
 }
 
 export async function saveReview(formData) {
-    console.log("se incearca save review")
     const supabase = await createSupabaseServerClient();
 
     const data = {

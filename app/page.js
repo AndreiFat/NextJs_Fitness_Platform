@@ -9,7 +9,7 @@ export default async function Home() {
         .from('products')
         .select('*')
         .eq('is_active', true)
-        .range(0, 3)
+        .range(0, 3).order('created_at', {ascending: true})
 
     return (
         <div>

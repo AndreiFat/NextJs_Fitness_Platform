@@ -3,8 +3,6 @@
 import {createSupabaseServerClient} from '@/utils/supabase/server';
 import {revalidatePath} from "next/cache";
 
-// Toggle favorite (Add/Remove)
-// Toggle favorite (Add/Remove)
 export async function toggleFavorite(userId, productId) {
     const supabase = await createSupabaseServerClient();
 
@@ -32,8 +30,7 @@ export async function toggleFavorite(userId, productId) {
         revalidatePath("/", "layout")
         return {success: true, isFavorite: true};
     }
-    console.log(favorites);
-    console.log(favorites[0]);
+
     // If favorite exists, remove it
     const {error: deleteError} = await supabase
         .from('favorites')

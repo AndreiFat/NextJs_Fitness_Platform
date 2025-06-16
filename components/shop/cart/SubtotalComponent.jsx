@@ -18,7 +18,7 @@ export default function SubtotalComponent({cartProducts, userAddresses, userEmai
 
     const handleCheckout = async () => {
         if (!selectedAddress) {
-            alert('Please select a delivery address.')
+            alert('Te rog selecteaza o adresa!')
             return
         }
 
@@ -57,7 +57,7 @@ export default function SubtotalComponent({cartProducts, userAddresses, userEmai
                 value={selectedAddress}
                 onChange={(e) => setSelectedAddress(e.target.value)}
             >
-                <option value="">Choose an address</option>
+                <option value="">Alege o adresa</option>
                 {userAddresses.map((address) => (
                     <option key={address.id} value={address.id}>
                         {address.address}, {address.city}

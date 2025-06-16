@@ -39,18 +39,18 @@ export default async function OrderProducts({orderId}) {
                                     </div>
                                 </td>
                                 <td>
-                                    Price
+                                    Pret
                                     <br/>
                                     <span className="badge badge-ghost badge-sm">{item.product_price} RON</span>
                                 </td>
                                 <td>
-                                    Quantity
+                                    Cantitate
                                     <br/>
                                     <span className="badge badge-ghost badge-sm">{item.quantity} Buc</span>
                                 </td>
                                 <th>
                                     <Link href={`/shop/product/${item.product.id}`}
-                                          className="btn btn-ghost btn-xs">details</Link>
+                                          className="btn btn-ghost btn-xs">Detalii produs</Link>
                                 </th>
                             </tr>))}
                     </tbody>

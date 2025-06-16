@@ -38,16 +38,16 @@ export default async function Success({searchParams}) {
         }));
 
         const data = {
-            user_id: user.id, // if you have it from session or metadata
-            status: 'paid',
+            user_id: user.id,
+            status: 'platit',
             total_price: subtotal,
             stripe_session_id: session_id,
             address_id: parseInt(metadata.address_id) || null,
             delivery_time: deliveryTime
         }
+        console.log(data)
 
 
-        // Step 1: Insert into 'orders' table
         const {data: orderData, error: orderError} = await supabase
             .from('orders')
             .insert(data)
@@ -55,12 +55,10 @@ export default async function Success({searchParams}) {
             .single()
 
         if (orderError?.code === '23505') {
-            // Unique violation - order already exists
             console.log('Order already exists, skipping.');
             return redirect('/')
         }
 
-        // Step 2: Insert into 'order_products' table
         const {error: productsError} = await supabase
             .from('order_products')
             .insert(orderItems.map(item => ({
@@ -70,7 +68,6 @@ export default async function Success({searchParams}) {
                 product_price: item.unit_price,
             })))
 
-        // Step 3: Update product stock
         for (const item of orderItems) {
             if (!item.db_product_id) continue;
 
@@ -80,19 +77,17 @@ export default async function Success({searchParams}) {
             });
 
             if (updateError) {
-                console.error(`❌ Failed to update stock for product ${item.db_product_id}:`, updateError);
+                console.error(`Failed to update stock for product ${item.db_product_id}:`, updateError);
             }
         }
 
-        // Step 4: Delete products from shopping cart
         const {error: cartDeleteError} = await supabase
             .from('cart_products')
             .delete()
             .eq('user_id', user.id);
 
         if (cartDeleteError) {
-            console.error('❌ Failed to clear cart after order:', cartDeleteError);
-            // Optionally notify the user or log for later processing
+            console.error('Failed to clear cart after order:', cartDeleteError);
         }
 
         if (productsError) {
@@ -100,16 +95,16 @@ export default async function Success({searchParams}) {
             throw new Error('Failed to create order products.')
         }
 
-        console.log('✅ Order successfully created.')
+        console.log('Order successfully created.')
 
         return (
-            <section id="success">
-                <p>
-                    We appreciate your business! A confirmation email will be sent to{' '}
-                    {customerEmail}. If you have any questions, please email{' '}
-                </p>
-                <a href="mailto:orders@example.com">orders@example.com</a>.
-            </section>
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    Îți mulțumim pentru achiziție! Un email de confirmare va fi trimis către {customerEmail}. Dacă ai
+                    întrebări, te rugăm să ne contactezi prin email la <a
+                    href="mailto:orders@example.com"> orders@fitmind.com</a>.
+                </div>
+            </div>
         )
     }
 }

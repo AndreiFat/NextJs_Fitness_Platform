@@ -1,7 +1,5 @@
 import formatDate from "@/utils/date/formatDate";
 import OrderProducts from "@/components/shop/orders/OrderProducts";
-import {faMoneyBillWave} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {getUserRole} from "@/utils/user/getUserRole";
 import ModifyStatus from "@/components/shop/orders/admin/ModifyStatus";
 import DownloadInvoiceButton from "@/components/shop/orders/DownloadInvoiceButton";
@@ -29,8 +27,8 @@ export default async function OrderList({orders}) {
                                     order.status === 'completed' ? 'badge-success' : 'badge-accent badge-soft'
                                 }`}
                             >
-            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-          </span>
+                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                          </span>
                         </div>
                         <div className="text-sm font-light text-base-content/60">
                             {formatDate(order.created_at)}
@@ -52,10 +50,10 @@ export default async function OrderList({orders}) {
                                         />
                                     ) : (
                                         <span
-                                            className="text-xl font-semibold text-primary capitalize flex items-center gap-2">
-                  <FontAwesomeIcon icon={faMoneyBillWave}/>
+                                            className="text-xl font-semibold text-secondary capitalize flex items-center gap-2">
+                  {/*<FontAwesomeIcon icon={faMoneyBillWave}/>*/}
                                             {order.status}
-                </span>
+                                    </span>
                                     )}
                                     <span className="text-xs text-base-content/50">
                 Modificat la: {formatDate(order.created_at)}

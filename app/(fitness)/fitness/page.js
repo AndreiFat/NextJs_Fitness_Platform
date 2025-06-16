@@ -22,6 +22,7 @@ import {
     faWeightScale
 } from "@fortawesome/free-solid-svg-icons";
 import {faUserCircle} from "@fortawesome/free-regular-svg-icons";
+import {redirect} from "next/navigation";
 
 export const metadata = {
     title: `${process.env.NEXT_PUBLIC_PLATFORM_NAME} - Obiective Fitness`,
@@ -38,6 +39,10 @@ export default async function FitnessGoals() {
     }
 
     const userProfile = await getUserProfile(user.id);
+
+    if (!userProfile) {
+        redirect("/user-profile");
+    }
 
     const initialDate = userProfile.created_at;
     const formattedDate = new Date(initialDate).toLocaleDateString("ro-RO", {
@@ -173,7 +178,7 @@ export default async function FitnessGoals() {
                                     <FontAwesomeIcon icon={faHeartPulse} className="text-3xl mt-4"/>
                                 </div>
                                 <div className="stat-title text-base-content/70">IMC (Indice de Masă Corporală)</div>
-                                <div className="stat-value text-success">{fitness_goals.initial_IMC}</div>
+                                <div className="stat-value text-success">{fitness_goals.initial_IMC?.toFixed(2)}</div>
                             </div>
 
                             <div className="stat">
@@ -305,20 +310,17 @@ export default async function FitnessGoals() {
                             className="btn btn-sm bg-neutral/10 btn-circle btn-ghost absolute right-3 top-3">x
                         </button>
                     </form>
-                    <h3 className="font-bold text-lg">Adauga progres </h3>
-                    <form id="add-fitness-log-form" action={saveFitnessLog}
-                          className="mt-6">
-                        <input type="hidden" id={"height"}
-                               name="height"
-                               value={userProfile.height}/>
-                        <FormInput label="Weight" name="weight" type="number" placeholder="Weight"/>
-                        <FormInput label="Abdominal circumference" name="abdominal_circumference" type="number"
-                                   placeholder="Abdominal circumference"/>
-                        <FormInput label="Hip circumference" name="hip_circumference" type="number"
-                                   placeholder="Hip circumference"/>
+                    <h3 className="font-bold text-lg">Adauga progres</h3>
+                    <form id="add-fitness-log-form" action={saveFitnessLog} className="mt-6">
+                        <input type="hidden" id={"height"} name="height" value={userProfile.height}/>
+                        <FormInput label="Greutate" name="weight" type="number" placeholder="Greutate"/>
+                        <FormInput label="Circumferinta abdominala" name="abdominal_circumference" type="number"
+                                   placeholder="Circumferinta abdominala"/>
+                        <FormInput label="Circumferinta sold" name="hip_circumference" type="number"
+                                   placeholder="Circumferinta sold"/>
 
                         <SaveButton formId="add-fitness-log-form" modalId="addFitnessLogForm"
-                                    label="Salveaza Progresul"/>
+                                    label="Salveaza progresul"/>
                     </form>
                 </div>
             </dialog>

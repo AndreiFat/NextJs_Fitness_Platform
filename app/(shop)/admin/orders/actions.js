@@ -34,7 +34,7 @@ export async function modifyStatus(formData) {
         fullUpdate.tracking_id = tracking_id
     }
 
-    if (status.toLowerCase() === 'on delivery') {
+    if (status.toLowerCase() === 'in curs de livrare') {
         const filePath = `user_${order.user.id}/invoice-${order.id}.pdf`
         const folderPath = `user_${order.user.id}`
 

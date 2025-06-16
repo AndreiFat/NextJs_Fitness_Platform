@@ -23,7 +23,7 @@ export default function SignUpPage() {
 
                     <form className="space-y-4" action={signup}>
                         <div className="form-control">
-                            <legend className="text-sm font-medium mb-1">What is your name?</legend>
+                            <legend className="text-sm font-medium mb-1">Care este numele tau?</legend>
                             <input
                                 name="name"
                                 id="name"

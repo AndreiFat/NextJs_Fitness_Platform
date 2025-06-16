@@ -11,10 +11,11 @@ export function FriendRequests({userId}) {
         const fetchRequests = async () => {
             const {data, error} = await supabase
                 .from("friends")
-                .select("*, sender: user_id(email)")
+                .select("*, sender: user_id(email, full_name)")
                 .eq("friend_id", userId)
                 .eq("status", "pending");
             if (!error) setRequests(data || []);
+            console.log(data)
         };
 
         fetchRequests();

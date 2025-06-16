@@ -17,8 +17,8 @@ function AddToCartButton({userId, productId, initialQuantity, isDisabled}) {
 
     return (
         <button onClick={() => handleCartUpdate(quantity + 1)} disabled={isPending}
-                className={`btn w-full px-4 py-2 bg-white text-base-100 ${!isDisabled ? 'btn-disabled' : ''}`}>Add to
-            Cart
+                className={`btn w-full px-4 py-2 bg-white text-base-100 ${!isDisabled ? 'btn-disabled' : ''}`}>Adauga in
+            cos
         </button>
     );
 }

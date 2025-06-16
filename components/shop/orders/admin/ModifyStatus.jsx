@@ -3,7 +3,7 @@ import React, {useState, useTransition} from 'react';
 import {modifyStatus} from "@/app/(shop)/admin/orders/actions";
 
 function ModifyStatus({currentStatus, orderId, existingTrackingId}) {
-    const validStatuses = ['paid', 'on delivery', 'shipped', 'cancelled'];
+    const validStatuses = ['platit', 'in curs de livrare', 'livrat', 'anulata'];
 
     const [status, setStatus] = useState(currentStatus);
     const [trackingId, setTrackingId] = useState(existingTrackingId || '');
@@ -13,20 +13,18 @@ function ModifyStatus({currentStatus, orderId, existingTrackingId}) {
         const newStatus = e.target.value;
         let generatedTrackingId = trackingId;
 
-        if (newStatus === 'on delivery' && !trackingId) {
+        if (newStatus === 'in curs de livrare' && !trackingId) {
             generatedTrackingId = 'AWB-' + Math.random().toString(36).substring(2, 10).toUpperCase();
             setTrackingId(generatedTrackingId);
         }
 
-        // Optimistically update status
         setStatus(newStatus);
 
-        // Wrap the async server action in a transition
         startTransition(async () => {
             const formData = new FormData();
             formData.append('order_id', orderId);
             formData.append('status', newStatus);
-            if (newStatus === 'on delivery') {
+            if (newStatus === 'in curs de livrare') {
                 formData.append('tracking_id', generatedTrackingId);
             }
 
@@ -55,11 +53,9 @@ function ModifyStatus({currentStatus, orderId, existingTrackingId}) {
                 ))}
             </select>
 
-            {status === 'on delivery' && trackingId && (
+            {status === 'in curs de livrare' && trackingId && (
                 <input type="hidden" name="tracking_id" value={trackingId}/>
             )}
-
-            {isPending && <span style={{marginLeft: '8px'}}>Updating...</span>}
         </form>
     );
 }

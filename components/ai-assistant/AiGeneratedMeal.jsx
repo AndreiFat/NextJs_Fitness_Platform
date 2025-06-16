@@ -80,22 +80,22 @@ function AiGeneratedMeal({response}) {
                                     <CollapseComponentMeals
                                         index={index}
                                         recipe={recipe.breakfast}
-                                        mealType="Breakfast"
+                                        mealType="Mic dejun"
                                         badgeColor="primary"
                                     />
                                     <CollapseComponentMeals
                                         index={index}
                                         recipe={recipe.lunch}
-                                        mealType="Lunch"
+                                        mealType="Pranz"
                                         badgeColor="secondary"
                                     />
                                     <CollapseComponentMeals
                                         index={index}
                                         recipe={recipe.dinner}
-                                        mealType="Dinner"
+                                        mealType="Cina"
                                         badgeColor="accent"
                                     />
-                                    <div className="divider divider-primary">Snacks</div>
+                                    <div className="divider divider-primary">Gustari</div>
                                     <div className="card card-sm bg-base-200/75 rounded-xl">
                                         <div className="card-body">
                                             {recipe.snacks.map((snack, i) => (

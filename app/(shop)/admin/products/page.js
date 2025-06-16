@@ -75,7 +75,7 @@ export default async function AdminProducts({searchParams}) {
             </div>
             <div className="card bg-base-100 my-4">
                 <div className="card-body">
-                    <h2 className={"text-2xl font-bold mb-2 text-primary"}>Filters</h2>
+                    <h2 className={"text-2xl font-bold mb-2 text-primary"}>Filtre</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-between gap-4 lg:gap-6">
                         <SortButtons sortKey="name"/>
                         <SortButtons sortKey="price" labelAsc="1 → 2" labelDesc="2 → 1"/>
@@ -100,11 +100,13 @@ export default async function AdminProducts({searchParams}) {
                           className="mt-4">
                         <FormInput type="text" placeholder="ex: L-Carnitine" label="Numele produsului"
                                    name="name"></FormInput>
-                        <FormInput type="text" placeholder="ex: Composition and so on" label="Descriere"
+                        <FormInput type="text" placeholder="ex: Supliment alimentar bazat pe compusi naturali."
+                                   label="Descriere"
                                    name="description"></FormInput>
                         <div className="flex gap-4 w-full">
-                            <FormInput type="number" placeholder="100$" label="Product price" name="price"></FormInput>
-                            <FormInput type="number" placeholder="100" label="Product stock" name="stock"></FormInput>
+                            <FormInput type="number" placeholder="100 RON" label="Pretul produsului"
+                                       name="price"></FormInput>
+                            <FormInput type="number" placeholder="100" label="Stoc disponibil" name="stock"></FormInput>
                         </div>
                         <label className="form-control w-full">
                             <InputLabel label={"Selecteaza o categorie"}></InputLabel>

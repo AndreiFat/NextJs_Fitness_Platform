@@ -21,24 +21,23 @@ export async function handleAIGeneration(formData) {
 
     if (
         prompt.includes("workout") ||
-        prompt.includes("exercițiu") ||
-        prompt.includes("exerciții") ||
+        prompt.includes("exercitiu") ||
+        prompt.includes("exercitii") ||
         prompt.includes("antrenament") ||
         prompt.includes("antrenamente") ||
-        prompt.includes("sedință de antrenament") ||
-        prompt.includes("ședință de antrenament") ||
+        prompt.includes("sedinta de antrenament") ||
         prompt.includes("program de antrenament") ||
         prompt.includes("rutina de antrenament") ||
-        prompt.includes("exerciții fizice") ||
+        prompt.includes("exercitii fizice") ||
         prompt.includes("fitness") ||
-        prompt.includes("sesiune de exerciții") ||
+        prompt.includes("sesiune de exercitii") ||
         prompt.includes("sesiune de antrenament") ||
-        prompt.includes("mișcare") ||
-        prompt.includes("exercițiu fizic") ||
-        prompt.includes("exerciții sportive") ||
+        prompt.includes("miscare") ||
+        prompt.includes("exercitiu fizic") ||
+        prompt.includes("exercitii sportive") ||
         prompt.includes("antrenor") ||
-        prompt.includes("pregătire fizică") ||
-        prompt.includes("încălzire") ||
+        prompt.includes("pregatire fizica") ||
+        prompt.includes("incalzire") ||
         prompt.includes("stretching")
     ) {
         const aiText = await askGeminiWorkouts(prompt, goal, calories);
@@ -60,22 +59,21 @@ export async function handleAIGeneration(formData) {
         prompt.includes("meniu") ||
         prompt.includes("menu") ||
         prompt.includes("masa") ||
-        prompt.includes("masă") ||
         prompt.includes("mese") ||
-        prompt.includes("plan de masă") ||
+        prompt.includes("plan de masa") ||
         prompt.includes("plan alimentar") ||
-        prompt.includes("plan de alimentație") ||
+        prompt.includes("plan de alimentatie") ||
         prompt.includes("plan alimentar zilnic") ||
-        prompt.includes("dietă") ||
+        prompt.includes("dieta") ||
         prompt.includes("diete") ||
         prompt.includes("regim alimentar") ||
         prompt.includes("alimentatie") ||
-        prompt.includes("nutriție") ||
-        prompt.includes("nutriție personalizată") ||
+        prompt.includes("nutritie") ||
+        prompt.includes("nutritie personalizata") ||
         prompt.includes("alimente") ||
-        prompt.includes("alimente sănătoase") ||
-        prompt.includes("plan nutrițional") ||
-        prompt.includes("plan de nutriție")
+        prompt.includes("alimente sanatoase") ||
+        prompt.includes("plan nutritional") ||
+        prompt.includes("plan de nutritie")
     ) {
         const aiText = await askGeminiRecipes(prompt, goal, calories);
 
@@ -112,7 +110,6 @@ export async function handleAIGeneration(formData) {
     return result;
 }
 
-// Hashing function to match items (optional, for uniqueness)
 function hashItem(item) {
     return crypto.createHash('sha256').update(JSON.stringify(item)).digest('hex');
 }

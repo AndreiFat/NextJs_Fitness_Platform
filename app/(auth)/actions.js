@@ -15,8 +15,9 @@ export async function login(formData) {
     const {data: session, error} = await supabase.auth.signInWithPassword(data)
 
     if (error) {
-        console.error(error);
-        redirect('/error')
+        console.log(error)
+        const errorMessage = encodeURIComponent(error.message)
+        redirect(`/error?message=${errorMessage}`)
     }
 
     const {data: profile, error: profileError} = await supabase
@@ -120,7 +121,11 @@ export async function resetPassword(prevState, formData) {
 
     if (error) {
         return {error: error.message};
-    } else return {success: "Password updated successfully."};
+    } else {
+        redirect("/")
+        return {success: "Password updated successfully."}
+    }
+
 }
 
 const getURL = () => {

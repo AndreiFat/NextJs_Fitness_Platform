@@ -19,11 +19,11 @@ export function AddFriend({currentUser}) {
             .single();
 
         if (userError || !friendUser) {
-            return setStatus("User not found");
+            return setStatus("Utilizatorul nu a fost gasit.");
         }
 
         if (friendUser.id === currentUser.id) {
-            return setStatus("Cannot add yourself");
+            return setStatus("Nu te poti adauga pe tine.");
         }
 
         const userId = currentUser.id;
@@ -40,12 +40,12 @@ export function AddFriend({currentUser}) {
 
         if (existing) {
             if (existing.status === "pending") {
-                return setStatus("Friend request already sent or received.");
+                return setStatus("Cererea de prietenie a fost deja trimisă sau primită.");
             }
             if (existing.status === "accepted") {
-                return setStatus("You are already friends.");
+                return setStatus("Sunteți deja prieteni.");
             }
-            return setStatus("Request exists (maybe rejected).");
+            return setStatus("Cererea există deja (posibil a fost respinsă).");
         }
 
         // 3. Insert new friend request
@@ -56,10 +56,10 @@ export function AddFriend({currentUser}) {
         });
 
         if (insertError) {
-            return setStatus("Could not send request.");
+            return setStatus("Nu pot trimite cererea de prietenie.");
         }
 
-        setStatus("Friend request sent!");
+        setStatus("Cerere de prietenie trimisa!");
         setEmail("");
     };
 

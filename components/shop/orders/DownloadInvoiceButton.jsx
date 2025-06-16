@@ -24,7 +24,7 @@ function DownloadInvoiceButton({filePath, orderId}) {
             onClick={handleDownload}
             className="cursor-pointer badge badge-lg text-sm badge-soft badge-info mt-2"
         >
-            Download Invoice
+            Descarca Factura
         </button>
     )
 }

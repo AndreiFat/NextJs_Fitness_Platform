@@ -53,11 +53,12 @@ export default function UserInfo({userInfo}) {
                 </div>
                 <ul tabIndex={0}
                     className="menu dropdown-content bg-base-200 rounded-box z-1 w-full p-2 shadow-sm spacer-y-2">
-                    <li><Link href={"/account-settings"}>Cont</Link></li>
-                    <li><Link href={"/orders"}>Comenzi</Link></li>
-                    <li><Link href={"/addresses"}>Adrese de livrare</Link></li>
+                    <li className={"w-full"}><Link href={"/account-settings"}>Cont</Link></li>
+                    <li className={"w-full"}><Link href={"/orders"}>Comenzi</Link></li>
+                    <li className={"w-full"}><Link href={"/addresses"}>Adrese de livrare</Link></li>
                     {isAdmin ? (<>
-                        <li className={"font-semibold text-primary"}><Link href={"/admin"}>Panou Administrator</Link>
+                        <li className={"font-semibold text-primary w-full"}><Link href={"/admin"}>Panou
+                            Administrator</Link>
                         </li>
                     </>) : ""}
                     <li className={""}><LogoutButton/></li>

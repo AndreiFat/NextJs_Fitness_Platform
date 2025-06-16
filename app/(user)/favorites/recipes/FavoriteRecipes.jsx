@@ -32,19 +32,19 @@ export default async function FavoriteRecipes({recipes}) {
                                 <CollapseComponentMeals
                                     index={index}
                                     recipe={recipe.item.breakfast}
-                                    mealType="Breakfast"
+                                    mealType="Mic dejun"
                                     badgeColor="primary"
                                 />
                                 <CollapseComponentMeals
                                     index={index}
                                     recipe={recipe.item.lunch}
-                                    mealType="Lunch"
+                                    mealType="Pranz"
                                     badgeColor="secondary"
                                 />
                                 <CollapseComponentMeals
                                     index={index}
                                     recipe={recipe.item.dinner}
-                                    mealType="Dinner"
+                                    mealType="Cina"
                                     badgeColor="accent"
                                 />
                             </div>
